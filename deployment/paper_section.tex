@@ -1,0 +1,200 @@
+\subsection{Deployment Planner}
+
+The Deployment Planner transforms the results of the preceding stages into a
+deployment plan on a shared, heterogeneous infrastructure. Unlike the
+analysis stages, which rely on an LLM to interpret the application, the
+planner is a deterministic optimization procedure: it consumes the structured
+profiles produced by these stages and returns the same plan for the same
+inputs, which makes every decision verifiable and allows a direct comparison
+with baseline strategies.
+
+\paragraph{Infrastructure model.}
+The infrastructure is a graph $\mathcal{I}=(\mathcal{N}\cup\mathcal{S}w,\mathcal{L})$,
+where $\mathcal{N}=\{n_1,\ldots,n_k\}$ is the set of compute nodes,
+$\mathcal{S}w$ a set of network switches, and $\mathcal{L}$ the set of links.
+Each node $n$ belongs to a tier (device, Edge, or Cloud) and to a site with a
+region, and is characterized by its available capacity
+$\kappa_n=(\kappa_n^{cpu},\kappa_n^{mem},\kappa_n^{gpu},\kappa_n^{sto})$, its
+availability $a_n$, and whether its resources are comparable with those of a
+general-purpose server (microcontrollers are not). Each link $\ell$ has a
+bandwidth $B_\ell$, a latency $\lambda_\ell$, and a type (LAN, Wi-Fi,
+Bluetooth, or WAN). Local devices are bound to the anchors identified by the
+Offloadability Analysis, and each unit is associated with its \emph{original
+host}, i.e., the device on which it executes before planning (which may differ
+from the node on which it is eventually deployed).
+
+\paragraph{Decision variables.}
+For each execution unit $u_i$ and node $n_j$,
+\begin{equation}
+x_{ij} =
+\begin{cases}
+1, & \text{if an instance of } u_i \text{ is deployed on } n_j,\\
+0, & \text{otherwise},
+\end{cases}
+\end{equation}
+and $k_i=\sum_j x_{ij}$ is the number of replicas of $u_i$. At most one replica
+of a unit is placed on a node (anti-affinity).
+
+\paragraph{Constraints.}
+A configuration is feasible when:
+\begin{enumerate}
+\item \emph{Anchoring}: every non-offloadable unit is placed on the node bound
+to its anchor, and units connected by a hardware edge share a node.
+\item \emph{Co-location}: every initialization unit that follows other units
+is deployed on each node hosting one of the units it supports; only its
+persistent storage is reserved, and its start-up peak must fit.
+\item \emph{Capacity}: for each node and resource $\rho$,
+\begin{equation}
+\sum_i x_{ij}\, \mu_{\pi_i}\, r_i^{\rho} + o_j^{\rho} \le \theta\, \kappa_j^{\rho},
+\end{equation}
+where $r_i^{\rho}$ is the estimated demand, $\mu_{\pi_i}$ a safety margin that
+depends on the provenance of the estimate (e.g., $1.0$ for observed and
+$1.25$ for assumed values), $o_j^{\rho}$ the runtime overhead of hosting the
+application on $n_j$, and $\theta$ the utilization target of the SLA policy.
+\item \emph{GPU and services}: units requiring a GPU are placed only on nodes
+with sufficient GPU memory, and units requiring an external service only on
+nodes with Internet access.
+\item \emph{Proximity}: each proximity condition (same site or same region) of
+the offloadability profile holds between the nodes hosting the two units.
+\item \emph{Bandwidth}: the traffic of each edge $(u_s,u_t)$ is split evenly
+among the replica pairs and routed along the lowest-latency path; for each
+link, $\sum \mathit{traffic}_\ell \le \theta\, B_\ell$.
+\end{enumerate}
+
+\paragraph{Objective.}
+Among feasible configurations, the planner minimizes
+\begin{equation}
+J(c)=\sum_{q} w_q \,\frac{\phi_q(c)}{\nu_q},
+\end{equation}
+where the components $\phi_q$ are the total inter-node traffic, the traffic
+crossing WAN links, a latency cost $\sum_{(s,t)} \omega_{st}\,\lambda_{st}$
+weighted by the latency sensitivity $\omega_{st}$ of each flow, the maximum
+load of local devices, two load-balancing terms defined below, the
+Cloud resources used, the number of offloaded units whose decision depends on
+an unverified assumption, and the availability shortfall with respect to the
+SLA target, with availability $1-\prod_{j:x_{ij}=1}(1-a_j)$. The weights $w_q$
+and normalization constants $\nu_q$ are part of the SLA policy
+$P_{\mathrm{SLA}}$.
+
+\paragraph{Load balancing and workload distribution.}
+Load balancing is evaluated over the whole pool $\mathcal{P}$ of shared Edge
+and Cloud nodes, including idle nodes and the load already reserved by
+previously planned applications. For each node, the dominant utilization
+\begin{equation}
+\eta_j = \max_{\rho}\ \frac{\text{used}_j^{\rho} + \text{load}_j^{\rho}}{\kappa_j^{\rho}}
+\end{equation}
+is taken over CPU, memory, GPU memory and storage, so that the scarcest
+resource of each node (typically GPU memory) determines its load. Two terms
+enter the objective: the dispersion $\sigma(\{\eta_j\}_{j\in\mathcal{P}})$,
+which penalizes uneven load, and the bottleneck $\max_{j\in\mathcal{P}}\eta_j$,
+which penalizes hotspots. Both are measured as the marginal change caused by
+the application being planned, since the load of other applications is a
+constant that the application cannot influence. Consolidating all units on a
+single node therefore no longer yields a spuriously balanced configuration.
+Workload is distributed among the replicas of a unit: the traffic of each edge
+is split evenly among replica pairs, and the CPU demand of a replicated unit is
+divided among its $k$ replicas, each also incurring a fixed per-replica
+overhead, whereas memory, GPU memory and storage are reserved in full by every
+replica, since each instance loads its own model, state and data. The weights
+of the two balancing terms control the trade-off between spreading load and
+keeping communicating units close; setting them to zero yields a purely
+communication- and latency-driven placement.
+
+\paragraph{Availability semantics.}
+The availability of a unit is $A_i = 1-\prod_{j:x_{ij}=1}(1-a_j)$ and the SLA
+policy defines a target $A^\ast$. Two cases are distinguished. For anchored
+units, $A_i$ is bounded by the availability of the device they depend on and
+cannot be changed by any placement decision; these units are therefore
+excluded from the availability requirement and are reported separately. For
+movable units, the policy selects one of two modes. In \emph{soft} mode (the
+default), availability enters the objective through the shortfall term
+$\sum_i \max(0, A^\ast - A_i)$, so a plan may be feasible while some units
+remain below the target; each such unit is reported together with its cause.
+In \emph{hard} mode, the condition $A_i \ge A^\ast$ is added to the
+feasibility constraints and checked after replication; a plan that violates it
+is rejected. This distinction makes explicit whether an SLA shortfall results
+from the infrastructure (anchored devices), from the SLA itself (too few
+requested replicas), or from placement constraints that bind a unit to a less
+available host.
+
+\paragraph{Procedure.}
+The planner first fixes the anchored units, then generates for every movable
+unit the candidate nodes that satisfy its unit-level conditions (capacity
+type, GPU, external access, proximity to anchored peers). When the candidate
+space is small, all configurations are evaluated exhaustively; otherwise a
+greedy assignment refined by local search is used. Replication is part of the
+optimization rather than a post-processing step: every feasible base
+configuration is extended with replicas, which are placed on distinct feasible
+nodes (anti-affinity), and the plan with the lowest final objective is
+selected. Two replication policies are supported. Under \emph{SLA-required}
+replication, the number of replicas requested by $P_{\mathrm{SLA}}$ is always
+deployed, even if the additional traffic and load increase $J$; under
+\emph{score-driven} replication, a replica is added only if it decreases $J$.
+How replicas share the work of a unit is made explicit by its
+\emph{replication semantics}, derived from the upstream profiles:
+\begin{itemize}
+\item \emph{load-split} (stateless units): the incoming traffic and the CPU
+work are divided among the $k$ replicas;
+\item \emph{mirrored} (units holding persistent data, e.g., an event log or a
+historical store): writes are mirrored, i.e., every replica receives all
+incoming writes and keeps a full copy, so the write traffic is multiplied by
+$k$ and each replica reserves the full CPU and storage demand; reads (outgoing
+flows) are load-balanced, each being served by a single replica (optionally,
+by a designated primary replica); replicas are assumed to be kept consistent by
+asynchronous write replication, whose ordering and consistency guarantees are
+not modelled;
+\item \emph{partitioned} (optional alternative for persistent units): the data
+are sharded, each replica receiving and storing $1/k$ of the records, without
+redundancy of individual records;
+\item \emph{single}: units that keep in-memory processing state (e.g., object
+tracking or sliding frame buffers) are not replicated unless the policy
+explicitly allows it.
+\end{itemize}
+Each semantics is defined in the SLA policy by four rules, applied
+consistently to capacity reservation, traffic routing and reporting: the
+distribution of incoming writes (all replicas or split), of outgoing reads
+(load-balanced or primary), of CPU work (split or full), and of storage (split
+or full). Every replication decision is reported together with its cause, its
+semantics, and the resulting per-replica shares of write traffic, read
+traffic, CPU and storage. Applications are planned in order of priority on the residual
+capacity of the shared infrastructure, so that contention between applications
+is taken into account. To make every decision traceable, the planner attaches a rationale to each
+unit: anchored units report the blocking factor that binds them; follower units
+report the units they are co-located with; and each movable unit reports the
+nodes excluded before the search (with the reason), and a counterfactual
+analysis in which the unit alone is moved to every other candidate node while
+the rest of the plan is kept, giving either the resulting change in $J$ and
+the objective terms responsible for it, or the constraint the move would
+violate. Violations name the units or flows responsible (e.g., the flows that
+saturate a link). For evaluation, the resulting plan is compared with
+three baselines: keeping all movable units on their original host, placing all
+of them in the Cloud, and a greedy first-fit placement.
+
+\begin{algorithm}[ht]
+\caption{Deployment Planner}
+\label{alg:deployment_planner}
+\begin{algorithmic}[1]
+\Require Execution units $\mathcal{U}$, resource profile $R$, offloadability profile $O$
+\Require Infrastructure $\mathcal{I}$ (residual capacity), SLA policy $P_{\mathrm{SLA}}$
+\Ensure Deployment descriptor $D_{\mathrm{deploy}}$
+\State $F \leftarrow$ place each non-offloadable unit on the node of its anchor
+\State $\mathcal{U}_m \leftarrow$ units that are neither anchored nor followers
+\For{each $u_i \in \mathcal{U}_m$}
+  \State $N_i \leftarrow \mathrm{GenerateCandidates}(u_i, R, O, \mathcal{I})$
+\EndFor
+\State $C \leftarrow N_1\times\cdots\times N_{|\mathcal{U}_m|}$ \Comment{or greedy + local search if $|C|$ is too large}
+\State $C_{\mathrm{valid}} \leftarrow \emptyset$
+\For{each configuration $c \in C$}
+  \State $c \leftarrow c \cup F \cup \mathrm{CoLocateFollowers}(c)$
+  \If{$\mathrm{SatisfiesResources}(c,R,\mathcal{I})$ \textbf{and} $\mathrm{SatisfiesOffloadability}(c,O,\mathcal{I})$}
+    \State $C_{\mathrm{valid}} \leftarrow C_{\mathrm{valid}} \cup \{(c, J(c))\}$
+  \EndIf
+\EndFor
+\State $C_{\mathrm{rep}} \leftarrow \{\mathrm{Replicate}(c, P_{\mathrm{SLA}}) : (c,\cdot)\in C_{\mathrm{valid}}\}$ \Comment{anti-affinity, stateful units kept single}
+\State $c^\ast \leftarrow \arg\min_{c\in C_{\mathrm{rep}},\ c\ \mathrm{feasible}} J(c)$
+\State Distribute the traffic of each edge evenly among replica pairs
+\State Reserve the resources of $c^\ast$ in $\mathcal{I}$
+\State $D_{\mathrm{deploy}} \leftarrow (c^\ast, J(c^\ast), \text{constraint checks}, \text{baselines})$
+\State \Return $D_{\mathrm{deploy}}$
+\end{algorithmic}
+\end{algorithm}

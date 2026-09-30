@@ -1,0 +1,299 @@
+{
+  "result": "Valid",
+  "summary": {
+    "valid": true,
+    "checks": 30,
+    "passed": 30,
+    "errors": 0,
+    "warnings": 0
+  },
+  "violations": [],
+  "checks": [
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "operator_pc CPU (cores): 1.04 of 4 (limit 80%) from smart_surveillance 1.04",
+      "unit": null,
+      "node": "operator_pc"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "operator_pc memory (GB): 0.338 of 8 (limit 80%) from smart_surveillance 0.338",
+      "unit": null,
+      "node": "operator_pc"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "agri_phone CPU (cores): 0.138 of 1 (limit 80%) from smart_agriculture_iot 0.138",
+      "unit": null,
+      "node": "agri_phone"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "agri_phone memory (GB): 0.276 of 0.5 (limit 80%) from smart_agriculture_iot 0.276",
+      "unit": null,
+      "node": "agri_phone"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_1 CPU (cores): 1.66 of 16 (limit 80%) from smart_surveillance 1.66",
+      "unit": null,
+      "node": "edge_1"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_1 memory (GB): 1.5 of 32 (limit 80%) from smart_surveillance 1.5",
+      "unit": null,
+      "node": "edge_1"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_1 GPU memory (GB): 4 of 8 (limit 80%) from smart_surveillance 4",
+      "unit": null,
+      "node": "edge_1"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_1 storage (GB): 0.5 of 100 (limit 80%) from smart_surveillance 0.5",
+      "unit": null,
+      "node": "edge_1"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_2 CPU (cores): 0.113 of 16 (limit 80%) from smart_surveillance 0.113",
+      "unit": null,
+      "node": "edge_2"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_2 memory (GB): 0.251 of 32 (limit 80%) from smart_surveillance 0.251",
+      "unit": null,
+      "node": "edge_2"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_2 storage (GB): 0.1 of 100 (limit 80%) from smart_surveillance 0.1",
+      "unit": null,
+      "node": "edge_2"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_3 CPU (cores): 0.113 of 8 (limit 80%) from smart_surveillance 0.113",
+      "unit": null,
+      "node": "edge_3"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_3 memory (GB): 0.251 of 16 (limit 80%) from smart_surveillance 0.251",
+      "unit": null,
+      "node": "edge_3"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_3 storage (GB): 0.1 of 50 (limit 80%) from smart_surveillance 0.1",
+      "unit": null,
+      "node": "edge_3"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_4 CPU (cores): 0.169 of 16 (limit 80%) from crop_monitoring 0.169",
+      "unit": null,
+      "node": "edge_4"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_4 memory (GB): 0.314 of 32 (limit 80%) from crop_monitoring 0.314",
+      "unit": null,
+      "node": "edge_4"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_4 storage (GB): 0.5 of 100 (limit 80%) from crop_monitoring 0.5",
+      "unit": null,
+      "node": "edge_4"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_5 CPU (cores): 0.181 of 12 (limit 80%) from crop_monitoring 0.181",
+      "unit": null,
+      "node": "edge_5"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_5 memory (GB): 0.326 of 24 (limit 80%) from crop_monitoring 0.326",
+      "unit": null,
+      "node": "edge_5"
+    },
+    {
+      "id": "J1",
+      "constraint": "node capacity within utilization target (all applications)",
+      "result": "pass",
+      "detail": "edge_5 storage (GB): 0.5 of 80 (limit 80%) from crop_monitoring 0.5",
+      "unit": null,
+      "node": "edge_5"
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_pc: 183.602 Mbps of 1000 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_e1: 183.605 Mbps of 10000 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_e2: 0.0016 Mbps of 10000 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_e3: 0.0016 Mbps of 1000 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_bt: 0.00016008 Mbps of 0.0096 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_crop: 4e-06 Mbps of 1 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_e4: 1.2e-05 Mbps of 1000 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J2",
+      "constraint": "link bandwidth within utilization target (all applications)",
+      "result": "pass",
+      "detail": "l_e5: 1.6e-05 Mbps of 1000 Mbps (limit 80%)",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "J3",
+      "constraint": "start-up peak of initialization units fits",
+      "result": "pass",
+      "detail": "smart_surveillance/U4 needs 2 CPU (cores) at start-up on edge_1; 14.3 free",
+      "unit": null,
+      "node": "edge_1"
+    },
+    {
+      "id": "J3",
+      "constraint": "start-up peak of initialization units fits",
+      "result": "pass",
+      "detail": "smart_surveillance/U4 needs 1 memory (GB) at start-up on edge_1; 30.5 free",
+      "unit": null,
+      "node": "edge_1"
+    }
+  ],
+  "node_usage": {
+    "operator_pc": {
+      "cpu_cores": 1.0375,
+      "memory_gb": 0.3375
+    },
+    "agri_phone": {
+      "cpu_cores": 0.1375,
+      "memory_gb": 0.2762
+    },
+    "edge_1": {
+      "cpu_cores": 1.6625,
+      "memory_gb": 1.5,
+      "gpu_memory_gb": 4.0,
+      "storage_gb": 0.5
+    },
+    "edge_2": {
+      "cpu_cores": 0.1125,
+      "memory_gb": 0.2512,
+      "storage_gb": 0.1
+    },
+    "edge_3": {
+      "cpu_cores": 0.1125,
+      "memory_gb": 0.2512,
+      "storage_gb": 0.1
+    },
+    "edge_4": {
+      "cpu_cores": 0.1688,
+      "memory_gb": 0.3137,
+      "storage_gb": 0.5
+    },
+    "edge_5": {
+      "cpu_cores": 0.1813,
+      "memory_gb": 0.3262,
+      "storage_gb": 0.5
+    }
+  },
+  "link_usage_mbps": {
+    "l_pc": 183.6016,
+    "l_e1": 183.6048,
+    "l_e2": 0.0016,
+    "l_e3": 0.0016,
+    "l_bt": 0.00016,
+    "l_crop": 4e-06,
+    "l_e4": 1.2e-05,
+    "l_e5": 1.6e-05
+  }
+}

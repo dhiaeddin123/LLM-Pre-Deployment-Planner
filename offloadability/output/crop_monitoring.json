@@ -1,0 +1,235 @@
+{
+  "application_id": "crop_monitoring",
+  "anchors": [
+    {
+      "anchor_id": "A1",
+      "description": "Sensor device with the soil moisture and temperature sensors (device type not stated)",
+      "anchored_units": ["U1"],
+      "evidence": [
+        "sensor_acquisition collects soil moisture and temperature data, which requires physical sensors in the field.",
+        "The resource estimation lists 'Soil moisture sensor (type not stated)' and 'Temperature sensor (type not stated)' as required hardware for U1."
+      ],
+      "network_connectivity": "unknown",
+      "provenance": "inferred"
+    }
+  ],
+  "offloadability_profiles": [
+    {
+      "unit_id": "U1",
+      "name": "Sensor Acquisition",
+      "unit_type": "runtime",
+      "current_platform": "unknown",
+      "status": "non_offloadable",
+      "anchored_to": "A1",
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [
+        {
+          "type": "hardware_binding",
+          "component": "sensor_acquisition",
+          "evidence": "Collects soil moisture and temperature data, which requires direct access to the physical sensors.",
+          "provenance": "inferred"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U2",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "unknown",
+          "bandwidth_mbps": 0.000004,
+          "latency_sensitivity": "unknown",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "medium",
+      "rationale": "Measurements of soil moisture and temperature can only be taken where the sensors are, so the unit is anchored to the sensor device A1. The binding is inferred from the component function, since the input names neither the sensors nor the device. The single outgoing edge to U2 concerns a non-anchored unit and is left to the Deployment Planner."
+    },
+    {
+      "unit_id": "U2",
+      "name": "Measurement Processing and Crop Analysis",
+      "unit_type": "runtime",
+      "current_platform": "unknown",
+      "status": "conditionally_offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "min_bandwidth_mbps",
+          "requirement": "The link between the remote host and the sensor unit U1 must carry the sample stream.",
+          "value": 0.000004,
+          "unit": "Mbps",
+          "related_unit": "U1",
+          "basis": "communication_requirements U1 -> U2, bandwidth_mbps",
+          "provenance": "assumed"
+        },
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm that the sensor device A1 can send its samples to a remote host, either directly or through a gateway. Its connectivity is not stated in the input, so a relay may be needed.",
+          "value": null,
+          "unit": null,
+          "related_unit": "U1",
+          "basis": "anchors A1 network_connectivity = unknown; communication_requirements U1 -> U2 current_mechanism = unknown",
+          "provenance": "unknown"
+        },
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm that crop analysis is rule-based or statistical. If it uses an ML model, the remote host may need additional compute or a GPU, and the resource estimate must be revised.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "resource_profiles U2 gpu.assumption_refs: 'Crop analysis is rule-based or statistical; the input names no ML model.'",
+          "provenance": "assumed"
+        },
+        {
+          "type": "state_handling",
+          "requirement": "Filtering keeps a small window of recent measurements. A remote instance must be the single active consumer of the sensor stream, or the window state must be transferred.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "resource_profiles U2 evidence.inferred_characteristics: 'Filtering implies a small window of recent measurements kept across samples.'",
+          "provenance": "inferred"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U1",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "unknown",
+          "bandwidth_mbps": 0.000004,
+          "latency_sensitivity": "unknown",
+          "becomes_network_traffic": true
+        },
+        {
+          "peer_unit": "U3",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "unknown",
+          "bandwidth_mbps": 0.000008,
+          "latency_sensitivity": "unknown",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U4",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "unknown",
+          "bandwidth_mbps": 0.000008,
+          "latency_sensitivity": "low",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0.000004,
+      "confidence": "low",
+      "rationale": "Filtering, normalization and crop-condition analysis need no sensor hardware or operator interface, so nothing binds the unit to A1. Remote execution depends on the sensor device being able to reach a remote host, which the input does not state, and on the assumed absence of an ML model. The edge from U1 has unknown latency sensitivity, so no proximity condition is derived, but proximity to A1 should be revisited if a latency requirement is identified. Offloading adds only the assumed 0.000004 Mbps sample stream from the anchored unit U1."
+    },
+    {
+      "unit_id": "U3",
+      "name": "Irrigation Decision",
+      "unit_type": "runtime",
+      "current_platform": "unknown",
+      "status": "conditionally_offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm where irrigation decisions are delivered. The unit graph has no consumer for them. If they drive irrigation hardware in the field, the remote host must be able to reach that hardware, and latency requirements must be checked.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "resource_profiles U3 evidence: 'The input does not state where the decisions go.'; network.basis: no outgoing edge modelled",
+          "provenance": "unknown"
+        },
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm that decision generation is rule-based logic with no model that would require additional compute or a GPU.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "resource_profiles U3 gpu.assumption_refs: 'Decision generation is rule-based logic evaluated on one crop-condition result per sample.'",
+          "provenance": "assumed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U2",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "unknown",
+          "bandwidth_mbps": 0.000008,
+          "latency_sensitivity": "unknown",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "low",
+      "rationale": "Generating irrigation decisions requires no sensor hardware or operator interface, and the unit communicates only with the non-anchored unit U2. It is conditional rather than offloadable because two facts are missing: the destination of its decisions (possibly field hardware, which the graph does not model) and the confirmation that its logic needs no model."
+    },
+    {
+      "unit_id": "U4",
+      "name": "Historical Data Storage",
+      "unit_type": "runtime",
+      "current_platform": "unknown",
+      "status": "offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "persistent_storage",
+          "requirement": "The remote host must provide durable storage for about one year of historical records, growing over time.",
+          "value": 0.5,
+          "unit": "GB",
+          "related_unit": null,
+          "basis": "resource_profiles U4 storage.size_gb, persistent = true, growth = grows_over_time",
+          "provenance": "assumed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U2",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "unknown",
+          "bandwidth_mbps": 0.000008,
+          "latency_sensitivity": "low",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "medium",
+      "rationale": "Storing historical agricultural data needs no sensor hardware, operator interface or device API. Its only flow, from the non-anchored unit U2, needs only eventual delivery. The durable-storage requirement is ordinary for a remote host, and only its size is assumed. The component's name (cloud_storage) is consistent with a remotely hosted store but does not by itself fix where it runs."
+    }
+  ],
+  "summary": {
+    "offloadable": ["U4"],
+    "conditionally_offloadable": ["U2", "U3"],
+    "non_offloadable": ["U1"],
+    "follows_supported_units": [],
+    "local_core": {
+      "A1": ["U1"]
+    },
+    "disagreements_with_granularity": [],
+    "observations": [
+      "The only anchor is the sensor device A1. Its binding is inferred from 'collects soil moisture and temperature data', because the input names neither the device nor the sensors.",
+      "The connectivity of A1 is unknown, which is the main open question for offloading U2: whether samples can leave the sensor device directly or need a gateway or relay.",
+      "Offloading any unit adds at most 0.000004 Mbps of traffic from an anchored unit (U1 -> U2). This value is assumed from a 10 s sampling interval.",
+      "No edge has a stated latency requirement, so no proximity condition is derived. U2 -> U4 is low, because it carries historical records.",
+      "U3's irrigation decisions have no consumer in the unit graph. If they drive field hardware, a second anchor may exist that the input does not describe.",
+      "No unit requires a GPU under the resource estimation. For U2 and U3 this rests on the assumption that no ML model is used."
+    ]
+  }
+}

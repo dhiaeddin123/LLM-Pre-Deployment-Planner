@@ -1,0 +1,562 @@
+{
+  "application_id": "crop_monitoring",
+  "search": {
+    "method": "exhaustive",
+    "configurations_evaluated": 1331,
+    "candidate_nodes": {
+      "U2": [
+        "edge_1",
+        "edge_2",
+        "edge_3",
+        "edge_4",
+        "edge_5",
+        "edge_6",
+        "edge_7",
+        "edge_8",
+        "edge_9",
+        "edge_10",
+        "cloud_1"
+      ],
+      "U3": [
+        "edge_1",
+        "edge_2",
+        "edge_3",
+        "edge_4",
+        "edge_5",
+        "edge_6",
+        "edge_7",
+        "edge_8",
+        "edge_9",
+        "edge_10",
+        "cloud_1"
+      ],
+      "U4": [
+        "edge_1",
+        "edge_2",
+        "edge_3",
+        "edge_4",
+        "edge_5",
+        "edge_6",
+        "edge_7",
+        "edge_8",
+        "edge_9",
+        "edge_10",
+        "cloud_1"
+      ]
+    },
+    "rejected_nodes": {
+      "U2": {
+        "operator_pc": "foreign local device",
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "agri_phone": "foreign local device",
+        "crop_sensor": "non-comparable device (microcontroller)"
+      },
+      "U3": {
+        "operator_pc": "foreign local device",
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "agri_phone": "foreign local device",
+        "crop_sensor": "non-comparable device (microcontroller)"
+      },
+      "U4": {
+        "operator_pc": "foreign local device",
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "agri_phone": "foreign local device",
+        "crop_sensor": "non-comparable device (microcontroller)"
+      }
+    },
+    "base_configurations_feasible": 1331,
+    "replicated_configurations_feasible": 1022,
+    "replication_policy": "sla_required"
+  },
+  "baselines": {
+    "all_local": {
+      "feasible": false,
+      "score": null,
+      "violations": [
+        "some movable units have no current host in the infrastructure bindings"
+      ]
+    },
+    "cloud_only": {
+      "feasible": true,
+      "score": 4.9279,
+      "violations": [],
+      "placement": {
+        "U2": "cloud_1",
+        "U3": "cloud_1",
+        "U4": "cloud_1"
+      }
+    },
+    "greedy_first_fit": {
+      "feasible": true,
+      "score": 1.7752,
+      "placement": {
+        "U4": [
+          "edge_6",
+          "edge_10"
+        ],
+        "U2": [
+          "edge_5"
+        ],
+        "U3": [
+          "edge_5",
+          "edge_4"
+        ]
+      }
+    }
+  },
+  "status": "feasible",
+  "sla_compliance": {
+    "availability_mode": "soft",
+    "availability_target": 0.99,
+    "availability": "met_for_controllable_units",
+    "units_below_target": [
+      {
+        "unit_id": "U1",
+        "availability": 0.97,
+        "target": 0.99,
+        "controllable_by_planner": false,
+        "cause": "anchored to crop_sensor; bounded by the device availability (0.97)"
+      }
+    ],
+    "explanation": "Availability is a soft objective: shortfalls of movable units are penalised in the score but do not make the plan infeasible. Anchored units are excluded from the constraint: their availability is bounded by the device they depend on, which the planner cannot change."
+  },
+  "placements": [
+    {
+      "unit_id": "U1",
+      "name": "Sensor Acquisition",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "crop_sensor",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A1 on crop_sensor",
+        "blocking_factors": [
+          "hardware_binding: Collects soil moisture and temperature data, which requires direct access to the physical sensors."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "crop_sensor",
+          "tier": "device",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.97,
+      "meets_availability_target": false,
+      "availability_cause": "anchored to crop_sensor; bounded by the device availability (0.97)",
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U2",
+      "name": "Measurement Processing and Crop Analysis",
+      "offloadability": "conditionally_offloadable",
+      "decision": "offloaded",
+      "original_host": null,
+      "replication_semantics": "single",
+      "replicable_as": "single",
+      "decision_rationale": {
+        "reason": "edge_5 minimises the objective; the closest alternative (edge_5 -> edge_4) scores +0.0001 (load_imbalance +8.11e-05).",
+        "excluded_before_search": [
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "operator_pc",
+              "agri_phone"
+            ]
+          },
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [
+          {
+            "move": "edge_5 -> edge_4",
+            "feasible": true,
+            "score_delta": 0.0001,
+            "why": [
+              "load_imbalance +8.11e-05"
+            ]
+          },
+          {
+            "move": "edge_5 -> edge_6",
+            "feasible": true,
+            "score_delta": 1.9286,
+            "why": [
+              "latency +1.94",
+              "load_imbalance -0.00842"
+            ]
+          },
+          {
+            "move": "edge_5 -> edge_10",
+            "feasible": true,
+            "score_delta": 1.9286,
+            "why": [
+              "latency +1.94",
+              "load_imbalance -0.00842"
+            ]
+          }
+        ],
+        "infeasible_moves": [],
+        "infeasible_moves_total": 0
+      },
+      "replicas": [
+        {
+          "node": "edge_5",
+          "tier": "edge",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.99,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": [
+        "Confirm that the sensor device A1 can send its samples to a remote host, either directly or through a gateway. Its connectivity is not stated in the input, so a relay may be needed.",
+        "Confirm that crop analysis is rule-based or statistical. If it uses an ML model, the remote host may need additional compute or a GPU, and the resource estimate must be revised."
+      ]
+    },
+    {
+      "unit_id": "U3",
+      "name": "Irrigation Decision",
+      "offloadability": "conditionally_offloadable",
+      "decision": "offloaded",
+      "original_host": null,
+      "replication_semantics": "load_split",
+      "replicable_as": "load_split",
+      "decision_rationale": {
+        "reason": "edge_5, edge_4 minimises the objective; the closest alternative (edge_4 -> edge_6) scores +0.8842 (latency +0.894; load_imbalance -0.00984).",
+        "excluded_before_search": [
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "operator_pc",
+              "agri_phone"
+            ]
+          },
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [
+          {
+            "move": "edge_4 -> edge_6",
+            "feasible": true,
+            "score_delta": 0.8842,
+            "why": [
+              "latency +0.894",
+              "load_imbalance -0.00984"
+            ]
+          },
+          {
+            "move": "edge_4 -> edge_10",
+            "feasible": true,
+            "score_delta": 0.8842,
+            "why": [
+              "latency +0.894",
+              "load_imbalance -0.00984"
+            ]
+          },
+          {
+            "move": "edge_5 -> edge_6",
+            "feasible": true,
+            "score_delta": 0.8845,
+            "why": [
+              "latency +0.894",
+              "load_imbalance -0.0095"
+            ]
+          }
+        ],
+        "infeasible_moves": [],
+        "infeasible_moves_total": 0
+      },
+      "replicas": [
+        {
+          "node": "edge_5",
+          "tier": "edge",
+          "site": "farm"
+        },
+        {
+          "node": "edge_4",
+          "tier": "edge",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "load_split",
+        "replicas": 2,
+        "writes": "split",
+        "reads": "load_balanced",
+        "write_traffic_share": 0.5,
+        "read_traffic_share": 0.5,
+        "cpu_share": 0.5,
+        "storage_share": 1.0,
+        "note": "requests and CPU work divided among replicas; each replica loads its own code/models"
+      },
+      "availability": 0.9999,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": [
+        "Confirm where irrigation decisions are delivered. The unit graph has no consumer for them. If they drive irrigation hardware in the field, the remote host must be able to reach that hardware, and latency requirements must be checked.",
+        "Confirm that decision generation is rule-based logic with no model that would require additional compute or a GPU."
+      ]
+    },
+    {
+      "unit_id": "U4",
+      "name": "Historical Data Storage",
+      "offloadability": "offloadable",
+      "decision": "offloaded",
+      "original_host": null,
+      "replication_semantics": "mirrored",
+      "replicable_as": "mirrored",
+      "decision_rationale": {
+        "reason": "edge_5, edge_4 minimises the objective; the closest alternative (edge_5 -> edge_6) scores +0.1392 (latency +0.149; load_imbalance -0.00976).",
+        "excluded_before_search": [
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "operator_pc",
+              "agri_phone"
+            ]
+          },
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [
+          {
+            "move": "edge_5 -> edge_6",
+            "feasible": true,
+            "score_delta": 0.1392,
+            "why": [
+              "latency +0.149",
+              "load_imbalance -0.00976"
+            ]
+          },
+          {
+            "move": "edge_5 -> edge_10",
+            "feasible": true,
+            "score_delta": 0.1392,
+            "why": [
+              "latency +0.149",
+              "load_imbalance -0.00976"
+            ]
+          },
+          {
+            "move": "edge_4 -> edge_6",
+            "feasible": true,
+            "score_delta": 0.1392,
+            "why": [
+              "latency +0.149",
+              "load_imbalance -0.00984"
+            ]
+          }
+        ],
+        "infeasible_moves": [],
+        "infeasible_moves_total": 0
+      },
+      "replicas": [
+        {
+          "node": "edge_5",
+          "tier": "edge",
+          "site": "farm"
+        },
+        {
+          "node": "edge_4",
+          "tier": "edge",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "mirrored",
+        "replicas": 2,
+        "writes": "all_replicas",
+        "reads": "load_balanced",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 0.5,
+        "cpu_share": 1.0,
+        "storage_share": 1.0,
+        "note": "writes are mirrored to every replica (full copy each); reads are served by one replica"
+      },
+      "availability": 0.9999,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    }
+  ],
+  "objective": {
+    "score": 1.6462,
+    "score_before_replication": 1.6108,
+    "components": {
+      "network_traffic": 1.6e-05,
+      "wan_traffic": 0.0,
+      "latency": 3.3,
+      "device_load": 0.0,
+      "load_imbalance": -0.000688,
+      "max_node_utilization": 0.0,
+      "cloud_usage": 0,
+      "assumption_risk": 2,
+      "availability_shortfall": 0.0
+    }
+  },
+  "violations": [],
+  "node_utilization": {
+    "edge_5": {
+      "cpu_cores": 0.015,
+      "memory_gb": 0.014,
+      "storage_gb": 0.006
+    },
+    "edge_4": {
+      "cpu_cores": 0.011,
+      "memory_gb": 0.01,
+      "storage_gb": 0.005
+    }
+  },
+  "load_balance": {
+    "pool": "all shared Edge and Cloud nodes, including load of previously planned applications",
+    "metric": "dominant resource utilization per node = max over CPU, memory, GPU memory, storage",
+    "replication_models": {
+      "load_split": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "full"
+      },
+      "mirrored": {
+        "writes": "all_replicas",
+        "reads": "load_balanced",
+        "cpu": "full",
+        "storage": "full"
+      },
+      "partitioned": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "split"
+      },
+      "single": {
+        "writes": "n/a",
+        "reads": "n/a",
+        "cpu": "full",
+        "storage": "full"
+      }
+    },
+    "dominant_utilization": {
+      "edge_1": 0.5,
+      "edge_2": 0.0079,
+      "edge_3": 0.0157,
+      "edge_4": 0.0105,
+      "edge_5": 0.0151,
+      "edge_6": 0.0,
+      "edge_7": 0.0,
+      "edge_8": 0.0,
+      "edge_9": 0.0,
+      "edge_10": 0.0,
+      "cloud_1": 0.0
+    },
+    "max_node_utilization": {
+      "before": 0.5,
+      "after": 0.5
+    },
+    "stdev": {
+      "before": 0.1431,
+      "after": 0.1425
+    },
+    "objective_uses": "after - before (marginal effect of this application)"
+  },
+  "link_load_mbps": {
+    "l_crop": 4e-06,
+    "l_e4": 1.2e-05,
+    "l_e5": 1.6e-05
+  },
+  "replication_notes": [
+    "U3: 2 replicas on edge_5, edge_4 because the SLA policy requests desired_replicas=2 (max 2) for crop_monitoring; one replica per node (anti-affinity). Replication semantics: load_split (stateless) - incoming traffic and CPU work are divided among the 2 replicas.",
+    "U4: 2 replicas on edge_5, edge_4 because the SLA policy requests desired_replicas=2 (max 2) for crop_monitoring; one replica per node (anti-affinity). Replication semantics: mirrored - the unit holds persistent data, so every replica receives ALL writes and keeps a full copy (2x write traffic, full CPU and storage per replica). ASSUMPTION: replicas are kept consistent by asynchronous write replication; ordering/consistency is not modelled."
+  ],
+  "alternatives": [
+    {
+      "score": 1.6463,
+      "score_before_replication": 1.6124,
+      "placement": {
+        "U2": [
+          "edge_4"
+        ],
+        "U3": [
+          "edge_4",
+          "edge_5"
+        ],
+        "U4": [
+          "edge_5",
+          "edge_4"
+        ]
+      }
+    },
+    {
+      "score": 1.7752,
+      "score_before_replication": 1.7572,
+      "placement": {
+        "U2": [
+          "edge_5"
+        ],
+        "U3": [
+          "edge_5",
+          "edge_4"
+        ],
+        "U4": [
+          "edge_6",
+          "edge_10"
+        ]
+      }
+    },
+    {
+      "score": 1.7753,
+      "score_before_replication": 1.7586,
+      "placement": {
+        "U2": [
+          "edge_4"
+        ],
+        "U3": [
+          "edge_4",
+          "edge_5"
+        ],
+        "U4": [
+          "edge_6",
+          "edge_10"
+        ]
+      }
+    }
+  ]
+}

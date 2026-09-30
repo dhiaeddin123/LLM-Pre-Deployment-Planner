@@ -1,0 +1,384 @@
+{
+  "application_id": "smart_surveillance",
+  "result": "Valid",
+  "summary": {
+    "valid": true,
+    "checks": 43,
+    "passed": 40,
+    "errors": 0,
+    "warnings": 3
+  },
+  "violations": [],
+  "warnings": [
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "warning",
+      "detail": "U3: availability 0.9800, target 0.99 (soft constraint)",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U5 is offloaded while 1 assumption(s) remain to verify",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U6 is offloaded while 1 assumption(s) remain to verify",
+      "unit": "U6",
+      "node": null
+    }
+  ],
+  "checks": [
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U1 -> ['operator_pc']",
+      "unit": "U1",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U2 -> ['operator_pc']",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U3 -> ['operator_pc']",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U4 -> ['edge_1']",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U5 -> ['edge_1']",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U6 -> ['edge_1']",
+      "unit": "U6",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U7 -> ['edge_3', 'edge_2']",
+      "unit": "U7",
+      "node": null
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U1 must run only on operator_pc (anchor A1), found ['operator_pc']",
+      "unit": "U1",
+      "node": "operator_pc"
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U2 must run only on operator_pc (anchor A1), found ['operator_pc']",
+      "unit": "U2",
+      "node": "operator_pc"
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U3 on operator_pc: eligible",
+      "unit": "U3",
+      "node": "operator_pc"
+    },
+    {
+      "id": "V6",
+      "constraint": "proximity condition",
+      "result": "pass",
+      "detail": "U3 on operator_pc must be same_site with U2 on operator_pc",
+      "unit": "U3",
+      "node": "operator_pc"
+    },
+    {
+      "id": "V6",
+      "constraint": "proximity condition",
+      "result": "pass",
+      "detail": "U3 on operator_pc must be same_site with U1 on operator_pc",
+      "unit": "U3",
+      "node": "operator_pc"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U3 replicas ['operator_pc']",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U3: 1 replicas, max 1",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "SLA-required replicas are deployed",
+      "result": "pass",
+      "detail": "U3: 1 of 1 requested replicas",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "warning",
+      "detail": "U3: availability 0.9800, target 0.99 (soft constraint)",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V3",
+      "constraint": "initialization units are co-located with the units they support",
+      "result": "pass",
+      "detail": "U4 must be on ['edge_1'] (hosts of U5, U6), found ['edge_1']",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U5 on edge_1: eligible",
+      "unit": "U5",
+      "node": "edge_1"
+    },
+    {
+      "id": "V5",
+      "constraint": "GPU requirement",
+      "result": "pass",
+      "detail": "U5 needs 2 GB GPU memory; edge_1 has 8 GB",
+      "unit": "U5",
+      "node": "edge_1"
+    },
+    {
+      "id": "V6",
+      "constraint": "proximity condition",
+      "result": "pass",
+      "detail": "U5 on edge_1 must be same_site with U1 on operator_pc",
+      "unit": "U5",
+      "node": "edge_1"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U5 replicas ['edge_1']",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U5: 1 replicas, max 2",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "stateful units are not replicated",
+      "result": "pass",
+      "detail": "U5 is stateful/single (1 replicas)",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "pass",
+      "detail": "U5: availability 0.9900, target 0.99 (soft constraint)",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U5 is offloaded while 1 assumption(s) remain to verify",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U6 on edge_1: eligible",
+      "unit": "U6",
+      "node": "edge_1"
+    },
+    {
+      "id": "V5",
+      "constraint": "GPU requirement",
+      "result": "pass",
+      "detail": "U6 needs 2 GB GPU memory; edge_1 has 8 GB",
+      "unit": "U6",
+      "node": "edge_1"
+    },
+    {
+      "id": "V6",
+      "constraint": "proximity condition",
+      "result": "pass",
+      "detail": "U6 on edge_1 must be same_site with U1 on operator_pc",
+      "unit": "U6",
+      "node": "edge_1"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U6 replicas ['edge_1']",
+      "unit": "U6",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U6: 1 replicas, max 2",
+      "unit": "U6",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "stateful units are not replicated",
+      "result": "pass",
+      "detail": "U6 is stateful/single (1 replicas)",
+      "unit": "U6",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "pass",
+      "detail": "U6: availability 0.9900, target 0.99 (soft constraint)",
+      "unit": "U6",
+      "node": null
+    },
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U6 is offloaded while 1 assumption(s) remain to verify",
+      "unit": "U6",
+      "node": null
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U7 on edge_3: eligible",
+      "unit": "U7",
+      "node": "edge_3"
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U7 on edge_2: eligible",
+      "unit": "U7",
+      "node": "edge_2"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U7 replicas ['edge_3', 'edge_2']",
+      "unit": "U7",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U7: 2 replicas, max 2",
+      "unit": "U7",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "SLA-required replicas are deployed",
+      "result": "pass",
+      "detail": "U7: 2 of 2 requested replicas",
+      "unit": "U7",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "pass",
+      "detail": "U7: availability 0.9999, target 0.99 (soft constraint)",
+      "unit": "U7",
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_pc: descriptor 183.602 Mbps, recomputed 183.602 Mbps",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_e2: descriptor 0.0016 Mbps, recomputed 0.0016 Mbps",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_e1: descriptor 183.605 Mbps, recomputed 183.605 Mbps",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_e3: descriptor 0.0016 Mbps, recomputed 0.0016 Mbps",
+      "unit": null,
+      "node": null
+    }
+  ]
+}

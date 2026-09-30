@@ -1,0 +1,428 @@
+{
+  "application_id": "smart_agriculture_iot",
+  "anchors": [
+    {
+      "anchor_id": "A1",
+      "description": "Arduino Uno sensor node with DHT22 sensor, analog soil moisture sensor and HC-05 Bluetooth module",
+      "anchored_units": ["U1", "U2", "U3"],
+      "evidence": [
+        "temperature_humidity_sensing reads a DHT22 sensor wired to the Arduino Uno sensor node.",
+        "soil_moisture_sensing reads an analog soil moisture sensor wired to the Arduino Uno sensor node.",
+        "sensor_bluetooth_link is an HC-05 Bluetooth module on the Arduino Uno (serial, 9600 baud).",
+        "The edges between U2 and U3 run over the Arduino's wired serial interface to the HC-05 module (boundary 'hardware' in the resource estimation)."
+      ],
+      "network_connectivity": "Bluetooth serial only, through the HC-05 module to the Android app. No other connectivity is stated.",
+      "provenance": "observed"
+    },
+    {
+      "anchor_id": "A2",
+      "description": "Farmer's Android phone running the app (Bluetooth interface and user interface)",
+      "anchored_units": ["U4", "U6"],
+      "evidence": [
+        "device_discovery lists bonded Bluetooth devices, discovers nearby devices and lets the farmer select the sensor node, in the Android app.",
+        "app_bluetooth_connection opens a Bluetooth serial connection to the selected sensor node, in the Android app.",
+        "dashboard_display, trend_chart and command_input are the farmer's tiles, chart and text field in the Android app."
+      ],
+      "network_connectivity": "Bluetooth serial to the sensor node A1 (observed). Any IP connectivity of the phone is not stated in the input.",
+      "provenance": "observed"
+    }
+  ],
+  "offloadability_profiles": [
+    {
+      "unit_id": "U1",
+      "name": "Environmental Sensing",
+      "unit_type": "runtime",
+      "current_platform": "Arduino Uno",
+      "status": "non_offloadable",
+      "anchored_to": "A1",
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [
+        {
+          "type": "hardware_binding",
+          "component": "temperature_humidity_sensing",
+          "evidence": "Reads air temperature and humidity from a DHT22 sensor wired to the Arduino Uno sensor node.",
+          "provenance": "observed"
+        },
+        {
+          "type": "hardware_binding",
+          "component": "soil_moisture_sensing",
+          "evidence": "Reads the soil moisture level from an analog soil moisture sensor wired to the Arduino Uno sensor node.",
+          "provenance": "observed"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U2",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.000096,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "high",
+      "rationale": "Both components read sensors physically wired to the Arduino Uno, so the unit is anchored to A1. Its only edge goes to U2, which is anchored to the same device, so no network traffic arises."
+    },
+    {
+      "unit_id": "U2",
+      "name": "Sensor Data Formatting and Command Handling",
+      "unit_type": "runtime",
+      "current_platform": "Arduino Uno",
+      "status": "non_offloadable",
+      "anchored_to": "A1",
+      "follows_units": [],
+      "agrees_with_granularity": false,
+      "disagreement_reason": "Granularity marks the unit flexible because formatting and command interpretation need no hardware themselves. However, both of its edges with U3 are hardware edges over the Arduino's serial interface to the HC-05 module, and a unit with a hardware edge to an anchored unit is itself anchored. In addition, the readings of U1 reach the rest of the application only through U2 -> U3, and the unit graph has no other path off the sensor node. A remote U2 would therefore receive neither the sensor readings nor the commands, and could not send its lines to the Bluetooth module.",
+      "blocking_factors": [
+        {
+          "type": "hardware_binding",
+          "component": "measurement_packaging",
+          "evidence": "The formatted measurement line is written to the HC-05 Bluetooth module on the Arduino Uno over serial at 9600 baud (edge U2 -> U3, boundary hardware).",
+          "provenance": "inferred"
+        },
+        {
+          "type": "hardware_binding",
+          "component": "sensor_command_handler",
+          "evidence": "Commands are received over Bluetooth from the HC-05 serial interface and replies are written back to it (edges U3 -> U2 and U2 -> U3, boundary hardware).",
+          "provenance": "inferred"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U1",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.000096,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U3",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "hardware",
+          "bandwidth_mbps": 0.00016,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U3",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "hardware",
+          "bandwidth_mbps": 0.00000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "medium",
+      "rationale": "The unit's logic is simple formatting and command interpretation, but it is connected to the HC-05 module by hardware edges that cannot be separated. It is also the only path by which the sensor readings leave the Arduino. It is anchored to A1 by these edges, not by its current location. The binding is inferred from the stated serial connection of the HC-05 module on the Arduino Uno."
+    },
+    {
+      "unit_id": "U3",
+      "name": "Sensor Bluetooth Link",
+      "unit_type": "runtime",
+      "current_platform": "Arduino Uno with HC-05 Bluetooth module",
+      "status": "non_offloadable",
+      "anchored_to": "A1",
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [
+        {
+          "type": "hardware_binding",
+          "component": "sensor_bluetooth_link",
+          "evidence": "HC-05 Bluetooth module on the Arduino Uno (serial, 9600 baud) transmits one measurement line every second and receives commands from the mobile app.",
+          "provenance": "observed"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U2",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "hardware",
+          "bandwidth_mbps": 0.00016,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U2",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "hardware",
+          "bandwidth_mbps": 0.00000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U4",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "physical",
+          "bandwidth_mbps": 0.00016,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U4",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "physical",
+          "bandwidth_mbps": 0.00000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "high",
+      "rationale": "The unit is the HC-05 hardware module itself, so it is anchored to A1. Its Bluetooth edges with U4 already cross a physical device link and remain a Bluetooth link. They do not become IP network traffic."
+    },
+    {
+      "unit_id": "U4",
+      "name": "App Bluetooth Connectivity",
+      "unit_type": "runtime",
+      "current_platform": "Android app",
+      "status": "non_offloadable",
+      "anchored_to": "A2",
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [
+        {
+          "type": "device_platform_api",
+          "component": "app_bluetooth_connection",
+          "evidence": "In the Android app, opens a Bluetooth serial connection to the selected sensor node, receives its byte stream and sends outgoing commands. The sensor node is reachable only over Bluetooth, which requires a Bluetooth radio within range of the node.",
+          "provenance": "observed"
+        },
+        {
+          "type": "device_platform_api",
+          "component": "device_discovery",
+          "evidence": "In the Android app, lists bonded Bluetooth devices and discovers nearby devices.",
+          "provenance": "observed"
+        },
+        {
+          "type": "local_user_interaction",
+          "component": "device_discovery",
+          "evidence": "Lets the farmer select the sensor node.",
+          "provenance": "observed"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U3",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "physical",
+          "bandwidth_mbps": 0.00016,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U3",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "physical",
+          "bandwidth_mbps": 0.00000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U6",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.00000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U5",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.00016,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "high",
+      "rationale": "The unit uses the phone's Bluetooth interface to discover the sensor node and hold the serial connection. The sensor node offers no other connectivity, and the farmer selects the node in the app. It is therefore anchored to A2 and is the only bridge between the sensor node and the rest of the application. Its edge to U5 concerns a non-anchored unit and is left to the Deployment Planner."
+    },
+    {
+      "unit_id": "U5",
+      "name": "Stream Parsing and Aggregation",
+      "unit_type": "runtime",
+      "current_platform": "Android app",
+      "status": "conditionally_offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "min_bandwidth_mbps",
+          "requirement": "The link from the phone-side connectivity unit U4 to the remote host must carry the received byte stream.",
+          "value": 0.00016,
+          "unit": "Mbps",
+          "related_unit": "U4",
+          "basis": "communication_requirements U4 -> U5, bandwidth_mbps",
+          "provenance": "inferred"
+        },
+        {
+          "type": "min_bandwidth_mbps",
+          "requirement": "The link from the remote host to the farmer interface U6 must carry the aggregated updates.",
+          "value": 0.0008,
+          "unit": "Mbps",
+          "related_unit": "U6",
+          "basis": "communication_requirements U5 -> U6, bandwidth_mbps",
+          "provenance": "assumed"
+        },
+        {
+          "type": "network_proximity",
+          "requirement": "The remote host must deliver parsed stream data within seconds of reception from U4.",
+          "value": null,
+          "unit": "regional",
+          "related_unit": "U4",
+          "basis": "communication_requirements U4 -> U5, latency_sensitivity = medium",
+          "provenance": "inferred"
+        },
+        {
+          "type": "network_proximity",
+          "requirement": "The remote host must deliver aggregated values to the dashboard within seconds (once-per-second refresh).",
+          "value": null,
+          "unit": "regional",
+          "related_unit": "U6",
+          "basis": "communication_requirements U5 -> U6, latency_sensitivity = medium",
+          "provenance": "inferred"
+        },
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm that the phone has IP connectivity to a remote host. The input states only its Bluetooth link to the sensor node.",
+          "value": null,
+          "unit": null,
+          "related_unit": "U4",
+          "basis": "anchors A2 network_connectivity",
+          "provenance": "unknown"
+        },
+        {
+          "type": "state_handling",
+          "requirement": "The unit keeps a sliding window of the last 10 readings of each measurement. A remote instance must be the single active consumer of the stream, or the window must be transferred when the unit moves.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "granularity characteristics 'stateful'; measurement_aggregation function",
+          "provenance": "observed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U4",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.00016,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": true
+        },
+        {
+          "peer_unit": "U6",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.0008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": true
+        }
+      ],
+      "added_network_traffic_mbps": 0.00096,
+      "confidence": "medium",
+      "rationale": "Parsing and sliding-window averaging need no sensor, Bluetooth interface or operator interface, so nothing binds the unit to A2. If it is offloaded, both of its edges connect it to units anchored on the phone, adding 0.00096 Mbps of traffic between the phone and the remote host. That traffic has seconds-scale timeliness, and the data would travel phone -> remote host -> phone. Remote execution also depends on the phone having IP connectivity, which the input does not state."
+    },
+    {
+      "unit_id": "U6",
+      "name": "Farmer Interface",
+      "unit_type": "runtime",
+      "current_platform": "Android app",
+      "status": "non_offloadable",
+      "anchored_to": "A2",
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [
+        {
+          "type": "local_user_interaction",
+          "component": "dashboard_display",
+          "evidence": "In the Android app, shows tiles with the mean temperature, humidity and soil moisture, plus a rainfall tile.",
+          "provenance": "observed"
+        },
+        {
+          "type": "local_user_interaction",
+          "component": "trend_chart",
+          "evidence": "In the Android app, draws a line chart of the temperature readings in the current sliding window.",
+          "provenance": "observed"
+        },
+        {
+          "type": "local_user_interaction",
+          "component": "command_input",
+          "evidence": "In the Android app, text field where the farmer types a command that is sent to the sensor node.",
+          "provenance": "observed"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U5",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.0008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U4",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.00000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "high",
+      "rationale": "The dashboard tiles, trend chart and command text field are the farmer's local interface in the Android app, so the unit is anchored to A2. Its edge to U4 stays within the same anchor. Its edge from U5 concerns a non-anchored unit and is left to the Deployment Planner."
+    }
+  ],
+  "summary": {
+    "offloadable": [],
+    "conditionally_offloadable": ["U5"],
+    "non_offloadable": ["U1", "U2", "U3", "U4", "U6"],
+    "follows_supported_units": [],
+    "local_core": {
+      "A1": ["U1", "U2", "U3"],
+      "A2": ["U4", "U6"]
+    },
+    "disagreements_with_granularity": ["U2"],
+    "observations": [
+      "The application has two anchors: the Arduino Uno sensor node (A1) and the farmer's Android phone (A2), connected only by the Bluetooth serial link between U3 and U4.",
+      "U2 is anchored to A1 despite granularity marking it flexible. Its hardware edges to the HC-05 module cannot be separated, and it is the only path by which the sensor readings leave the Arduino.",
+      "The sensor node has no connectivity other than Bluetooth to the phone. Every data flow between A1 and any other host therefore passes through U4 on the phone.",
+      "U5 is the only unit that can execute on a remote host. Doing so adds 0.00096 Mbps of traffic between the phone and that host, with seconds-scale timeliness, and requires the phone to have IP connectivity, which the input does not state.",
+      "No unit requires a GPU, external services or persistent storage."
+    ]
+  }
+}

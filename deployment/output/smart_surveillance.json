@@ -1,0 +1,790 @@
+{
+  "application_id": "smart_surveillance",
+  "search": {
+    "method": "exhaustive",
+    "configurations_evaluated": 192,
+    "candidate_nodes": {
+      "U3": [
+        "operator_pc",
+        "edge_1",
+        "edge_2",
+        "edge_3"
+      ],
+      "U5": [
+        "edge_1",
+        "edge_3"
+      ],
+      "U6": [
+        "edge_1",
+        "edge_3"
+      ],
+      "U7": [
+        "operator_pc",
+        "edge_1",
+        "edge_2",
+        "edge_3",
+        "edge_4",
+        "edge_5",
+        "edge_6",
+        "edge_7",
+        "edge_8",
+        "edge_9",
+        "edge_10",
+        "cloud_1"
+      ]
+    },
+    "rejected_nodes": {
+      "U3": {
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "agri_phone": "foreign local device",
+        "crop_sensor": "non-comparable device (microcontroller)",
+        "edge_4": "proximity same_site to U2 (operator_pc) violated",
+        "edge_5": "proximity same_site to U2 (operator_pc) violated",
+        "edge_6": "proximity same_site to U2 (operator_pc) violated",
+        "edge_7": "proximity same_site to U2 (operator_pc) violated",
+        "edge_8": "proximity same_site to U2 (operator_pc) violated",
+        "edge_9": "proximity same_site to U2 (operator_pc) violated",
+        "edge_10": "proximity same_site to U2 (operator_pc) violated",
+        "cloud_1": "proximity same_site to U2 (operator_pc) violated"
+      },
+      "U5": {
+        "operator_pc": "no GPU / insufficient GPU memory",
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "agri_phone": "foreign local device",
+        "crop_sensor": "non-comparable device (microcontroller)",
+        "edge_2": "no GPU / insufficient GPU memory",
+        "edge_4": "no GPU / insufficient GPU memory",
+        "edge_5": "no GPU / insufficient GPU memory",
+        "edge_6": "no GPU / insufficient GPU memory",
+        "edge_7": "proximity same_site to U1 (operator_pc) violated",
+        "edge_8": "no GPU / insufficient GPU memory",
+        "edge_9": "no GPU / insufficient GPU memory",
+        "edge_10": "no GPU / insufficient GPU memory",
+        "cloud_1": "proximity same_site to U1 (operator_pc) violated"
+      },
+      "U6": {
+        "operator_pc": "no GPU / insufficient GPU memory",
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "agri_phone": "foreign local device",
+        "crop_sensor": "non-comparable device (microcontroller)",
+        "edge_2": "no GPU / insufficient GPU memory",
+        "edge_4": "no GPU / insufficient GPU memory",
+        "edge_5": "no GPU / insufficient GPU memory",
+        "edge_6": "no GPU / insufficient GPU memory",
+        "edge_7": "proximity same_site to U1 (operator_pc) violated",
+        "edge_8": "no GPU / insufficient GPU memory",
+        "edge_9": "no GPU / insufficient GPU memory",
+        "edge_10": "no GPU / insufficient GPU memory",
+        "cloud_1": "proximity same_site to U1 (operator_pc) violated"
+      },
+      "U7": {
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "agri_phone": "foreign local device",
+        "crop_sensor": "non-comparable device (microcontroller)"
+      }
+    },
+    "base_configurations_feasible": 36,
+    "replicated_configurations_feasible": 31,
+    "replication_policy": "sla_required"
+  },
+  "baselines": {
+    "all_local": {
+      "feasible": false,
+      "score": 12.6531,
+      "violations": [
+        "operator_pc has no GPU memory (capacity 0 GB), but U5 (2 GB), U6 (2 GB) require it",
+        "U4 (initialization) needs 2 cores of CPU at start-up on operator_pc, but only 1.39 cores are free"
+      ],
+      "placement": {
+        "U3": "operator_pc",
+        "U5": "operator_pc",
+        "U6": "operator_pc",
+        "U7": "operator_pc"
+      }
+    },
+    "cloud_only": {
+      "feasible": false,
+      "score": 81.6614,
+      "violations": [
+        "link l_pc (operator_pc - sw_campus, lan): 837.6 Mbps exceeds 80% of its 1000 Mbps capacity; flows: U2->U3 672, U3->U1 82.8, U5->U1 82.8, U6->U1 0.0016",
+        "link wan_campus (sw_campus - sw_metro, wan): 837.6 Mbps exceeds 80% of its 1000 Mbps capacity; flows: U2->U3 672, U3->U1 82.8, U5->U1 82.8, U6->U1 0.0016",
+        "link wan_cloud (sw_metro - sw_cloud, wan): 837.6 Mbps exceeds 80% of its 1000 Mbps capacity; flows: U2->U3 672, U3->U1 82.8, U5->U1 82.8, U6->U1 0.0016",
+        "U3 on cloud_1 violates same_site proximity to U2 on operator_pc",
+        "U3 on cloud_1 violates same_site proximity to U1 on operator_pc",
+        "U5 on cloud_1 violates same_site proximity to U1 on operator_pc",
+        "U6 on cloud_1 violates same_site proximity to U1 on operator_pc"
+      ],
+      "placement": {
+        "U3": "cloud_1",
+        "U5": "cloud_1",
+        "U6": "cloud_1",
+        "U7": "cloud_1"
+      }
+    },
+    "greedy_first_fit": {
+      "feasible": true,
+      "score": 10.5233,
+      "placement": {
+        "U5": [
+          "edge_1"
+        ],
+        "U6": [
+          "edge_1"
+        ],
+        "U3": [
+          "operator_pc"
+        ],
+        "U7": [
+          "edge_3",
+          "edge_2"
+        ]
+      }
+    }
+  },
+  "status": "feasible",
+  "sla_compliance": {
+    "availability_mode": "soft",
+    "availability_target": 0.99,
+    "availability": "not_met_soft_constraint",
+    "units_below_target": [
+      {
+        "unit_id": "U1",
+        "availability": 0.98,
+        "target": 0.99,
+        "controllable_by_planner": false,
+        "cause": "anchored to operator_pc; bounded by the device availability (0.98)"
+      },
+      {
+        "unit_id": "U2",
+        "availability": 0.98,
+        "target": 0.99,
+        "controllable_by_planner": false,
+        "cause": "anchored to operator_pc; bounded by the device availability (0.98)"
+      },
+      {
+        "unit_id": "U3",
+        "availability": 0.98,
+        "target": 0.99,
+        "controllable_by_planner": true,
+        "cause": "SLA requests 1 replica(s); placed on operator_pc (0.98), whose availability is below the target. The shortfall is penalised in the objective (soft mode)."
+      }
+    ],
+    "explanation": "Availability is a soft objective: shortfalls of movable units are penalised in the score but do not make the plan infeasible. Anchored units are excluded from the constraint: their availability is bounded by the device they depend on, which the planner cannot change."
+  },
+  "placements": [
+    {
+      "unit_id": "U1",
+      "name": "Operator Interface",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "operator_pc",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A1 on operator_pc",
+        "blocking_factors": [
+          "hardware_binding: Raises a real-time alert with an optional beep on the local machine speaker.",
+          "local_user_interaction: Streamlit dashboard where the operator selects the video source, sets frame-skip, resolution and alert options, and starts or stops detection.",
+          "local_user_interaction: Renders the annotated frames, the current detection status and FPS statistics in the user interface."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "operator_pc",
+          "tier": "device",
+          "site": "campus"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.98,
+      "meets_availability_target": false,
+      "availability_cause": "anchored to operator_pc; bounded by the device availability (0.98)",
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U2",
+      "name": "Video Acquisition",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "operator_pc",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A1 on operator_pc",
+        "blocking_factors": [
+          "hardware_binding: Captures frames continuously from the local webcam at the target FPS."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "operator_pc",
+          "tier": "device",
+          "site": "campus"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.98,
+      "meets_availability_target": false,
+      "availability_cause": "anchored to operator_pc; bounded by the device availability (0.98)",
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U3",
+      "name": "Frame Preprocessing",
+      "offloadability": "conditionally_offloadable",
+      "decision": "kept on original host",
+      "original_host": "operator_pc",
+      "replication_semantics": "single",
+      "replicable_as": "load_split",
+      "decision_rationale": {
+        "reason": "operator_pc: every other candidate node violates a constraint (see infeasible_moves).",
+        "excluded_before_search": [
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          },
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "agri_phone"
+            ]
+          },
+          {
+            "reason": "proximity same_site to U2 (operator_pc) violated",
+            "nodes": [
+              "edge_4",
+              "edge_5",
+              "edge_6",
+              "edge_7",
+              "edge_8",
+              "edge_9",
+              "edge_10",
+              "cloud_1"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [],
+        "infeasible_moves": [
+          {
+            "move": "operator_pc -> edge_1",
+            "feasible": false,
+            "score_delta": null,
+            "why": [
+              "link l_pc (operator_pc - sw_campus, lan): 837.6 Mbps exceeds 80% of its 1000 Mbps capacity; flows: U2->U3 672, U3->U1 82.8, U5->U1 82.8, U6->U1 0.0016"
+            ]
+          },
+          {
+            "move": "operator_pc -> edge_2",
+            "feasible": false,
+            "score_delta": null,
+            "why": [
+              "link l_pc (operator_pc - sw_campus, lan): 837.6 Mbps exceeds 80% of its 1000 Mbps capacity; flows: U2->U3 672, U3->U1 82.8, U5->U1 82.8, U6->U1 0.0016"
+            ]
+          },
+          {
+            "move": "operator_pc -> edge_3",
+            "feasible": false,
+            "score_delta": null,
+            "why": [
+              "link l_pc (operator_pc - sw_campus, lan): 837.6 Mbps exceeds 80% of its 1000 Mbps capacity; flows: U2->U3 672, U3->U1 82.8, U5->U1 82.8, U6->U1 0.0016",
+              "link l_e3 (edge_3 - sw_campus, lan): 855.6 Mbps exceeds 80% of its 1000 Mbps capacity; flows: U2->U3 672, U3->U1 82.8, U3->U5 82.8, U3->U6 18, U6->U7 0.0016"
+            ]
+          }
+        ],
+        "infeasible_moves_total": 3
+      },
+      "replicas": [
+        {
+          "node": "operator_pc",
+          "tier": "device",
+          "site": "campus"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "load_split",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.98,
+      "meets_availability_target": false,
+      "availability_cause": "SLA requests 1 replica(s); placed on operator_pc (0.98), whose availability is below the target. The shortfall is penalised in the objective (soft mode).",
+      "open_assumptions": [
+        "Confirm the camera resolution and frame rate (assumed 1280x720 at 30 FPS), the display resolution (assumed 640x360), and whether frames would be encoded when sent over a network. The bandwidth conditions scale directly with these."
+      ]
+    },
+    {
+      "unit_id": "U4",
+      "name": "Model Provisioning",
+      "offloadability": "follows_supported_units",
+      "decision": "follows U5,U6",
+      "original_host": "operator_pc",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "initialization dependency of U5, U6 (offloadability: follows_supported_units): deployed on every node hosting one of them (edge_1), so that each consumer loads its models locally. Not placed independently and not scaled on its own; only its persistent storage (0.5 GB) is reserved, and its start-up peak must fit."
+      },
+      "replicas": [
+        {
+          "node": "edge_1",
+          "tier": "edge",
+          "site": "campus"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.99,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U5",
+      "name": "Object Detection and Tracking",
+      "offloadability": "conditionally_offloadable",
+      "decision": "offloaded",
+      "original_host": "operator_pc",
+      "replication_semantics": "single",
+      "replicable_as": "single",
+      "decision_rationale": {
+        "reason": "edge_1 minimises the objective; the closest alternative (edge_1 -> edge_3) scores +0.254 (load_imbalance +0.214; latency +0.04).",
+        "excluded_before_search": [
+          {
+            "reason": "no GPU / insufficient GPU memory",
+            "nodes": [
+              "operator_pc",
+              "edge_2",
+              "edge_4",
+              "edge_5",
+              "edge_6",
+              "edge_8",
+              "edge_9",
+              "edge_10"
+            ]
+          },
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          },
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "agri_phone"
+            ]
+          },
+          {
+            "reason": "proximity same_site to U1 (operator_pc) violated",
+            "nodes": [
+              "edge_7",
+              "cloud_1"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [
+          {
+            "move": "edge_1 -> edge_3",
+            "feasible": true,
+            "score_delta": 0.254,
+            "why": [
+              "load_imbalance +0.214",
+              "latency +0.04"
+            ]
+          }
+        ],
+        "infeasible_moves": [],
+        "infeasible_moves_total": 0
+      },
+      "replicas": [
+        {
+          "node": "edge_1",
+          "tier": "edge",
+          "site": "campus"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.99,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": [
+        "Confirm the processed frame rate (assumed 15 FPS) and detection resolution (assumed 640x360), which determine whether a GPU is required and how much frame bandwidth is needed."
+      ]
+    },
+    {
+      "unit_id": "U6",
+      "name": "Crime and Activity Recognition",
+      "offloadability": "conditionally_offloadable",
+      "decision": "offloaded",
+      "original_host": "operator_pc",
+      "replication_semantics": "single",
+      "replicable_as": "single",
+      "decision_rationale": {
+        "reason": "edge_1 minimises the objective; the closest alternative (edge_1 -> edge_3) scores +0.254 (load_imbalance +0.214; latency +0.04).",
+        "excluded_before_search": [
+          {
+            "reason": "no GPU / insufficient GPU memory",
+            "nodes": [
+              "operator_pc",
+              "edge_2",
+              "edge_4",
+              "edge_5",
+              "edge_6",
+              "edge_8",
+              "edge_9",
+              "edge_10"
+            ]
+          },
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          },
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "agri_phone"
+            ]
+          },
+          {
+            "reason": "proximity same_site to U1 (operator_pc) violated",
+            "nodes": [
+              "edge_7",
+              "cloud_1"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [
+          {
+            "move": "edge_1 -> edge_3",
+            "feasible": true,
+            "score_delta": 0.254,
+            "why": [
+              "load_imbalance +0.214",
+              "latency +0.04"
+            ]
+          }
+        ],
+        "infeasible_moves": [],
+        "infeasible_moves_total": 0
+      },
+      "replicas": [
+        {
+          "node": "edge_1",
+          "tier": "edge",
+          "site": "campus"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.99,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": [
+        "Confirm the clip classification rate (assumed about once per second), which determines whether a GPU is required rather than optional."
+      ]
+    },
+    {
+      "unit_id": "U7",
+      "name": "Event Logging",
+      "offloadability": "offloadable",
+      "decision": "offloaded",
+      "original_host": "operator_pc",
+      "replication_semantics": "mirrored",
+      "replicable_as": "mirrored",
+      "decision_rationale": {
+        "reason": "edge_3, edge_2 minimises the objective; the closest alternative (edge_2 -> edge_1) scores +0.0043 (load_imbalance +0.00432; network_traffic -1.6e-05).",
+        "excluded_before_search": [
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          },
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "agri_phone"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [
+          {
+            "move": "edge_2 -> edge_1",
+            "feasible": true,
+            "score_delta": 0.0043,
+            "why": [
+              "load_imbalance +0.00432",
+              "network_traffic -1.6e-05"
+            ]
+          },
+          {
+            "move": "edge_3 -> edge_1",
+            "feasible": true,
+            "score_delta": 0.0068,
+            "why": [
+              "load_imbalance +0.00777",
+              "latency -0.001"
+            ]
+          },
+          {
+            "move": "edge_2 -> operator_pc",
+            "feasible": true,
+            "score_delta": 0.0094,
+            "why": [
+              "load_imbalance +0.00432",
+              "device_load +0.00312"
+            ]
+          }
+        ],
+        "infeasible_moves": [],
+        "infeasible_moves_total": 0
+      },
+      "replicas": [
+        {
+          "node": "edge_3",
+          "tier": "edge",
+          "site": "campus"
+        },
+        {
+          "node": "edge_2",
+          "tier": "edge",
+          "site": "campus"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "mirrored",
+        "replicas": 2,
+        "writes": "all_replicas",
+        "reads": "load_balanced",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 0.5,
+        "cpu_share": 1.0,
+        "storage_share": 1.0,
+        "note": "writes are mirrored to every replica (full copy each); reads are served by one replica"
+      },
+      "availability": 0.9999,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    }
+  ],
+  "objective": {
+    "score": 10.5233,
+    "score_before_replication": 10.5276,
+    "components": {
+      "network_traffic": 183.6048,
+      "wan_traffic": 0.0,
+      "latency": 2.825,
+      "device_load": 0.259375,
+      "load_imbalance": 0.143143,
+      "max_node_utilization": 0.5,
+      "cloud_usage": 0,
+      "assumption_risk": 2,
+      "availability_shortfall": 0.01
+    }
+  },
+  "violations": [],
+  "node_utilization": {
+    "edge_2": {
+      "cpu_cores": 0.007,
+      "memory_gb": 0.008,
+      "storage_gb": 0.001
+    },
+    "operator_pc": {
+      "cpu_cores": 0.259,
+      "memory_gb": 0.042
+    },
+    "edge_1": {
+      "cpu_cores": 0.104,
+      "memory_gb": 0.047,
+      "gpu_memory_gb": 0.5,
+      "storage_gb": 0.005
+    },
+    "edge_3": {
+      "cpu_cores": 0.014,
+      "memory_gb": 0.016,
+      "storage_gb": 0.002
+    }
+  },
+  "load_balance": {
+    "pool": "all shared Edge and Cloud nodes, including load of previously planned applications",
+    "metric": "dominant resource utilization per node = max over CPU, memory, GPU memory, storage",
+    "replication_models": {
+      "load_split": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "full"
+      },
+      "mirrored": {
+        "writes": "all_replicas",
+        "reads": "load_balanced",
+        "cpu": "full",
+        "storage": "full"
+      },
+      "partitioned": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "split"
+      },
+      "single": {
+        "writes": "n/a",
+        "reads": "n/a",
+        "cpu": "full",
+        "storage": "full"
+      }
+    },
+    "dominant_utilization": {
+      "edge_1": 0.5,
+      "edge_2": 0.0079,
+      "edge_3": 0.0157,
+      "edge_4": 0.0,
+      "edge_5": 0.0,
+      "edge_6": 0.0,
+      "edge_7": 0.0,
+      "edge_8": 0.0,
+      "edge_9": 0.0,
+      "edge_10": 0.0,
+      "cloud_1": 0.0
+    },
+    "max_node_utilization": {
+      "before": 0.0,
+      "after": 0.5
+    },
+    "stdev": {
+      "before": 0.0,
+      "after": 0.1431
+    },
+    "objective_uses": "after - before (marginal effect of this application)"
+  },
+  "link_load_mbps": {
+    "l_pc": 183.6016,
+    "l_e1": 183.6048,
+    "l_e2": 0.0016,
+    "l_e3": 0.0016
+  },
+  "replication_notes": [
+    "U7: 2 replicas on edge_3, edge_2 because the SLA policy requests desired_replicas=2 (max 2) for smart_surveillance; one replica per node (anti-affinity). Replication semantics: mirrored - the unit holds persistent data, so every replica receives ALL writes and keeps a full copy (2x write traffic, full CPU and storage per replica). ASSUMPTION: replicas are kept consistent by asynchronous write replication; ordering/consistency is not modelled."
+  ],
+  "alternatives": [
+    {
+      "score": 10.5276,
+      "score_before_replication": 10.5302,
+      "placement": {
+        "U3": [
+          "operator_pc"
+        ],
+        "U5": [
+          "edge_1"
+        ],
+        "U6": [
+          "edge_1"
+        ],
+        "U7": [
+          "edge_1",
+          "edge_3"
+        ]
+      }
+    },
+    {
+      "score": 10.5327,
+      "score_before_replication": 13.5403,
+      "placement": {
+        "U3": [
+          "operator_pc"
+        ],
+        "U5": [
+          "edge_1"
+        ],
+        "U6": [
+          "edge_1"
+        ],
+        "U7": [
+          "operator_pc",
+          "edge_3"
+        ]
+      }
+    },
+    {
+      "score": 10.5687,
+      "score_before_replication": 10.5766,
+      "placement": {
+        "U3": [
+          "operator_pc"
+        ],
+        "U5": [
+          "edge_1"
+        ],
+        "U6": [
+          "edge_1"
+        ],
+        "U7": [
+          "edge_6",
+          "edge_3"
+        ]
+      }
+    }
+  ]
+}

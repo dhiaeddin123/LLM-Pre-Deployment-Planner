@@ -1,0 +1,82 @@
+{
+  "application_id": "smart_agriculture_iot",
+  "nodes": [
+    {
+      "id": "temperature_humidity_sensing",
+      "name": "Temperature and Humidity Sensing",
+      "function": "Reads air temperature and humidity from a DHT22 sensor wired to the Arduino Uno sensor node, once per loop iteration (about every second)"
+    },
+    {
+      "id": "soil_moisture_sensing",
+      "name": "Soil Moisture Sensing",
+      "function": "Reads the soil moisture level from an analog soil moisture sensor wired to the Arduino Uno sensor node, once per loop iteration"
+    },
+    {
+      "id": "measurement_packaging",
+      "name": "Measurement Packaging",
+      "function": "On the Arduino Uno, formats the latest temperature, humidity and soil moisture values into one space-separated text line"
+    },
+    {
+      "id": "sensor_command_handler",
+      "name": "Sensor Command Handler",
+      "function": "On the Arduino Uno, interprets single-character commands received over Bluetooth ('h', 't', 'm') and replies with the requested humidity, temperature or soil moisture value"
+    },
+    {
+      "id": "sensor_bluetooth_link",
+      "name": "Sensor Bluetooth Link",
+      "function": "HC-05 Bluetooth module on the Arduino Uno (serial, 9600 baud): transmits one measurement line every second and receives commands from the mobile app"
+    },
+    {
+      "id": "device_discovery",
+      "name": "Device Discovery",
+      "function": "In the Android app, lists bonded Bluetooth devices, discovers nearby devices and lets the farmer select the sensor node"
+    },
+    {
+      "id": "app_bluetooth_connection",
+      "name": "App Bluetooth Connection",
+      "function": "In the Android app, opens a Bluetooth serial connection to the selected sensor node, receives its byte stream and sends outgoing commands"
+    },
+    {
+      "id": "stream_parsing",
+      "name": "Stream Parsing",
+      "function": "In the Android app, removes backspace control characters from the received bytes, splits the stream into lines and each line into temperature, humidity and soil moisture values"
+    },
+    {
+      "id": "measurement_aggregation",
+      "name": "Measurement Aggregation",
+      "function": "In the Android app, keeps a sliding window of the last 10 readings of each measurement and computes their mean values"
+    },
+    {
+      "id": "dashboard_display",
+      "name": "Dashboard Display",
+      "function": "In the Android app, shows tiles with the mean temperature, humidity and soil moisture, plus a rainfall tile with a placeholder value"
+    },
+    {
+      "id": "trend_chart",
+      "name": "Temperature Trend Chart",
+      "function": "In the Android app, draws a line chart of the temperature readings in the current sliding window"
+    },
+    {
+      "id": "command_input",
+      "name": "Command Input",
+      "function": "In the Android app, text field where the farmer types a command that is sent to the sensor node"
+    }
+  ],
+  "edges": [
+    { "source": "temperature_humidity_sensing", "target": "measurement_packaging", "type": "data_flow" },
+    { "source": "soil_moisture_sensing", "target": "measurement_packaging", "type": "data_flow" },
+    { "source": "temperature_humidity_sensing", "target": "sensor_command_handler", "type": "data_flow" },
+    { "source": "soil_moisture_sensing", "target": "sensor_command_handler", "type": "data_flow" },
+    { "source": "measurement_packaging", "target": "sensor_bluetooth_link", "type": "data_flow" },
+    { "source": "sensor_command_handler", "target": "sensor_bluetooth_link", "type": "data_flow" },
+    { "source": "sensor_bluetooth_link", "target": "sensor_command_handler", "type": "control_flow" },
+    { "source": "sensor_bluetooth_link", "target": "app_bluetooth_connection", "type": "data_flow" },
+    { "source": "app_bluetooth_connection", "target": "sensor_bluetooth_link", "type": "control_flow" },
+    { "source": "device_discovery", "target": "app_bluetooth_connection", "type": "control_flow" },
+    { "source": "command_input", "target": "app_bluetooth_connection", "type": "data_flow" },
+    { "source": "app_bluetooth_connection", "target": "stream_parsing", "type": "data_flow" },
+    { "source": "stream_parsing", "target": "measurement_aggregation", "type": "data_flow" },
+    { "source": "measurement_aggregation", "target": "dashboard_display", "type": "data_flow" },
+    { "source": "measurement_aggregation", "target": "trend_chart", "type": "data_flow" }
+  ]
+}

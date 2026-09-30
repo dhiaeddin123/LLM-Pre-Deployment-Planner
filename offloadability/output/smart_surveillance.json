@@ -1,0 +1,537 @@
+{
+  "application_id": "smart_surveillance",
+  "anchors": [
+    {
+      "anchor_id": "A1",
+      "description": "Operator's local machine running the Streamlit application, with the local webcam, the local machine speaker and the operator dashboard",
+      "anchored_units": ["U1", "U2"],
+      "evidence": [
+        "video_acquisition captures frames continuously from the local webcam.",
+        "alert_notification raises a status message and optional beep on the local machine speaker.",
+        "user_interface is the Streamlit dashboard where the operator selects the video source, sets options and starts or stops detection.",
+        "video_display renders the annotated frames, detection status and FPS statistics in the user interface."
+      ],
+      "network_connectivity": "IP connectivity to the Internet is implied by model_loader downloading models from Hugging Face and PyTorchVideo (inferred). Connectivity to other local hosts is not stated.",
+      "provenance": "observed"
+    }
+  ],
+  "offloadability_profiles": [
+    {
+      "unit_id": "U1",
+      "name": "Operator Interface",
+      "unit_type": "runtime",
+      "current_platform": "Streamlit Python application",
+      "status": "non_offloadable",
+      "anchored_to": "A1",
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [
+        {
+          "type": "hardware_binding",
+          "component": "alert_notification",
+          "evidence": "Raises a real-time alert with an optional beep on the local machine speaker.",
+          "provenance": "observed"
+        },
+        {
+          "type": "local_user_interaction",
+          "component": "user_interface",
+          "evidence": "Streamlit dashboard where the operator selects the video source, sets frame-skip, resolution and alert options, and starts or stops detection.",
+          "provenance": "observed"
+        },
+        {
+          "type": "local_user_interaction",
+          "component": "video_display",
+          "evidence": "Renders the annotated frames, the current detection status and FPS statistics in the user interface.",
+          "provenance": "observed"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U2",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U3",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 82.8,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U5",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 82.8,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U6",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.0016,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "high",
+      "rationale": "The alert beep needs the local machine speaker, and the dashboard and video display are the operator's local interface, so the unit is anchored to A1. Its control edge to U2 stays within the same anchor. Its incoming frame and status flows come from non-anchored units and are left to the Deployment Planner."
+    },
+    {
+      "unit_id": "U2",
+      "name": "Video Acquisition",
+      "unit_type": "runtime",
+      "current_platform": "Streamlit Python application",
+      "status": "non_offloadable",
+      "anchored_to": "A1",
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [
+        {
+          "type": "hardware_binding",
+          "component": "video_acquisition",
+          "evidence": "Captures frames continuously from the local webcam at the target FPS.",
+          "provenance": "observed"
+        }
+      ],
+      "conditions": [],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U1",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.000008,
+          "latency_sensitivity": "medium",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U3",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 672,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "high",
+      "rationale": "Webcam capture requires the local camera, so the unit is anchored to A1. In the alternative uploaded-file mode the input is a stored file rather than the camera, but the webcam mode alone establishes the binding. Its 672 Mbps raw frame stream to U3 concerns a non-anchored unit and is left to the Deployment Planner."
+    },
+    {
+      "unit_id": "U3",
+      "name": "Frame Preprocessing",
+      "unit_type": "runtime",
+      "current_platform": "Streamlit Python application",
+      "status": "conditionally_offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "min_bandwidth_mbps",
+          "requirement": "The link from the webcam unit U2 to the remote host must carry the raw frame stream.",
+          "value": 672,
+          "unit": "Mbps",
+          "related_unit": "U2",
+          "basis": "communication_requirements U2 -> U3, bandwidth_mbps (raw uncompressed frames)",
+          "provenance": "assumed"
+        },
+        {
+          "type": "min_bandwidth_mbps",
+          "requirement": "The link from the remote host to the operator interface U1 must carry the display-resolution frames.",
+          "value": 82.8,
+          "unit": "Mbps",
+          "related_unit": "U1",
+          "basis": "communication_requirements U3 -> U1, bandwidth_mbps",
+          "provenance": "assumed"
+        },
+        {
+          "type": "network_proximity",
+          "requirement": "Every captured frame must reach preprocessing within the processing of the current frame.",
+          "value": null,
+          "unit": "same_site",
+          "related_unit": "U2",
+          "basis": "communication_requirements U2 -> U3, latency_sensitivity = high",
+          "provenance": "inferred"
+        },
+        {
+          "type": "network_proximity",
+          "requirement": "Preprocessed frames must reach the live display on every processed frame.",
+          "value": null,
+          "unit": "same_site",
+          "related_unit": "U1",
+          "basis": "communication_requirements U3 -> U1, latency_sensitivity = high",
+          "provenance": "inferred"
+        },
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm the camera resolution and frame rate (assumed 1280x720 at 30 FPS), the display resolution (assumed 640x360), and whether frames would be encoded when sent over a network. The bandwidth conditions scale directly with these.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "resource_estimation assumptions on webcam resolution and FPS, display resolution and uncompressed in-process frames",
+          "provenance": "assumed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U2",
+          "direction": "incoming",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 672,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": true
+        },
+        {
+          "peer_unit": "U1",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 82.8,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": true
+        },
+        {
+          "peer_unit": "U5",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 82.8,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U6",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 18,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 754.8,
+      "confidence": "medium",
+      "rationale": "Resizing and frame skipping need no camera, speaker or operator interface, so nothing binds the unit to A1. However, it sits between the webcam and the display on the per-frame path. Offloading it turns the raw 672 Mbps capture stream and the 82.8 Mbps display stream into network traffic, both with high latency sensitivity. It is conditional on a same-site, high-bandwidth link to A1 and on the assumed frame parameters."
+    },
+    {
+      "unit_id": "U4",
+      "name": "Model Provisioning",
+      "unit_type": "initialization",
+      "current_platform": "Streamlit Python application",
+      "status": "follows_supported_units",
+      "anchored_to": null,
+      "follows_units": ["U5", "U6"],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "external_service_access",
+          "requirement": "Each host running the unit must reach Hugging Face and PyTorchVideo to download the pretrained models, unless they are already cached.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "model_loader function; granularity characteristic external_service_dependency",
+          "provenance": "observed"
+        },
+        {
+          "type": "persistent_storage",
+          "requirement": "Each host running the unit must provide durable storage for the cached model files.",
+          "value": 0.5,
+          "unit": "GB",
+          "related_unit": null,
+          "basis": "resource_estimation U4 storage.size_gb, persistent = true",
+          "provenance": "assumed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U5",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0,
+          "latency_sensitivity": "not_applicable",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U6",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0,
+          "latency_sensitivity": "not_applicable",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "high",
+      "rationale": "The unit only downloads and loads models at startup, into the memory of the process that runs inference. It therefore runs wherever U5 and U6 run. If those units are on different hosts, each host needs its own instance with repository access and model storage."
+    },
+    {
+      "unit_id": "U5",
+      "name": "Object Detection and Tracking",
+      "unit_type": "runtime",
+      "current_platform": "Streamlit Python application",
+      "status": "conditionally_offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "gpu_required",
+          "requirement": "The remote host must provide a GPU to sustain YOLOv8-large inference and DeepSORT embedding on every processed frame.",
+          "value": 2,
+          "unit": "GB",
+          "related_unit": null,
+          "basis": "resource_estimation U5 gpu.requirement = required, memory_gb",
+          "provenance": "assumed"
+        },
+        {
+          "type": "min_bandwidth_mbps",
+          "requirement": "The link from the remote host to the operator interface U1 must carry the annotated frames.",
+          "value": 82.8,
+          "unit": "Mbps",
+          "related_unit": "U1",
+          "basis": "communication_requirements U5 -> U1, bandwidth_mbps",
+          "provenance": "assumed"
+        },
+        {
+          "type": "network_proximity",
+          "requirement": "Annotated frames must reach the live display on every processed frame.",
+          "value": null,
+          "unit": "same_site",
+          "related_unit": "U1",
+          "basis": "communication_requirements U5 -> U1, latency_sensitivity = high",
+          "provenance": "inferred"
+        },
+        {
+          "type": "state_handling",
+          "requirement": "DeepSORT keeps persistent track IDs across frames. One active instance per video stream, with sticky routing of frames, or transfer of the track state is needed.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "object_tracking function; granularity characteristic stateful",
+          "provenance": "observed"
+        },
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm the processed frame rate (assumed 15 FPS) and detection resolution (assumed 640x360), which determine whether a GPU is required and how much frame bandwidth is needed.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "resource_estimation U5 gpu.assumption_refs and edge assumption_refs",
+          "provenance": "assumed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U3",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 82.8,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U4",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0,
+          "latency_sensitivity": "not_applicable",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U1",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 82.8,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": true
+        }
+      ],
+      "added_network_traffic_mbps": 82.8,
+      "confidence": "medium",
+      "rationale": "Detection and tracking need no camera, speaker or operator interface, and the ML inference is a GPU condition on the remote host, not a binding. Offloading adds the 82.8 Mbps annotated-frame stream to the anchored display, which is latency-sensitive on every frame, so the remote host must be same-site. Its 82.8 Mbps input from U3 depends on where U3 runs and is left to the Deployment Planner. The GPU requirement and both bandwidths rest on the assumed frame rate and resolution."
+    },
+    {
+      "unit_id": "U6",
+      "name": "Crime and Activity Recognition",
+      "unit_type": "runtime",
+      "current_platform": "Streamlit Python application",
+      "status": "conditionally_offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "gpu_required",
+          "requirement": "The remote host must provide a GPU to run VideoMAE and I3D-R50 on 16-frame clips at the required rate.",
+          "value": 2,
+          "unit": "GB",
+          "related_unit": null,
+          "basis": "resource_estimation U6 gpu.requirement = required, memory_gb",
+          "provenance": "assumed"
+        },
+        {
+          "type": "min_bandwidth_mbps",
+          "requirement": "The link from the remote host to the operator interface U1 must carry the status labels and crime alerts.",
+          "value": 0.0016,
+          "unit": "Mbps",
+          "related_unit": "U1",
+          "basis": "communication_requirements U6 -> U1, bandwidth_mbps",
+          "provenance": "assumed"
+        },
+        {
+          "type": "network_proximity",
+          "requirement": "Crime alerts must reach the operator interface in real time.",
+          "value": null,
+          "unit": "same_site",
+          "related_unit": "U1",
+          "basis": "communication_requirements U6 -> U1, latency_sensitivity = high ('Raises a real-time alert when a crime is detected')",
+          "provenance": "observed"
+        },
+        {
+          "type": "state_handling",
+          "requirement": "The sliding buffer keeps the last 16 sampled frames. One active instance per video stream, with sticky routing of frames, or transfer of the buffer is needed.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "frame_buffering function; granularity characteristic stateful",
+          "provenance": "observed"
+        },
+        {
+          "type": "verify_assumption",
+          "requirement": "Confirm the clip classification rate (assumed about once per second), which determines whether a GPU is required rather than optional.",
+          "value": null,
+          "unit": null,
+          "related_unit": null,
+          "basis": "resource_estimation U6 gpu.assumption_refs",
+          "provenance": "assumed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U3",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 18,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U4",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0,
+          "latency_sensitivity": "not_applicable",
+          "becomes_network_traffic": false
+        },
+        {
+          "peer_unit": "U1",
+          "direction": "outgoing",
+          "peer_is_anchored": true,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.0016,
+          "latency_sensitivity": "high",
+          "becomes_network_traffic": true
+        },
+        {
+          "peer_unit": "U7",
+          "direction": "outgoing",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.0016,
+          "latency_sensitivity": "low",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0.0016,
+      "confidence": "medium",
+      "rationale": "Clip buffering and video classification need no camera, speaker or operator interface, and the two ML models are a GPU condition on the remote host. Offloading adds only 0.0016 Mbps of status and alert traffic to the anchored interface. That traffic carries the real-time crime alert, which requires a same-site remote host. Its 18 Mbps clip-frame input from U3 depends on where U3 runs and is left to the Deployment Planner."
+    },
+    {
+      "unit_id": "U7",
+      "name": "Event Logging",
+      "unit_type": "runtime",
+      "current_platform": "Streamlit Python application",
+      "status": "offloadable",
+      "anchored_to": null,
+      "follows_units": [],
+      "agrees_with_granularity": true,
+      "disagreement_reason": null,
+      "blocking_factors": [],
+      "conditions": [
+        {
+          "type": "persistent_storage",
+          "requirement": "The remote host must provide durable storage for the log files, growing over time (about one week of retention).",
+          "value": 0.1,
+          "unit": "GB",
+          "related_unit": null,
+          "basis": "resource_estimation U7 storage.size_gb, persistent = true, growth = grows_over_time",
+          "provenance": "assumed"
+        }
+      ],
+      "communication_if_offloaded": [
+        {
+          "peer_unit": "U6",
+          "direction": "incoming",
+          "peer_is_anchored": false,
+          "current_boundary": "logical",
+          "bandwidth_mbps": 0.0016,
+          "latency_sensitivity": "low",
+          "becomes_network_traffic": false
+        }
+      ],
+      "added_network_traffic_mbps": 0,
+      "confidence": "medium",
+      "rationale": "Writing timestamped log records needs no camera, speaker, operator interface or device API. Its only flow comes from the non-anchored unit U6 and needs only eventual delivery. The durable-storage requirement is ordinary for a remote host, and only its size is assumed. The input writes to a local logs folder, but whether the operator must read the logs on A1 is not stated, so it is not treated as a binding."
+    }
+  ],
+  "summary": {
+    "offloadable": ["U7"],
+    "conditionally_offloadable": ["U3", "U5", "U6"],
+    "non_offloadable": ["U1", "U2"],
+    "follows_supported_units": ["U4"],
+    "local_core": {
+      "A1": ["U1", "U2"]
+    },
+    "disagreements_with_granularity": [],
+    "observations": [
+      "The only anchor is the operator's machine A1, which holds the webcam, the speaker and the Streamlit operator interface. All other units are bound to it only through their communication.",
+      "U3 is the most constrained non-anchored unit. Offloading it alone adds 754.8 Mbps of same-site, latency-sensitive traffic, mostly the raw 672 Mbps capture stream from U2. All frame bandwidths assume uncompressed arrays and would drop substantially with encoding.",
+      "U5 and U6 each require a GPU (2 GB each, assumed) and a same-site link to the operator interface. U5 adds 82.8 Mbps of annotated frames to A1, while U6 adds only 0.0016 Mbps of status and alert traffic.",
+      "The frame inputs of U5 (82.8 Mbps) and U6 (18 Mbps) come from U3, which is not anchored. Their network cost therefore depends on whether U3 is placed with the anchors or with the inference units, which is a Deployment Planner decision.",
+      "U4 follows U5 and U6. It needs access to Hugging Face and PyTorchVideo and about 0.5 GB of model storage on every host that runs an inference unit.",
+      "U7 is the only fully offloadable unit. It needs durable, growing storage and carries only low-latency-sensitivity log records."
+    ]
+  }
+}

@@ -1,0 +1,495 @@
+{
+  "application_id": "smart_agriculture_iot",
+  "functional_graph": {
+    "application_id": "smart_agriculture_iot",
+    "nodes": [
+      {
+        "id": "temperature_humidity_sensing",
+        "name": "Temperature and Humidity Sensing",
+        "function": "Reads air temperature and humidity from a DHT22 sensor wired to the Arduino Uno sensor node, once per loop iteration (about every second)"
+      },
+      {
+        "id": "soil_moisture_sensing",
+        "name": "Soil Moisture Sensing",
+        "function": "Reads the soil moisture level from an analog soil moisture sensor wired to the Arduino Uno sensor node, once per loop iteration"
+      },
+      {
+        "id": "measurement_packaging",
+        "name": "Measurement Packaging",
+        "function": "On the Arduino Uno, formats the latest temperature, humidity and soil moisture values into one space-separated text line"
+      },
+      {
+        "id": "sensor_command_handler",
+        "name": "Sensor Command Handler",
+        "function": "On the Arduino Uno, interprets single-character commands received over Bluetooth ('h', 't', 'm') and replies with the requested humidity, temperature or soil moisture value"
+      },
+      {
+        "id": "sensor_bluetooth_link",
+        "name": "Sensor Bluetooth Link",
+        "function": "HC-05 Bluetooth module on the Arduino Uno (serial, 9600 baud): transmits one measurement line every second and receives commands from the mobile app"
+      },
+      {
+        "id": "device_discovery",
+        "name": "Device Discovery",
+        "function": "In the Android app, lists bonded Bluetooth devices, discovers nearby devices and lets the farmer select the sensor node"
+      },
+      {
+        "id": "app_bluetooth_connection",
+        "name": "App Bluetooth Connection",
+        "function": "In the Android app, opens a Bluetooth serial connection to the selected sensor node, receives its byte stream and sends outgoing commands"
+      },
+      {
+        "id": "stream_parsing",
+        "name": "Stream Parsing",
+        "function": "In the Android app, removes backspace control characters from the received bytes, splits the stream into lines and each line into temperature, humidity and soil moisture values"
+      },
+      {
+        "id": "measurement_aggregation",
+        "name": "Measurement Aggregation",
+        "function": "In the Android app, keeps a sliding window of the last 10 readings of each measurement and computes their mean values"
+      },
+      {
+        "id": "dashboard_display",
+        "name": "Dashboard Display",
+        "function": "In the Android app, shows tiles with the mean temperature, humidity and soil moisture, plus a rainfall tile with a placeholder value"
+      },
+      {
+        "id": "trend_chart",
+        "name": "Temperature Trend Chart",
+        "function": "In the Android app, draws a line chart of the temperature readings in the current sliding window"
+      },
+      {
+        "id": "command_input",
+        "name": "Command Input",
+        "function": "In the Android app, text field where the farmer types a command that is sent to the sensor node"
+      }
+    ],
+    "edges": [
+      {
+        "source": "temperature_humidity_sensing",
+        "target": "measurement_packaging",
+        "type": "data_flow"
+      },
+      {
+        "source": "soil_moisture_sensing",
+        "target": "measurement_packaging",
+        "type": "data_flow"
+      },
+      {
+        "source": "temperature_humidity_sensing",
+        "target": "sensor_command_handler",
+        "type": "data_flow"
+      },
+      {
+        "source": "soil_moisture_sensing",
+        "target": "sensor_command_handler",
+        "type": "data_flow"
+      },
+      {
+        "source": "measurement_packaging",
+        "target": "sensor_bluetooth_link",
+        "type": "data_flow"
+      },
+      {
+        "source": "sensor_command_handler",
+        "target": "sensor_bluetooth_link",
+        "type": "data_flow"
+      },
+      {
+        "source": "sensor_bluetooth_link",
+        "target": "sensor_command_handler",
+        "type": "control_flow"
+      },
+      {
+        "source": "sensor_bluetooth_link",
+        "target": "app_bluetooth_connection",
+        "type": "data_flow"
+      },
+      {
+        "source": "app_bluetooth_connection",
+        "target": "sensor_bluetooth_link",
+        "type": "control_flow"
+      },
+      {
+        "source": "device_discovery",
+        "target": "app_bluetooth_connection",
+        "type": "control_flow"
+      },
+      {
+        "source": "command_input",
+        "target": "app_bluetooth_connection",
+        "type": "data_flow"
+      },
+      {
+        "source": "app_bluetooth_connection",
+        "target": "stream_parsing",
+        "type": "data_flow"
+      },
+      {
+        "source": "stream_parsing",
+        "target": "measurement_aggregation",
+        "type": "data_flow"
+      },
+      {
+        "source": "measurement_aggregation",
+        "target": "dashboard_display",
+        "type": "data_flow"
+      },
+      {
+        "source": "measurement_aggregation",
+        "target": "trend_chart",
+        "type": "data_flow"
+      }
+    ]
+  },
+  "granularity": {
+    "application_id": "smart_agriculture_iot",
+    "granularity": {
+      "level": "task",
+      "justification": "The graph contains identifiable functional stages with heterogeneous execution constraints: environmental sensing (DHT22 and analog soil moisture sensor), sensor-side measurement formatting and command handling, the HC-05 Bluetooth link on the Arduino Uno, Bluetooth discovery and connection in the Android app, stream parsing with sliding-window aggregation, and the farmer-facing dashboard, chart and command input. Several stages require direct access to local hardware (sensors, HC-05 module, the app's Bluetooth connection) or to the local operator interface, while parsing and aggregation have neither requirement and keep sliding-window state. Coupling is strong inside each stage: parsing feeds aggregation on every received line, and device discovery drives the connection. Between stages, coupling consists of single text lines once per second, single-character commands and aggregated values. Task-level units keep the hardware- and interface-bound stages separate from the processing stages without fragmenting cohesive functions.",
+      "alternatives": [
+        {
+          "level": "application",
+          "rejected_because": "Grouping all components without a hardware or interface requirement into one unit would merge measurement packaging and command handling, which the graph describes as Arduino Uno functions, with stream parsing and aggregation, which the graph describes as Android app functions. These components are separated by the Bluetooth link and serve different functions (formatting and answering sensor-side requests vs. parsing and windowed averaging of the received stream). Coupling across the whole graph is not intensive, since the flows are one text line per second and occasional single-character commands, so a single unit would join weakly related components."
+        },
+        {
+          "level": "method",
+          "rejected_because": "The nodes are small functions that do not perform independent processing. Both sensing functions feed the same packaging and command-handling functions, parsing exists only to feed aggregation, and discovery exists only to set up the connection. One unit per node would split these tightly coupled pairs and add communication hops without any benefit from independent handling."
+        }
+      ]
+    },
+    "execution_units": [
+      {
+        "unit_id": "U1",
+        "name": "Environmental Sensing",
+        "components": [
+          "temperature_humidity_sensing",
+          "soil_moisture_sensing"
+        ],
+        "unit_type": "runtime",
+        "rationale": "Both components read physical measurements from sensors wired to the Arduino Uno (DHT22 for air temperature and humidity, an analog sensor for soil moisture) once per loop iteration. They form one coherent sensing function and share the requirement of direct access to local sensor hardware, so they are grouped together and kept separate from components with different execution characteristics.",
+        "grouping_criteria": [
+          "device_binding",
+          "cohesion"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [],
+        "external_dependencies": [
+          "temperature_humidity_sensing -> measurement_packaging",
+          "soil_moisture_sensing -> measurement_packaging",
+          "temperature_humidity_sensing -> sensor_command_handler",
+          "soil_moisture_sensing -> sensor_command_handler"
+        ],
+        "execution_constraint": "device_bound",
+        "characteristics": [
+          "hardware_access"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U2",
+        "name": "Sensor Data Formatting and Command Handling",
+        "components": [
+          "measurement_packaging",
+          "sensor_command_handler"
+        ],
+        "unit_type": "runtime",
+        "rationale": "Measurement Packaging formats the latest temperature, humidity and soil moisture values into one text line, and the Sensor Command Handler answers single-character requests ('h', 't', 'm') with the requested value. Both consume the same sensor readings and produce the outgoing messages for the Bluetooth link, forming one coherent sensor-side data handling function. Neither accesses hardware directly, so they are kept separate from the sensing and Bluetooth hardware stages.",
+        "grouping_criteria": [
+          "cohesion",
+          "coupling",
+          "device_binding"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [],
+        "external_dependencies": [
+          "temperature_humidity_sensing -> measurement_packaging",
+          "soil_moisture_sensing -> measurement_packaging",
+          "temperature_humidity_sensing -> sensor_command_handler",
+          "soil_moisture_sensing -> sensor_command_handler",
+          "measurement_packaging -> sensor_bluetooth_link",
+          "sensor_command_handler -> sensor_bluetooth_link",
+          "sensor_bluetooth_link -> sensor_command_handler"
+        ],
+        "execution_constraint": "flexible",
+        "characteristics": [
+          "event_driven"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U3",
+        "name": "Sensor Bluetooth Link",
+        "components": [
+          "sensor_bluetooth_link"
+        ],
+        "unit_type": "runtime",
+        "rationale": "The HC-05 Bluetooth module on the Arduino Uno transmits one measurement line every second and receives commands from the mobile app. It requires direct access to the local Bluetooth hardware and is the communication boundary between the sensor side and the Android app, so it forms its own unit and is kept separate from components with different execution characteristics.",
+        "grouping_criteria": [
+          "device_binding",
+          "independence"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "medium",
+        "internal_dependencies": [],
+        "external_dependencies": [
+          "measurement_packaging -> sensor_bluetooth_link",
+          "sensor_command_handler -> sensor_bluetooth_link",
+          "sensor_bluetooth_link -> sensor_command_handler",
+          "sensor_bluetooth_link -> app_bluetooth_connection",
+          "app_bluetooth_connection -> sensor_bluetooth_link"
+        ],
+        "execution_constraint": "device_bound",
+        "characteristics": [
+          "hardware_access"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U4",
+        "name": "App Bluetooth Connectivity",
+        "components": [
+          "device_discovery",
+          "app_bluetooth_connection"
+        ],
+        "unit_type": "runtime",
+        "rationale": "Device Discovery lists bonded and nearby Bluetooth devices and lets the farmer select the sensor node, and App Bluetooth Connection opens the serial connection to that node, receives its byte stream and sends outgoing commands. Discovery exists only to establish the connection, so both form one coherent connectivity function. They share the requirement of direct access to the app's local Bluetooth hardware, so they are grouped together and kept separate from components with different execution characteristics.",
+        "grouping_criteria": [
+          "device_binding",
+          "cohesion",
+          "coupling"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "medium",
+        "internal_dependencies": [
+          "device_discovery -> app_bluetooth_connection"
+        ],
+        "external_dependencies": [
+          "sensor_bluetooth_link -> app_bluetooth_connection",
+          "app_bluetooth_connection -> sensor_bluetooth_link",
+          "command_input -> app_bluetooth_connection",
+          "app_bluetooth_connection -> stream_parsing"
+        ],
+        "execution_constraint": "device_bound",
+        "characteristics": [
+          "hardware_access",
+          "user_interaction",
+          "stateful"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U5",
+        "name": "Stream Parsing and Aggregation",
+        "components": [
+          "stream_parsing",
+          "measurement_aggregation"
+        ],
+        "unit_type": "runtime",
+        "rationale": "Stream Parsing cleans the received bytes and splits them into temperature, humidity and soil moisture values, and Measurement Aggregation keeps a sliding window of the last 10 readings of each measurement and computes their means. Parsing feeds aggregation on every received line, so they form one coherent processing function and are grouped to avoid a communication hop per line. Neither requires local hardware or the operator interface, so they are kept separate from the connectivity and interface stages.",
+        "grouping_criteria": [
+          "cohesion",
+          "coupling",
+          "device_binding"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [
+          "stream_parsing -> measurement_aggregation"
+        ],
+        "external_dependencies": [
+          "app_bluetooth_connection -> stream_parsing",
+          "measurement_aggregation -> dashboard_display",
+          "measurement_aggregation -> trend_chart"
+        ],
+        "execution_constraint": "flexible",
+        "characteristics": [
+          "stateful"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U6",
+        "name": "Farmer Interface",
+        "components": [
+          "dashboard_display",
+          "trend_chart",
+          "command_input"
+        ],
+        "unit_type": "runtime",
+        "rationale": "These components form the farmer-facing interface of the Android app: tiles with mean temperature, humidity and soil moisture (plus a rainfall placeholder), a line chart of temperature readings in the current window, and a text field for typing commands to the sensor node. They require direct access to the local operator interface, so they are grouped together and kept separate from components with different execution characteristics.",
+        "grouping_criteria": [
+          "device_binding",
+          "cohesion"
+        ],
+        "cohesion": "medium",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [],
+        "external_dependencies": [
+          "measurement_aggregation -> dashboard_display",
+          "measurement_aggregation -> trend_chart",
+          "command_input -> app_bluetooth_connection"
+        ],
+        "execution_constraint": "device_bound",
+        "characteristics": [
+          "user_interaction",
+          "event_driven"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      }
+    ],
+    "unit_graph": {
+      "nodes": [
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6"
+      ],
+      "edges": [
+        {
+          "source": "U1",
+          "target": "U2",
+          "component_edges": [
+            "temperature_humidity_sensing -> measurement_packaging",
+            "soil_moisture_sensing -> measurement_packaging",
+            "temperature_humidity_sensing -> sensor_command_handler",
+            "soil_moisture_sensing -> sensor_command_handler"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "periodic",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U2",
+          "target": "U3",
+          "component_edges": [
+            "measurement_packaging -> sensor_bluetooth_link",
+            "sensor_command_handler -> sensor_bluetooth_link"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "periodic",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U3",
+          "target": "U2",
+          "component_edges": [
+            "sensor_bluetooth_link -> sensor_command_handler"
+          ],
+          "types": [
+            "control_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "event_driven",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U3",
+          "target": "U4",
+          "component_edges": [
+            "sensor_bluetooth_link -> app_bluetooth_connection"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "periodic",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U4",
+          "target": "U3",
+          "component_edges": [
+            "app_bluetooth_connection -> sensor_bluetooth_link"
+          ],
+          "types": [
+            "control_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "event_driven",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U4",
+          "target": "U5",
+          "component_edges": [
+            "app_bluetooth_connection -> stream_parsing"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "periodic",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U5",
+          "target": "U6",
+          "component_edges": [
+            "measurement_aggregation -> dashboard_display",
+            "measurement_aggregation -> trend_chart"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "periodic",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U6",
+          "target": "U4",
+          "component_edges": [
+            "command_input -> app_bluetooth_connection"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "event_driven",
+            "volume": "low",
+            "latency_sensitivity": "unknown"
+          }
+        }
+      ]
+    },
+    "granularity_summary": {
+      "number_of_components": 12,
+      "number_of_execution_units": 6,
+      "total_edges": 15,
+      "internal_edges": 2,
+      "cut_edges": 13,
+      "overall_strategy": "Task-level granularity: components requiring local sensor, Bluetooth or operator-interface access are grouped by shared function (sensing, sensor Bluetooth link, app Bluetooth connectivity, farmer interface), and each group is kept separate from the components without such requirements. Sensor-side formatting and command handling form one unit, and stream parsing with sliding-window aggregation forms another cohesive stateful unit."
+    }
+  }
+}

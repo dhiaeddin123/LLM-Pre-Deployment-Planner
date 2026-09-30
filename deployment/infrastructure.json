@@ -1,0 +1,100 @@
+{
+  "description": "Shared infrastructure for the three applications: local devices (anchors), three Edge sites and one Cloud region. Capacities are the resources AVAILABLE to the applications. Units: cores, GB, Mbps, ms.",
+  "sites": [
+    { "id": "campus", "region": "north", "description": "Building where the surveillance operator works" },
+    { "id": "farm", "region": "north", "description": "Farm with the agriculture sensor node, the farmer's phone and the crop sensor" },
+    { "id": "metro", "region": "north", "description": "Metropolitan Edge micro data centre" },
+    { "id": "cloud", "region": "cloud", "description": "Public cloud region" }
+  ],
+  "nodes": [
+    {
+      "id": "operator_pc", "tier": "device", "site": "campus", "kind": "pc",
+      "comparable": true, "internet_access": true, "availability": 0.98, "cost_per_core_hour": 0.0,
+      "capacity": { "cpu_cores": 4, "memory_gb": 8, "gpu_memory_gb": 0, "storage_gb": 100 },
+      "notes": "Operator workstation with the webcam and speaker. No GPU."
+    },
+    {
+      "id": "agri_arduino", "tier": "device", "site": "farm", "kind": "microcontroller",
+      "comparable": false, "internet_access": false, "availability": 0.97, "cost_per_core_hour": 0.0,
+      "capacity": { "cpu_cores": null, "memory_gb": null, "gpu_memory_gb": 0, "storage_gb": null },
+      "notes": "Arduino Uno with DHT22, soil moisture sensor and HC-05. Bluetooth only."
+    },
+    {
+      "id": "agri_phone", "tier": "device", "site": "farm", "kind": "smartphone",
+      "comparable": true, "internet_access": true, "availability": 0.97, "cost_per_core_hour": 0.0,
+      "capacity": { "cpu_cores": 1, "memory_gb": 0.5, "gpu_memory_gb": 0, "storage_gb": 2 },
+      "notes": "Farmer's Android phone: Bluetooth to the Arduino, Wi-Fi/4G to the farm network."
+    },
+    {
+      "id": "crop_sensor", "tier": "device", "site": "farm", "kind": "microcontroller",
+      "comparable": false, "internet_access": true, "availability": 0.97, "cost_per_core_hour": 0.0,
+      "capacity": { "cpu_cores": null, "memory_gb": null, "gpu_memory_gb": 0, "storage_gb": null },
+      "notes": "Soil moisture and temperature sensor node with a low-rate Wi-Fi link."
+    },
+
+    { "id": "edge_1", "tier": "edge", "site": "campus", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.99, "cost_per_core_hour": 0.02,
+      "capacity": { "cpu_cores": 16, "memory_gb": 32, "gpu_memory_gb": 8, "storage_gb": 100 }, "notes": "Campus Edge server with an 8 GB GPU" },
+    { "id": "edge_2", "tier": "edge", "site": "campus", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.99, "cost_per_core_hour": 0.02,
+      "capacity": { "cpu_cores": 16, "memory_gb": 32, "gpu_memory_gb": 0, "storage_gb": 100 }, "notes": "Campus Edge server, CPU only" },
+    { "id": "edge_3", "tier": "edge", "site": "campus", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.99, "cost_per_core_hour": 0.02,
+      "capacity": { "cpu_cores": 8, "memory_gb": 16, "gpu_memory_gb": 4, "storage_gb": 50 }, "notes": "Small campus Edge box with a 4 GB embedded GPU" },
+
+    { "id": "edge_4", "tier": "edge", "site": "farm", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.99, "cost_per_core_hour": 0.02,
+      "capacity": { "cpu_cores": 16, "memory_gb": 32, "gpu_memory_gb": 0, "storage_gb": 100 }, "notes": "Farm gateway server" },
+    { "id": "edge_5", "tier": "edge", "site": "farm", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.99, "cost_per_core_hour": 0.02,
+      "capacity": { "cpu_cores": 12, "memory_gb": 24, "gpu_memory_gb": 0, "storage_gb": 80 }, "notes": "Farm Edge server" },
+
+    { "id": "edge_6", "tier": "edge", "site": "metro", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.995, "cost_per_core_hour": 0.03,
+      "capacity": { "cpu_cores": 8, "memory_gb": 16, "gpu_memory_gb": 0, "storage_gb": 50 }, "notes": "Metro Edge server" },
+    { "id": "edge_7", "tier": "edge", "site": "metro", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.995, "cost_per_core_hour": 0.03,
+      "capacity": { "cpu_cores": 24, "memory_gb": 64, "gpu_memory_gb": 16, "storage_gb": 200 }, "notes": "Metro Edge server with a 16 GB GPU" },
+    { "id": "edge_8", "tier": "edge", "site": "metro", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.995, "cost_per_core_hour": 0.03,
+      "capacity": { "cpu_cores": 12, "memory_gb": 24, "gpu_memory_gb": 0, "storage_gb": 100 }, "notes": "Metro Edge server" },
+    { "id": "edge_9", "tier": "edge", "site": "metro", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.995, "cost_per_core_hour": 0.03,
+      "capacity": { "cpu_cores": 16, "memory_gb": 32, "gpu_memory_gb": 0, "storage_gb": 120 }, "notes": "Metro Edge server" },
+    { "id": "edge_10", "tier": "edge", "site": "metro", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.995, "cost_per_core_hour": 0.03,
+      "capacity": { "cpu_cores": 8, "memory_gb": 16, "gpu_memory_gb": 0, "storage_gb": 50 }, "notes": "Metro Edge server" },
+
+    { "id": "cloud_1", "tier": "cloud", "site": "cloud", "kind": "server", "comparable": true, "internet_access": true, "availability": 0.9995, "cost_per_core_hour": 0.05,
+      "capacity": { "cpu_cores": 64, "memory_gb": 256, "gpu_memory_gb": 24, "storage_gb": 2000 }, "notes": "Cloud VM pool with a 24 GB GPU" }
+  ],
+  "switches": ["sw_campus", "sw_farm", "sw_metro", "sw_cloud"],
+  "links": [
+    { "id": "l_pc",        "a": "operator_pc",  "b": "sw_campus", "type": "lan",       "bandwidth_mbps": 1000,  "latency_ms": 0.5 },
+    { "id": "l_e1",        "a": "edge_1",       "b": "sw_campus", "type": "lan",       "bandwidth_mbps": 10000, "latency_ms": 0.2 },
+    { "id": "l_e2",        "a": "edge_2",       "b": "sw_campus", "type": "lan",       "bandwidth_mbps": 10000, "latency_ms": 0.2 },
+    { "id": "l_e3",        "a": "edge_3",       "b": "sw_campus", "type": "lan",       "bandwidth_mbps": 1000,  "latency_ms": 0.3 },
+
+    { "id": "l_bt",        "a": "agri_arduino", "b": "agri_phone", "type": "bluetooth", "bandwidth_mbps": 0.0096, "latency_ms": 20, "notes": "HC-05 at 9600 baud" },
+    { "id": "l_phone",     "a": "agri_phone",   "b": "sw_farm",    "type": "wifi",      "bandwidth_mbps": 50,     "latency_ms": 5 },
+    { "id": "l_crop",      "a": "crop_sensor",  "b": "sw_farm",    "type": "wifi",      "bandwidth_mbps": 1,      "latency_ms": 10 },
+    { "id": "l_e4",        "a": "edge_4",       "b": "sw_farm",    "type": "lan",       "bandwidth_mbps": 1000,   "latency_ms": 0.3 },
+    { "id": "l_e5",        "a": "edge_5",       "b": "sw_farm",    "type": "lan",       "bandwidth_mbps": 1000,   "latency_ms": 0.3 },
+
+    { "id": "l_e6",        "a": "edge_6",       "b": "sw_metro",   "type": "lan",       "bandwidth_mbps": 10000,  "latency_ms": 0.2 },
+    { "id": "l_e7",        "a": "edge_7",       "b": "sw_metro",   "type": "lan",       "bandwidth_mbps": 10000,  "latency_ms": 0.2 },
+    { "id": "l_e8",        "a": "edge_8",       "b": "sw_metro",   "type": "lan",       "bandwidth_mbps": 10000,  "latency_ms": 0.2 },
+    { "id": "l_e9",        "a": "edge_9",       "b": "sw_metro",   "type": "lan",       "bandwidth_mbps": 10000,  "latency_ms": 0.2 },
+    { "id": "l_e10",       "a": "edge_10",      "b": "sw_metro",   "type": "lan",       "bandwidth_mbps": 10000,  "latency_ms": 0.2 },
+    { "id": "l_c1",        "a": "cloud_1",      "b": "sw_cloud",   "type": "lan",       "bandwidth_mbps": 10000,  "latency_ms": 0.2 },
+
+    { "id": "wan_campus",  "a": "sw_campus",    "b": "sw_metro",   "type": "wan",       "bandwidth_mbps": 1000,   "latency_ms": 5 },
+    { "id": "wan_farm",    "a": "sw_farm",      "b": "sw_metro",   "type": "wan",       "bandwidth_mbps": 100,    "latency_ms": 15 },
+    { "id": "wan_cloud",   "a": "sw_metro",     "b": "sw_cloud",   "type": "wan",       "bandwidth_mbps": 1000,   "latency_ms": 40 }
+  ],
+  "application_bindings": {
+    "smart_surveillance": {
+      "anchors": { "A1": "operator_pc" },
+      "original_host": { "U1": "operator_pc", "U2": "operator_pc", "U3": "operator_pc", "U4": "operator_pc", "U5": "operator_pc", "U6": "operator_pc", "U7": "operator_pc" }
+    },
+    "smart_agriculture_iot": {
+      "anchors": { "A1": "agri_arduino", "A2": "agri_phone" },
+      "original_host": { "U1": "agri_arduino", "U2": "agri_arduino", "U3": "agri_arduino", "U4": "agri_phone", "U5": "agri_phone", "U6": "agri_phone" }
+    },
+    "crop_monitoring": {
+      "anchors": { "A1": "crop_sensor" },
+      "original_host": { "U1": "crop_sensor" },
+      "notes": "original_host = node on which a unit runs before planning. The input does not state where U2-U4 run today, so they have no original host and must be placed on the infrastructure."
+    }
+  }
+}

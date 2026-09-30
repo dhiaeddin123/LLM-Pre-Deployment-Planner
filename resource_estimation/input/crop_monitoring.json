@@ -1,0 +1,239 @@
+{
+  "application_id": "crop_monitoring",
+  "functional_graph": {
+    "application_id": "crop_monitoring",
+    "nodes": [
+      {
+        "id": "sensor_acquisition",
+        "name": "Sensor Acquisition",
+        "function": "Collects soil moisture and temperature data"
+      },
+      {
+        "id": "data_preprocessing",
+        "name": "Data Preprocessing",
+        "function": "Filters and normalizes sensor measurements"
+      },
+      {
+        "id": "crop_analysis",
+        "name": "Crop Analysis",
+        "function": "Analyzes measurements to determine crop conditions"
+      },
+      {
+        "id": "decision_engine",
+        "name": "Decision Engine",
+        "function": "Generates irrigation decisions"
+      },
+      {
+        "id": "cloud_storage",
+        "name": "Cloud Storage",
+        "function": "Stores historical agricultural data"
+      }
+    ],
+    "edges": [
+      {
+        "source": "sensor_acquisition",
+        "target": "data_preprocessing",
+        "type": "data_flow"
+      },
+      {
+        "source": "data_preprocessing",
+        "target": "crop_analysis",
+        "type": "data_flow"
+      },
+      {
+        "source": "crop_analysis",
+        "target": "decision_engine",
+        "type": "data_flow"
+      },
+      {
+        "source": "crop_analysis",
+        "target": "cloud_storage",
+        "type": "data_flow"
+      }
+    ]
+  },
+  "granularity": {
+    "application_id": "crop_monitoring",
+    "granularity": {
+      "level": "task",
+      "justification": "The graph is a short pipeline with identifiable functional stages: sensor acquisition of soil moisture and temperature, measurement processing (filtering, normalization and crop-condition analysis), irrigation decision generation, and storage of historical agricultural data. The stages have heterogeneous execution characteristics. Acquisition requires direct access to sensor hardware, storage keeps data durably, and processing and decision generation have neither requirement. Coupling is strongest between data_preprocessing and crop_analysis, because preprocessed measurements are consumed only by the analysis. The analysis results then fan out to two consumers with different functions. Task-level units group the tightly coupled processing steps and keep stages with different characteristics separate.",
+      "alternatives": [
+        {
+          "level": "application",
+          "rejected_because": "Grouping all components without a hardware requirement into one unit would merge measurement processing, irrigation decision generation and durable storage of historical data. These serve different functions, and the storage stage has different scaling needs from the processing stages. The graph does not indicate intensive data exchange between all components: analysis results simply fan out to decision generation and storage. A single unit would therefore join weakly related components without a clear communication benefit."
+        },
+        {
+          "level": "method",
+          "rejected_because": "One unit per node would separate data_preprocessing from crop_analysis, although preprocessing exists only to feed the analysis and no other component consumes its output. Splitting this pair would add a communication hop on the main processing path without any benefit from independent handling. The remaining nodes are already separated at task level."
+        }
+      ]
+    },
+    "execution_units": [
+      {
+        "unit_id": "U1",
+        "name": "Sensor Acquisition",
+        "components": [
+          "sensor_acquisition"
+        ],
+        "unit_type": "runtime",
+        "rationale": "Sensor Acquisition collects soil moisture and temperature data, which requires direct access to the sensors. No other component shares this requirement, so it forms its own unit and is kept separate from components with different execution characteristics.",
+        "grouping_criteria": [
+          "device_binding",
+          "independence"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [],
+        "external_dependencies": [
+          "sensor_acquisition -> data_preprocessing"
+        ],
+        "execution_constraint": "device_bound",
+        "characteristics": [
+          "hardware_access"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U2",
+        "name": "Measurement Processing and Crop Analysis",
+        "components": [
+          "data_preprocessing",
+          "crop_analysis"
+        ],
+        "unit_type": "runtime",
+        "rationale": "Data Preprocessing filters and normalizes the sensor measurements, and Crop Analysis analyzes them to determine crop conditions. The preprocessed measurements are consumed only by the analysis, so both form one coherent processing function and are grouped to avoid a communication hop between them. Neither requires sensor hardware or durable storage, so they are kept separate from the acquisition and storage stages.",
+        "grouping_criteria": [
+          "cohesion",
+          "coupling",
+          "device_binding"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [
+          "data_preprocessing -> crop_analysis"
+        ],
+        "external_dependencies": [
+          "sensor_acquisition -> data_preprocessing",
+          "crop_analysis -> decision_engine",
+          "crop_analysis -> cloud_storage"
+        ],
+        "execution_constraint": "flexible",
+        "characteristics": [],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U3",
+        "name": "Irrigation Decision",
+        "components": [
+          "decision_engine"
+        ],
+        "unit_type": "runtime",
+        "rationale": "The Decision Engine generates irrigation decisions from the crop-condition analysis. This decision function is distinct from measurement processing and from historical data storage, and it consumes only the analysis results. It is therefore kept as its own stage so its characteristics can be assessed independently.",
+        "grouping_criteria": [
+          "cohesion",
+          "independence"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [],
+        "external_dependencies": [
+          "crop_analysis -> decision_engine"
+        ],
+        "execution_constraint": "flexible",
+        "characteristics": [],
+        "deployment_role": "service",
+        "supports": []
+      },
+      {
+        "unit_id": "U4",
+        "name": "Historical Data Storage",
+        "components": [
+          "cloud_storage"
+        ],
+        "unit_type": "runtime",
+        "rationale": "The cloud_storage component stores historical agricultural data. It is a durable storage stage whose scaling needs differ from the processing and decision stages, so it is kept separate.",
+        "grouping_criteria": [
+          "scalability",
+          "independence"
+        ],
+        "cohesion": "high",
+        "communication_intensity_with_other_units": "low",
+        "internal_dependencies": [],
+        "external_dependencies": [
+          "crop_analysis -> cloud_storage"
+        ],
+        "execution_constraint": "flexible",
+        "characteristics": [
+          "persistent_storage"
+        ],
+        "deployment_role": "service",
+        "supports": []
+      }
+    ],
+    "unit_graph": {
+      "nodes": [
+        "U1",
+        "U2",
+        "U3",
+        "U4"
+      ],
+      "edges": [
+        {
+          "source": "U1",
+          "target": "U2",
+          "component_edges": [
+            "sensor_acquisition -> data_preprocessing"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "unknown",
+            "volume": "unknown",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U2",
+          "target": "U3",
+          "component_edges": [
+            "crop_analysis -> decision_engine"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "unknown",
+            "volume": "unknown",
+            "latency_sensitivity": "unknown"
+          }
+        },
+        {
+          "source": "U2",
+          "target": "U4",
+          "component_edges": [
+            "crop_analysis -> cloud_storage"
+          ],
+          "types": [
+            "data_flow"
+          ],
+          "data_characteristics": {
+            "frequency": "unknown",
+            "volume": "unknown",
+            "latency_sensitivity": "unknown"
+          }
+        }
+      ]
+    },
+    "granularity_summary": {
+      "number_of_components": 5,
+      "number_of_execution_units": 4,
+      "total_edges": 4,
+      "internal_edges": 1,
+      "cut_edges": 3,
+      "overall_strategy": "Task-level granularity: sensor acquisition, which requires sensor hardware, forms its own unit, and the tightly coupled preprocessing and crop analysis form one processing unit. Irrigation decision generation and historical data storage remain separate stages because their functions and characteristics differ."
+    }
+  }
+}

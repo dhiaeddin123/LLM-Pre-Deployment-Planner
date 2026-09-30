@@ -1,0 +1,459 @@
+{
+  "application_id": "smart_agriculture_iot",
+  "search": {
+    "method": "exhaustive",
+    "configurations_evaluated": 11,
+    "candidate_nodes": {
+      "U5": [
+        "agri_phone",
+        "edge_1",
+        "edge_2",
+        "edge_3",
+        "edge_4",
+        "edge_5",
+        "edge_6",
+        "edge_7",
+        "edge_8",
+        "edge_9",
+        "edge_10"
+      ]
+    },
+    "rejected_nodes": {
+      "U5": {
+        "operator_pc": "foreign local device",
+        "agri_arduino": "non-comparable device (microcontroller)",
+        "crop_sensor": "non-comparable device (microcontroller)",
+        "cloud_1": "proximity regional to U4 (agri_phone) violated"
+      }
+    },
+    "base_configurations_feasible": 11,
+    "replicated_configurations_feasible": 11,
+    "replication_policy": "sla_required"
+  },
+  "baselines": {
+    "all_local": {
+      "feasible": true,
+      "score": 2.5375,
+      "violations": [],
+      "placement": {
+        "U5": "agri_phone"
+      }
+    },
+    "cloud_only": {
+      "feasible": false,
+      "score": 10.2621,
+      "violations": [
+        "U5 on cloud_1 violates regional proximity to U4 on agri_phone",
+        "U5 on cloud_1 violates regional proximity to U6 on agri_phone"
+      ],
+      "placement": {
+        "U5": "cloud_1"
+      }
+    },
+    "greedy_first_fit": {
+      "feasible": true,
+      "score": 2.5375,
+      "placement": {
+        "U5": [
+          "agri_phone"
+        ]
+      }
+    }
+  },
+  "status": "feasible",
+  "sla_compliance": {
+    "availability_mode": "soft",
+    "availability_target": 0.95,
+    "availability": "met",
+    "units_below_target": [],
+    "explanation": "Availability is a soft objective: shortfalls of movable units are penalised in the score but do not make the plan infeasible. Anchored units are excluded from the constraint: their availability is bounded by the device they depend on, which the planner cannot change."
+  },
+  "placements": [
+    {
+      "unit_id": "U1",
+      "name": "Environmental Sensing",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "agri_arduino",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A1 on agri_arduino",
+        "blocking_factors": [
+          "hardware_binding: Reads air temperature and humidity from a DHT22 sensor wired to the Arduino Uno sensor node.",
+          "hardware_binding: Reads the soil moisture level from an analog soil moisture sensor wired to the Arduino Uno sensor node."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "agri_arduino",
+          "tier": "device",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.97,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U2",
+      "name": "Sensor Data Formatting and Command Handling",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "agri_arduino",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A1 on agri_arduino",
+        "blocking_factors": [
+          "hardware_binding: The formatted measurement line is written to the HC-05 Bluetooth module on the Arduino Uno over serial at 9600 baud (edge U2 -> U3, boundary hardware).",
+          "hardware_binding: Commands are received over Bluetooth from the HC-05 serial interface and replies are written back to it (edges U3 -> U2 and U2 -> U3, boundary hardware)."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "agri_arduino",
+          "tier": "device",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.97,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U3",
+      "name": "Sensor Bluetooth Link",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "agri_arduino",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A1 on agri_arduino",
+        "blocking_factors": [
+          "hardware_binding: HC-05 Bluetooth module on the Arduino Uno (serial, 9600 baud) transmits one measurement line every second and receives commands from the mobile app."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "agri_arduino",
+          "tier": "device",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.97,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U4",
+      "name": "App Bluetooth Connectivity",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "agri_phone",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A2 on agri_phone",
+        "blocking_factors": [
+          "device_platform_api: In the Android app, opens a Bluetooth serial connection to the selected sensor node, receives its byte stream and sends outgoing commands. The sensor node is reachable only over Bluetooth, which requires a Bluetooth radio within range of the node.",
+          "device_platform_api: In the Android app, lists bonded Bluetooth devices and discovers nearby devices.",
+          "local_user_interaction: Lets the farmer select the sensor node."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "agri_phone",
+          "tier": "device",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.97,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    },
+    {
+      "unit_id": "U5",
+      "name": "Stream Parsing and Aggregation",
+      "offloadability": "conditionally_offloadable",
+      "decision": "kept on original host",
+      "original_host": "agri_phone",
+      "replication_semantics": "single",
+      "replicable_as": "single",
+      "decision_rationale": {
+        "reason": "agri_phone minimises the objective; the closest alternative (agri_phone -> edge_5) scores +1.1178 (latency +0.636; assumption_risk +0.5).",
+        "excluded_before_search": [
+          {
+            "reason": "foreign local device",
+            "nodes": [
+              "operator_pc"
+            ]
+          },
+          {
+            "reason": "non-comparable device (microcontroller)",
+            "nodes": [
+              "agri_arduino",
+              "crop_sensor"
+            ]
+          },
+          {
+            "reason": "proximity regional to U4 (agri_phone) violated",
+            "nodes": [
+              "cloud_1"
+            ]
+          }
+        ],
+        "closest_feasible_alternatives": [
+          {
+            "move": "agri_phone -> edge_5",
+            "feasible": true,
+            "score_delta": 1.1178,
+            "why": [
+              "latency +0.636",
+              "assumption_risk +0.5"
+            ]
+          },
+          {
+            "move": "agri_phone -> edge_4",
+            "feasible": true,
+            "score_delta": 1.1191,
+            "why": [
+              "latency +0.636",
+              "assumption_risk +0.5"
+            ]
+          },
+          {
+            "move": "agri_phone -> edge_6",
+            "feasible": true,
+            "score_delta": 2.9034,
+            "why": [
+              "latency +2.42",
+              "assumption_risk +0.5"
+            ]
+          }
+        ],
+        "infeasible_moves": [],
+        "infeasible_moves_total": 0
+      },
+      "replicas": [
+        {
+          "node": "agri_phone",
+          "tier": "device",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.97,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": [
+        "Confirm that the phone has IP connectivity to a remote host. The input states only its Bluetooth link to the sensor node."
+      ]
+    },
+    {
+      "unit_id": "U6",
+      "name": "Farmer Interface",
+      "offloadability": "non_offloadable",
+      "decision": "anchored",
+      "original_host": "agri_phone",
+      "replication_semantics": null,
+      "replicable_as": null,
+      "decision_rationale": {
+        "reason": "anchored: non_offloadable, bound to anchor A2 on agri_phone",
+        "blocking_factors": [
+          "local_user_interaction: In the Android app, shows tiles with the mean temperature, humidity and soil moisture, plus a rainfall tile.",
+          "local_user_interaction: In the Android app, draws a line chart of the temperature readings in the current sliding window.",
+          "local_user_interaction: In the Android app, text field where the farmer types a command that is sent to the sensor node."
+        ]
+      },
+      "replicas": [
+        {
+          "node": "agri_phone",
+          "tier": "device",
+          "site": "farm"
+        }
+      ],
+      "per_replica_share": {
+        "semantics": "single",
+        "replicable_as": "single",
+        "replicas": 1,
+        "writes": "n/a (single instance)",
+        "reads": "n/a (single instance)",
+        "write_traffic_share": 1.0,
+        "read_traffic_share": 1.0,
+        "cpu_share": 1.0,
+        "storage_share": 1.0
+      },
+      "availability": 0.97,
+      "meets_availability_target": true,
+      "availability_cause": null,
+      "open_assumptions": []
+    }
+  ],
+  "objective": {
+    "score": 2.5375,
+    "score_before_replication": 2.5375,
+    "components": {
+      "network_traffic": 0.00016,
+      "wan_traffic": 0.0,
+      "latency": 12.0,
+      "device_load": 0.1375,
+      "load_imbalance": 0.0,
+      "max_node_utilization": 0.0,
+      "cloud_usage": 0,
+      "assumption_risk": 0,
+      "availability_shortfall": 0.0
+    }
+  },
+  "violations": [],
+  "node_utilization": {
+    "agri_phone": {
+      "cpu_cores": 0.138,
+      "memory_gb": 0.552
+    }
+  },
+  "load_balance": {
+    "pool": "all shared Edge and Cloud nodes, including load of previously planned applications",
+    "metric": "dominant resource utilization per node = max over CPU, memory, GPU memory, storage",
+    "replication_models": {
+      "load_split": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "full"
+      },
+      "mirrored": {
+        "writes": "all_replicas",
+        "reads": "load_balanced",
+        "cpu": "full",
+        "storage": "full"
+      },
+      "partitioned": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "split"
+      },
+      "single": {
+        "writes": "n/a",
+        "reads": "n/a",
+        "cpu": "full",
+        "storage": "full"
+      }
+    },
+    "dominant_utilization": {
+      "edge_1": 0.5,
+      "edge_2": 0.0079,
+      "edge_3": 0.0157,
+      "edge_4": 0.0,
+      "edge_5": 0.0,
+      "edge_6": 0.0,
+      "edge_7": 0.0,
+      "edge_8": 0.0,
+      "edge_9": 0.0,
+      "edge_10": 0.0,
+      "cloud_1": 0.0
+    },
+    "max_node_utilization": {
+      "before": 0.5,
+      "after": 0.5
+    },
+    "stdev": {
+      "before": 0.1431,
+      "after": 0.1431
+    },
+    "objective_uses": "after - before (marginal effect of this application)"
+  },
+  "link_load_mbps": {
+    "l_bt": 0.00016
+  },
+  "replication_notes": [],
+  "alternatives": [
+    {
+      "score": 3.6553,
+      "score_before_replication": 3.6553,
+      "placement": {
+        "U5": [
+          "edge_5"
+        ]
+      }
+    },
+    {
+      "score": 3.6566,
+      "score_before_replication": 3.6566,
+      "placement": {
+        "U5": [
+          "edge_4"
+        ]
+      }
+    },
+    {
+      "score": 5.4409,
+      "score_before_replication": 5.4409,
+      "placement": {
+        "U5": [
+          "edge_6"
+        ]
+      }
+    }
+  ]
+}

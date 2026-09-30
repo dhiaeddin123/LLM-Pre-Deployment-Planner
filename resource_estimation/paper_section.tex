@@ -1,0 +1,135 @@
+\subsection{Resource Estimation}
+
+The Resource Estimation stage characterizes the resources required by the
+execution units identified during the Granularity Analysis stage. It answers a
+single question: \emph{how many resources does one instance of each execution
+unit need?} Placement and offloadability are deliberately left to the
+subsequent stages.
+
+For each execution unit $u_j\in\mathcal{U}$, the LLM analyzes the functions of
+its constituent components, the characteristics produced by the Granularity
+Analysis (e.g., machine-learning inference, high-frequency input, statefulness,
+persistent storage), its unit type (runtime or initialization), and the data
+exchanged along its incoming and outgoing edges in the unit graph. When an
+estimate depends on information that the functional graph does not provide
+(e.g., input resolution or sampling rate), the LLM states the assumption
+explicitly, so that every estimate remains traceable.
+
+The estimates are heuristic rather than measured. To keep them traceable, each
+resource is derived through an explicit evidence hierarchy: (i) observed facts
+stated in the input, (ii) characteristics inferred from these facts, (iii) a
+qualitative demand level, (iv) a coarse numerical estimate, and (v) a
+confidence level. The qualitative level is the primary result; the numerical
+value only refines it and is reported with limited precision, or omitted when
+it is not meaningful (e.g., logic executed on a microcontroller). Furthermore,
+the demand of the unit's own logic is separated from the baseline overhead of
+the runtime platform on which it currently executes (e.g., a mobile
+application process); platform baselines are reported once per platform and
+are not attributed to individual units.
+
+Computational, memory and storage values are restricted to a fixed estimation
+grid (e.g., 0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 4 cores), which reflects their
+order-of-magnitude nature. For platforms whose resources are not comparable
+with general-purpose servers, such as microcontrollers, no value in cores or GB
+is produced; only the qualitative level is kept, unless the input states a
+native figure.
+Each profile also carries, unchanged, the constraints identified during the
+Granularity Analysis (execution constraint, deployment role, hardware or
+platform bindings), so that a low resource demand is never interpreted
+independently of the binding that restricts where the unit may execute.
+Aggregated demands are computed per platform rather than globally, since the
+resources of heterogeneous platforms (microcontrollers, mobile devices,
+servers) are not additive. These aggregates describe the load of the
+application as it currently executes (application demand plus platform
+baseline) and are not capacity requirements for future nodes, since the
+Deployment Planner may separate co-located units. Initialization units (e.g.,
+model provisioning) are characterized only during their initialization phase:
+resources that remain in use afterwards, such as loaded models, are attributed
+to the consuming units, which prevents double counting, and their transfers
+are described as one-time volumes rather than sustained bandwidth. Finally, every estimate carries a provenance label
+\begin{equation}
+\pi \in \{\mathrm{observed},\ \mathrm{inferred},\ \mathrm{assumed},\ \mathrm{unknown}\},
+\end{equation}
+indicating whether the value is stated in the input, derived from stated facts,
+dependent on an explicitly listed assumption, or unsupported. When several
+facts contribute, the weakest provenance is retained, and an unsupported value
+is reported as unknown rather than filled in. Provenance lets the Deployment
+Planner distinguish firm constraints from heuristic guesses, e.g., by applying
+safety margins to assumed values, and it explains why the precision of the
+profile varies between applications with more or less detailed descriptions.
+The resulting profile is uncalibrated by construction; its accuracy
+is assessed experimentally by comparing the estimates with measurements of the
+running application (Section~\ref{sec:evaluation}).
+
+The resource profile of an execution unit is represented as
+\begin{equation}
+r_j = \left( r_j^{cpu},\; r_j^{mem},\; r_j^{gpu},\; r_j^{sto},\; r_j^{net} \right),
+\end{equation}
+where $r_j^{cpu}$ is expressed in vCPU cores, $r_j^{mem}$ in GB of RAM,
+$r_j^{gpu}$ gives the GPU requirement (none, optional or required) and the
+associated GPU memory, $r_j^{sto}$ is the storage in GB, and
+$r_j^{net}=(r_j^{in},r_j^{out})$ is the ingress and egress traffic in Mbps.
+CPU and memory are estimated both for typical operation and at peak, so that
+the Deployment Planner can reason about sustained load and headroom. Each
+estimate is also mapped to a qualitative level
+(very low, low, medium, high, very high) using fixed thresholds, and is
+accompanied by a confidence level.
+
+In addition to per-unit demands, the stage estimates the communication
+requirement of every edge $(u_j,u_k)$ of the unit graph as
+\begin{equation}
+b_{jk} = \frac{s_{jk}\cdot f_{jk}\cdot 8}{1000},
+\end{equation}
+where $s_{jk}$ is the message size in kB, $f_{jk}$ the message rate per
+second, and $b_{jk}$ the required bandwidth in Mbps. Unlike the per-unit
+estimates, $b_{jk}$ is neither rounded nor bounded below, because the
+Deployment Planner aggregates link loads and rounding small flows would
+distort these sums. Each edge also records its end-to-end flow path when
+a payload is relayed across several units, and a latency sensitivity defined
+on the flow (high: per-input timeliness; medium: seconds-scale; low: eventual
+delivery). Each edge is further annotated with its current
+communication mechanism and with its boundary type $\beta_{jk}$:
+\begin{equation}
+\beta_{jk}\in\{\mathrm{logical},\ \mathrm{physical},\ \mathrm{hardware}\}.
+\end{equation}
+A \emph{logical} edge connects units that currently execute in the same
+program or machine (e.g., threads exchanging frames through a queue); its
+bandwidth $b_{jk}$ is the network load that would appear only if the planner
+separated the two units. A \emph{physical} edge already crosses a link between
+devices (e.g., a Bluetooth serial link), and a \emph{hardware} edge denotes a
+local hardware interface that cannot be turned into network traffic.
+Accordingly, each unit reports both its current physical traffic and its
+potential traffic if all its logical edges became network links.
+
+The complete resource profile of the application is
+\begin{equation}
+R = \left( \{r_1,\ldots,r_m\},\; \{b_{jk}\},\; \Pi \right),
+\end{equation}
+where $\Pi$ denotes the set of platform baselines. All values refer to a single instance of an execution unit and use the same
+units as the capacity model of the infrastructure, which allows the
+Offloadability Analysis and the Deployment Planner to compare demands with
+node capacities directly.
+
+The procedure is summarized in Algorithm~\ref{alg:resource_estimation}.
+
+\begin{algorithm}[ht]
+\caption{LLM-based Resource Estimation}
+\label{alg:resource_estimation}
+\begin{algorithmic}[1]
+\Require Functional application graph $G=(V,E)$
+\Require Execution units $\mathcal{U}$ and unit graph $G_U=(\mathcal{U},E_U)$
+\Ensure Resource profile $R$
+\State $R_U \leftarrow \emptyset$, $B \leftarrow \emptyset$
+\For{each execution unit $u_j \in \mathcal{U}$}
+  \State $I_j \leftarrow \mathrm{GetUnitInformation}(u_j, G, G_U)$
+  \State $r_j \leftarrow \mathrm{LLMResourceEstimation}(u_j, I_j)$
+  \State $R_U \leftarrow R_U \cup \{r_j\}$
+\EndFor
+\For{each edge $(u_j,u_k) \in E_U$}
+  \State $b_{jk} \leftarrow \mathrm{LLMCommunicationEstimation}(u_j,u_k,G_U)$
+  \State $B \leftarrow B \cup \{b_{jk}\}$
+\EndFor
+\State $R \leftarrow (R_U, B)$
+\State \Return $R$
+\end{algorithmic}
+\end{algorithm}

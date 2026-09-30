@@ -1,0 +1,302 @@
+{
+  "application_id": "smart_surveillance",
+  "granularity": {
+    "level": "task",
+    "justification": "The graph contains clearly identifiable functional stages with heterogeneous execution constraints and characteristics. Operator I/O (Streamlit dashboard, display, speaker alert) and camera acquisition both require local hardware or the local operator interface. The other stages are frame preprocessing, two distinct deep-learning pipelines (per-frame YOLOv8-large detection with DeepSORT tracking, and clip-based VideoMAE crime detection with conditional I3D-R50 activity recognition), a startup-time model loader and event logging to files. Coupling is strong inside each stage: detection feeds tracking on each frame, and the 16-frame buffer feeds crime detection, which gates activity recognition on the same clip. Coupling between stages is weaker or of a different nature (control flows, events, classification results, startup dependencies). Task-level units separate the hardware- and interface-bound stages from the ML inference pipelines, so the later stages can assess each stage independently.",
+    "alternatives": [
+      {
+        "level": "application",
+        "rejected_because": "A single unit would merge the per-frame detection/tracking pipeline, the clip-based crime/activity pipeline, preprocessing, the startup-time model loader and logging. These have different characteristics: two separate ML inference pipelines with different inputs (single frames vs. 16-frame clips) and triggers, a stage that runs only at startup, and a stage that writes persistent log files. Several inter-stage flows carry only control signals, events or classification results, so coupling is not uniformly intensive across the graph, and a single unit would remove flexibility without a matching communication benefit."
+      },
+      {
+        "level": "method",
+        "rejected_because": "One unit per node would cut the tightest links in the graph. Object detection passes detections for each frame to tracking, and the sliding frame buffer supplies 16-frame clips to crime detection, which gates activity recognition on the same clip. Splitting them would add network hops on the real-time path and duplicate frame transfers, without any benefit from independent handling, because these components must execute together to produce each result."
+      }
+    ]
+  },
+  "execution_units": [
+    {
+      "unit_id": "U1",
+      "name": "Operator Interface",
+      "components": ["user_interface", "video_display", "alert_notification"],
+      "unit_type": "runtime",
+      "rationale": "These components form the operator I/O stage: the Streamlit dashboard for source selection and detection control, the rendering of annotated frames, detection status and FPS statistics, and the real-time status message with optional beep on the local machine speaker. They require direct access to the local operator interface and audio hardware, so they are grouped together and kept separate from components with different execution characteristics.",
+      "grouping_criteria": ["device_binding", "cohesion", "latency"],
+      "cohesion": "medium",
+      "communication_intensity_with_other_units": "high",
+      "internal_dependencies": ["user_interface -> alert_notification"],
+      "external_dependencies": [
+        "user_interface -> video_acquisition",
+        "frame_preprocessing -> video_display",
+        "object_tracking -> video_display",
+        "crime_detection -> alert_notification",
+        "crime_detection -> video_display",
+        "activity_recognition -> video_display"
+      ],
+      "execution_constraint": "device_bound",
+      "characteristics": ["hardware_access", "user_interaction", "high_frequency_input", "latency_sensitive", "event_driven"],
+      "deployment_role": "service",
+      "supports": []
+    },
+    {
+      "unit_id": "U2",
+      "name": "Video Acquisition",
+      "components": ["video_acquisition"],
+      "unit_type": "runtime",
+      "rationale": "Video Acquisition captures frames continuously from the local webcam, or reads an uploaded video file, at the target FPS. It requires direct access to the local camera, a requirement that no other component shares, so it forms its own unit and is kept separate from components with different execution characteristics.",
+      "grouping_criteria": ["device_binding", "independence"],
+      "cohesion": "high",
+      "communication_intensity_with_other_units": "high",
+      "internal_dependencies": [],
+      "external_dependencies": [
+        "user_interface -> video_acquisition",
+        "video_acquisition -> frame_preprocessing"
+      ],
+      "execution_constraint": "device_bound",
+      "characteristics": ["hardware_access", "high_frequency_input", "latency_sensitive"],
+      "deployment_role": "service",
+      "supports": []
+    },
+    {
+      "unit_id": "U3",
+      "name": "Frame Preprocessing",
+      "components": ["frame_preprocessing"],
+      "unit_type": "runtime",
+      "rationale": "Frame Preprocessing is a distinct stage that resizes frames to the display resolution, applies frame skipping and produces 224x224 frames. It fans out to three consumers: object detection, the crime-detection frame buffer and the display. It does not require local hardware or the operator interface, so it is not grouped with acquisition. It is also kept out of either inference pipeline because it serves both pipelines and the display.",
+      "grouping_criteria": ["cohesion", "independence", "device_binding"],
+      "cohesion": "high",
+      "communication_intensity_with_other_units": "high",
+      "internal_dependencies": [],
+      "external_dependencies": [
+        "video_acquisition -> frame_preprocessing",
+        "frame_preprocessing -> object_detection",
+        "frame_preprocessing -> frame_buffering",
+        "frame_preprocessing -> video_display"
+      ],
+      "execution_constraint": "flexible",
+      "characteristics": ["high_frequency_input", "latency_sensitive"],
+      "deployment_role": "service",
+      "supports": []
+    },
+    {
+      "unit_id": "U4",
+      "name": "Model Provisioning",
+      "components": ["model_loader"],
+      "unit_type": "initialization",
+      "rationale": "Model Loader downloads the pretrained YOLOv8-large, VideoMAE and I3D-R50 models from Hugging Face and PyTorchVideo and loads them at startup. It has no runtime data flow, only dependency edges to three inference components that belong to two different pipelines. It is kept as its own unit because merging it into either pipeline would misrepresent the other pipeline's dependency. It prepares both inference units rather than processing inputs itself.",
+      "grouping_criteria": ["independence", "cohesion"],
+      "cohesion": "high",
+      "communication_intensity_with_other_units": "low",
+      "internal_dependencies": [],
+      "external_dependencies": [
+        "model_loader -> object_detection",
+        "model_loader -> crime_detection",
+        "model_loader -> activity_recognition"
+      ],
+      "execution_constraint": "flexible",
+      "characteristics": ["external_service_dependency"],
+      "deployment_role": "dependency",
+      "supports": ["U5", "U6"]
+    },
+    {
+      "unit_id": "U5",
+      "name": "Object Detection and Tracking",
+      "components": ["object_detection", "object_tracking"],
+      "unit_type": "runtime",
+      "rationale": "YOLOv8-large detection and DeepSORT tracking form one coherent per-frame perception pipeline. object_detection feeds object_tracking on every processed frame, and the tracker assigns persistent IDs and draws labeled bounding boxes. They are grouped to avoid a network hop per frame on the path to the display.",
+      "grouping_criteria": ["cohesion", "coupling", "latency"],
+      "cohesion": "high",
+      "communication_intensity_with_other_units": "high",
+      "internal_dependencies": ["object_detection -> object_tracking"],
+      "external_dependencies": [
+        "frame_preprocessing -> object_detection",
+        "model_loader -> object_detection",
+        "object_tracking -> video_display"
+      ],
+      "execution_constraint": "flexible",
+      "characteristics": ["ml_inference", "high_frequency_input", "latency_sensitive", "stateful"],
+      "deployment_role": "service",
+      "supports": []
+    },
+    {
+      "unit_id": "U6",
+      "name": "Crime and Activity Recognition",
+      "components": ["frame_buffering", "crime_detection", "activity_recognition"],
+      "unit_type": "runtime",
+      "rationale": "The sliding 16-frame buffer, VideoMAE crime classification and I3D-R50 activity recognition form one coherent clip-based video understanding stage. The buffer produces the clip consumed by crime detection, and activity recognition runs on that same clip only when crime detection reports no crime. Keeping them together avoids transferring the clip across the network twice and keeps the conditional control flow internal.",
+      "grouping_criteria": ["cohesion", "coupling", "latency"],
+      "cohesion": "high",
+      "communication_intensity_with_other_units": "medium",
+      "internal_dependencies": [
+        "frame_buffering -> crime_detection",
+        "crime_detection -> activity_recognition"
+      ],
+      "external_dependencies": [
+        "frame_preprocessing -> frame_buffering",
+        "model_loader -> crime_detection",
+        "model_loader -> activity_recognition",
+        "crime_detection -> alert_notification",
+        "crime_detection -> video_display",
+        "crime_detection -> event_logging",
+        "activity_recognition -> video_display",
+        "activity_recognition -> event_logging"
+      ],
+      "execution_constraint": "flexible",
+      "characteristics": ["ml_inference", "high_frequency_input", "latency_sensitive", "stateful", "event_driven"],
+      "deployment_role": "service",
+      "supports": []
+    },
+    {
+      "unit_id": "U7",
+      "name": "Event Logging",
+      "components": ["event_logging"],
+      "unit_type": "runtime",
+      "rationale": "Event Logging writes timestamped detection results, crime events and system events to log files. It is a storage stage whose scaling and durability needs differ from the inference stages, so it is kept separate.",
+      "grouping_criteria": ["scalability", "independence"],
+      "cohesion": "high",
+      "communication_intensity_with_other_units": "low",
+      "internal_dependencies": [],
+      "external_dependencies": [
+        "crime_detection -> event_logging",
+        "activity_recognition -> event_logging"
+      ],
+      "execution_constraint": "flexible",
+      "characteristics": ["persistent_storage", "event_driven"],
+      "deployment_role": "service",
+      "supports": []
+    }
+  ],
+  "unit_graph": {
+    "nodes": ["U1", "U2", "U3", "U4", "U5", "U6", "U7"],
+    "edges": [
+      {
+        "source": "U1",
+        "target": "U2",
+        "component_edges": ["user_interface -> video_acquisition"],
+        "types": ["control_flow"],
+        "data_characteristics": {
+          "frequency": "event_driven",
+          "volume": "low",
+          "latency_sensitivity": "unknown"
+        }
+      },
+      {
+        "source": "U2",
+        "target": "U3",
+        "component_edges": ["video_acquisition -> frame_preprocessing"],
+        "types": ["data_flow"],
+        "data_characteristics": {
+          "frequency": "continuous",
+          "volume": "high",
+          "latency_sensitivity": "high"
+        }
+      },
+      {
+        "source": "U3",
+        "target": "U1",
+        "component_edges": ["frame_preprocessing -> video_display"],
+        "types": ["data_flow"],
+        "data_characteristics": {
+          "frequency": "continuous",
+          "volume": "high",
+          "latency_sensitivity": "high"
+        }
+      },
+      {
+        "source": "U3",
+        "target": "U5",
+        "component_edges": ["frame_preprocessing -> object_detection"],
+        "types": ["data_flow"],
+        "data_characteristics": {
+          "frequency": "continuous",
+          "volume": "high",
+          "latency_sensitivity": "high"
+        }
+      },
+      {
+        "source": "U3",
+        "target": "U6",
+        "component_edges": ["frame_preprocessing -> frame_buffering"],
+        "types": ["data_flow"],
+        "data_characteristics": {
+          "frequency": "continuous",
+          "volume": "high",
+          "latency_sensitivity": "high"
+        }
+      },
+      {
+        "source": "U4",
+        "target": "U5",
+        "component_edges": ["model_loader -> object_detection"],
+        "types": ["dependency"],
+        "data_characteristics": {
+          "frequency": "startup_only",
+          "volume": "unknown",
+          "latency_sensitivity": "low"
+        }
+      },
+      {
+        "source": "U4",
+        "target": "U6",
+        "component_edges": [
+          "model_loader -> crime_detection",
+          "model_loader -> activity_recognition"
+        ],
+        "types": ["dependency"],
+        "data_characteristics": {
+          "frequency": "startup_only",
+          "volume": "unknown",
+          "latency_sensitivity": "low"
+        }
+      },
+      {
+        "source": "U5",
+        "target": "U1",
+        "component_edges": ["object_tracking -> video_display"],
+        "types": ["data_flow"],
+        "data_characteristics": {
+          "frequency": "continuous",
+          "volume": "high",
+          "latency_sensitivity": "high"
+        }
+      },
+      {
+        "source": "U6",
+        "target": "U1",
+        "component_edges": [
+          "crime_detection -> alert_notification",
+          "crime_detection -> video_display",
+          "activity_recognition -> video_display"
+        ],
+        "types": ["event", "data_flow"],
+        "data_characteristics": {
+          "frequency": "continuous",
+          "volume": "low",
+          "latency_sensitivity": "high"
+        }
+      },
+      {
+        "source": "U6",
+        "target": "U7",
+        "component_edges": [
+          "crime_detection -> event_logging",
+          "activity_recognition -> event_logging"
+        ],
+        "types": ["data_flow"],
+        "data_characteristics": {
+          "frequency": "continuous",
+          "volume": "low",
+          "latency_sensitivity": "low"
+        }
+      }
+    ]
+  },
+  "granularity_summary": {
+    "number_of_components": 12,
+    "number_of_execution_units": 7,
+    "total_edges": 18,
+    "internal_edges": 4,
+    "cut_edges": 14,
+    "overall_strategy": "Task-level granularity: operator I/O and camera acquisition, which require local hardware or the local operator interface, are separated from all other components, and each of the two ML inference pipelines (per-frame detection and tracking, clip-based crime and activity recognition) forms one cohesive runtime unit. Preprocessing and logging remain separate runtime stages, while model provisioning is an initialization dependency that prepares both inference units."
+  }
+}

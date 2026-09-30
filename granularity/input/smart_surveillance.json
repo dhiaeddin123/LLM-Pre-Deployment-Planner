@@ -1,0 +1,85 @@
+{
+  "application_id": "smart_surveillance",
+  "nodes": [
+    {
+      "id": "user_interface",
+      "name": "User Interface",
+      "function": "Streamlit dashboard where the operator selects the video source (webcam or uploaded file), sets frame-skip, resolution and alert options, and starts or stops detection"
+    },
+    {
+      "id": "video_acquisition",
+      "name": "Video Acquisition",
+      "function": "Captures frames continuously from the local webcam or reads them from an uploaded video file at the target FPS"
+    },
+    {
+      "id": "frame_preprocessing",
+      "name": "Frame Preprocessing",
+      "function": "Resizes frames to the selected display resolution, applies frame skipping, and produces 224x224 frames for action recognition"
+    },
+    {
+      "id": "frame_buffering",
+      "name": "Frame Buffering",
+      "function": "Keeps a sliding buffer of the last 16 sampled frames used as the input clip for crime detection"
+    },
+    {
+      "id": "model_loader",
+      "name": "Model Loader",
+      "function": "Downloads pretrained models from Hugging Face and PyTorchVideo (YOLOv8-large, VideoMAE crime detector, I3D-R50) and loads them into CPU/GPU memory at startup"
+    },
+    {
+      "id": "object_detection",
+      "name": "Object Detection",
+      "function": "Runs YOLOv8-large deep learning inference on each sent frame to detect objects and people with confidence above 0.5"
+    },
+    {
+      "id": "object_tracking",
+      "name": "Object Tracking",
+      "function": "Applies DeepSORT tracking with a MobileNet appearance embedder to assign persistent IDs to detections and draws labeled bounding boxes on the frame"
+    },
+    {
+      "id": "crime_detection",
+      "name": "Crime Detection",
+      "function": "Runs a VideoMAE video classification model on the 16-frame clip to classify the scene as crime or no crime"
+    },
+    {
+      "id": "activity_recognition",
+      "name": "Normal Activity Recognition",
+      "function": "When no crime is detected, runs the pretrained I3D-R50 model (Kinetics-400) on the same clip to label the ongoing normal activity"
+    },
+    {
+      "id": "alert_notification",
+      "name": "Alert Notification",
+      "function": "Raises a real-time alert when a crime is detected: status message and optional beep on the local machine speaker"
+    },
+    {
+      "id": "video_display",
+      "name": "Video Display",
+      "function": "Renders the annotated frames, the current detection status and FPS statistics in the user interface"
+    },
+    {
+      "id": "event_logging",
+      "name": "Event Logging",
+      "function": "Writes timestamped detection results, crime events and system events to log files in the logs folder"
+    }
+  ],
+  "edges": [
+    { "source": "user_interface", "target": "video_acquisition", "type": "control_flow" },
+    { "source": "user_interface", "target": "alert_notification", "type": "control_flow" },
+    { "source": "video_acquisition", "target": "frame_preprocessing", "type": "data_flow" },
+    { "source": "frame_preprocessing", "target": "object_detection", "type": "data_flow" },
+    { "source": "frame_preprocessing", "target": "frame_buffering", "type": "data_flow" },
+    { "source": "frame_preprocessing", "target": "video_display", "type": "data_flow" },
+    { "source": "model_loader", "target": "object_detection", "type": "dependency" },
+    { "source": "model_loader", "target": "crime_detection", "type": "dependency" },
+    { "source": "model_loader", "target": "activity_recognition", "type": "dependency" },
+    { "source": "object_detection", "target": "object_tracking", "type": "data_flow" },
+    { "source": "object_tracking", "target": "video_display", "type": "data_flow" },
+    { "source": "frame_buffering", "target": "crime_detection", "type": "data_flow" },
+    { "source": "crime_detection", "target": "activity_recognition", "type": "control_flow" },
+    { "source": "crime_detection", "target": "alert_notification", "type": "event" },
+    { "source": "crime_detection", "target": "video_display", "type": "data_flow" },
+    { "source": "crime_detection", "target": "event_logging", "type": "data_flow" },
+    { "source": "activity_recognition", "target": "video_display", "type": "data_flow" },
+    { "source": "activity_recognition", "target": "event_logging", "type": "data_flow" }
+  ]
+}

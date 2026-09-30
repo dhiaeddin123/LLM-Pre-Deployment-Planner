@@ -1,0 +1,52 @@
+{
+  "application_id": "crop_monitoring",
+  "nodes": [
+    {
+      "id": "sensor_acquisition",
+      "name": "Sensor Acquisition",
+      "function": "Collects soil moisture and temperature data"
+    },
+    {
+      "id": "data_preprocessing",
+      "name": "Data Preprocessing",
+      "function": "Filters and normalizes sensor measurements"
+    },
+    {
+      "id": "crop_analysis",
+      "name": "Crop Analysis",
+      "function": "Analyzes measurements to determine crop conditions"
+    },
+    {
+      "id": "decision_engine",
+      "name": "Decision Engine",
+      "function": "Generates irrigation decisions"
+    },
+    {
+      "id": "cloud_storage",
+      "name": "Cloud Storage",
+      "function": "Stores historical agricultural data"
+    }
+  ],
+  "edges": [
+    {
+      "source": "sensor_acquisition",
+      "target": "data_preprocessing",
+      "type": "data_flow"
+    },
+    {
+      "source": "data_preprocessing",
+      "target": "crop_analysis",
+      "type": "data_flow"
+    },
+    {
+      "source": "crop_analysis",
+      "target": "decision_engine",
+      "type": "data_flow"
+    },
+    {
+      "source": "crop_analysis",
+      "target": "cloud_storage",
+      "type": "data_flow"
+    }
+  ]
+}

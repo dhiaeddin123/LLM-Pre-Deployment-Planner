@@ -1,0 +1,125 @@
+{
+  "baseline_valid": true,
+  "detection_rate": 1.0,
+  "faults": [
+    {
+      "application": "smart_surveillance",
+      "fault": "anchored camera unit U2 moved to an Edge node",
+      "expected_check": "V2",
+      "detected": true,
+      "raised_checks": [
+        "J2",
+        "V2"
+      ],
+      "first_violation": "U2 must run only on operator_pc (anchor A1), found ['edge_1']"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "GPU unit U5 placed on a node without GPU",
+      "expected_check": "V5",
+      "detected": true,
+      "raised_checks": [
+        "J1",
+        "V3",
+        "V5"
+      ],
+      "first_violation": "U4 must be on ['edge_1', 'edge_2'] (hosts of U5, U6), found ['edge_1']"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "U3 moved to the metro site (far from the camera)",
+      "expected_check": "V6",
+      "detected": true,
+      "raised_checks": [
+        "J2",
+        "V6"
+      ],
+      "first_violation": "U3 on edge_7 must be same_site with U2 on operator_pc"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "model loader U4 not co-located with U6",
+      "expected_check": "V3",
+      "detected": true,
+      "raised_checks": [
+        "V3"
+      ],
+      "first_violation": "U4 must be on ['edge_1', 'edge_3'] (hosts of U5, U6), found ['edge_1']"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "both U7 replicas on the same node",
+      "expected_check": "V7",
+      "detected": true,
+      "raised_checks": [
+        "V7"
+      ],
+      "first_violation": "U7 replicas ['edge_2', 'edge_2']"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "stateful tracking unit U5 replicated",
+      "expected_check": "V7",
+      "detected": true,
+      "raised_checks": [
+        "V3",
+        "V7"
+      ],
+      "first_violation": "U4 must be on ['edge_1', 'edge_3'] (hosts of U5, U6), found ['edge_1']"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "U3 placed on another user's phone",
+      "expected_check": "V4",
+      "detected": true,
+      "raised_checks": [
+        "J1",
+        "J2",
+        "V4",
+        "V6"
+      ],
+      "first_violation": "U3 on agri_phone: local device of another user/application"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "U3 offloaded: camera feed overloads the operator PC link",
+      "expected_check": "J2",
+      "detected": true,
+      "raised_checks": [
+        "J2"
+      ],
+      "first_violation": "l_pc: 837.602 Mbps of 1000 Mbps (limit 80%)"
+    },
+    {
+      "application": "smart_surveillance",
+      "fault": "a unit missing from the plan",
+      "expected_check": "V1",
+      "detected": true,
+      "raised_checks": [
+        "V1",
+        "V7"
+      ],
+      "first_violation": "U7 is not deployed"
+    },
+    {
+      "application": "crop_monitoring",
+      "fault": "SLA-required replica of storage U4 removed",
+      "expected_check": "V7",
+      "detected": true,
+      "raised_checks": [
+        "V7"
+      ],
+      "first_violation": "U4: 1 of 2 requested replicas"
+    },
+    {
+      "application": "crop_monitoring",
+      "fault": "crop processing placed on a microcontroller",
+      "expected_check": "V4",
+      "detected": true,
+      "raised_checks": [
+        "V4"
+      ],
+      "first_violation": "U2 on crop_sensor: non-comparable device"
+    }
+  ]
+}

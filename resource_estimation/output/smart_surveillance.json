@@ -1,0 +1,928 @@
+{
+  "application_id": "smart_surveillance",
+  "estimation_method": "heuristic_llm",
+  "assumptions": [
+    "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB.",
+    "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+    "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+    "Object detection runs on the 640x360 frames, on every processed frame.",
+    "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected.",
+    "Frames are passed between units as uncompressed arrays inside the same Python program.",
+    "All units are components of one Streamlit Python application on the operator's machine, so every unit-graph edge is currently an in-process call.",
+    "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total).",
+    "Models are downloaded at about 50 Mbps on first start; later starts use the local cache.",
+    "Operator control actions occur about once every 100 s (0.01 per second), with about 0.1 kB each.",
+    "Classification results, alerts and log records are about 0.2 kB each.",
+    "Log files are retained for about one week.",
+    "Frames are 8-bit RGB (3 bytes per pixel).",
+    "The network level of a unit is based on the larger of its potential ingress and potential egress.",
+    "The transfer of rendered frames from the Streamlit server to the browser front end happens inside U1 and is not a unit-graph edge."
+  ],
+  "platform_baselines": [
+    {
+      "platform": "Streamlit Python application process (operator's machine)",
+      "units": ["U1", "U2", "U3", "U4", "U5", "U6", "U7"],
+      "cpu_cores": 0.1,
+      "memory_gb": 1,
+      "basis": "The Python interpreter, Streamlit server and script re-run loop, plus the imported PyTorch, Ultralytics, PyTorchVideo, Hugging Face Transformers, OpenCV and CUDA runtime libraries (host side). A CUDA context also occupies GPU memory once per process, which is not included in the unit GPU figures. The browser rendering the Streamlit front end is a separate process and is not included.",
+      "confidence": "low"
+    }
+  ],
+  "resource_profiles": [
+    {
+      "unit_id": "U1",
+      "name": "Operator Interface",
+      "unit_type": "runtime",
+      "platform": "Streamlit Python application",
+      "workload_pattern": "continuous",
+      "constraints": {
+        "execution_constraint": "device_bound",
+        "deployment_role": "service",
+        "binding_characteristics": ["hardware_access", "user_interaction"],
+        "required_hardware_or_platform": ["Streamlit dashboard (operator interface)", "Local machine speaker (optional beep)"]
+      },
+      "evidence": {
+        "observed_facts": [
+          "The Streamlit dashboard lets the operator select the video source, set frame-skip, resolution and alert options, and start or stop detection.",
+          "Video display renders the annotated frames, the current detection status and FPS statistics in the user interface.",
+          "Alert notification raises a real-time status message and optional beep on the local machine speaker when a crime is detected."
+        ],
+        "inferred_characteristics": [
+          "It receives display-resolution frames continuously from U3 and U5 and must render them for the operator.",
+          "It receives small status and alert messages from U6.",
+          "Control actions are sparse, operator-triggered events."
+        ]
+      },
+      "cpu": {
+        "level": "low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw."
+        ],
+        "typical_cores": 0.25,
+        "peak_cores": 0.5,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Encoding and pushing 640x360 frames to the Streamlit front end at about 15 FPS, plus updating the status text and FPS statistics. The peak covers alert handling and option changes that trigger script re-runs. The Streamlit baseline is excluded."
+      },
+      "memory": {
+        "level": "very_low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw."
+        ],
+        "typical_gb": 0.05,
+        "peak_gb": 0.05,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "A few display-resolution frames and their encoded copies, plus widget state."
+      },
+      "gpu": {
+        "requirement": "none",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "memory_gb": 0,
+        "basis": "UI rendering, text updates and a beep. No model inference."
+      },
+      "storage": {
+        "level": "very_low",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "size_gb": 0,
+        "persistent": false,
+        "growth": "none",
+        "basis": "The input describes no data written by these components."
+      },
+      "network": {
+        "level": "very_high",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+          "Frames are passed between units as uncompressed arrays inside the same Python program.",
+          "Classification results, alerts and log records are about 0.2 kB each.",
+          "Operator control actions occur about once every 100 s (0.01 per second), with about 0.1 kB each."
+        ],
+        "physical_ingress_mbps": 0,
+        "physical_egress_mbps": 0,
+        "potential_ingress_mbps": 165.6016,
+        "potential_egress_mbps": 0.000008,
+        "basis": "Potential ingress is U3 -> U1 (82.8) + U5 -> U1 (82.8) + U6 -> U1 (0.0016). Potential egress is U1 -> U2 (0.000008). All edges are logical in-process calls, so physical traffic is 0."
+      },
+      "transient": false,
+      "startup_duration_s": null,
+      "confidence": "low",
+      "assumptions": ["Both the preprocessed frame stream (U3) and the annotated frame stream (U5) reach the display at 15 FPS, as the graph has both edges."],
+      "how_to_measure": "Profile the Streamlit process with py-spy during detection, attributing samples to st.image and UI update calls, and measure RSS with psutil while the display runs at the configured resolution and frame skip."
+    },
+    {
+      "unit_id": "U2",
+      "name": "Video Acquisition",
+      "unit_type": "runtime",
+      "platform": "Streamlit Python application",
+      "workload_pattern": "continuous",
+      "constraints": {
+        "execution_constraint": "device_bound",
+        "deployment_role": "service",
+        "binding_characteristics": ["hardware_access"],
+        "required_hardware_or_platform": ["Local webcam (or an uploaded video file)"]
+      },
+      "evidence": {
+        "observed_facts": [
+          "Captures frames continuously from the local webcam, or reads them from an uploaded video file, at the target FPS."
+        ],
+        "inferred_characteristics": [
+          "A continuous stream of full-resolution frames is produced for preprocessing.",
+          "Webcam capture or file decoding runs on every source frame, before frame skipping."
+        ]
+      },
+      "cpu": {
+        "level": "low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB."
+        ],
+        "typical_cores": 0.25,
+        "peak_cores": 0.5,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Grabbing and decoding 1280x720 frames at 30 FPS from the webcam. The peak covers decoding a compressed uploaded video file."
+      },
+      "memory": {
+        "level": "very_low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB."
+        ],
+        "typical_gb": 0.01,
+        "peak_gb": 0.01,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Capture buffers holding a few raw 1280x720 frames."
+      },
+      "gpu": {
+        "requirement": "none",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "memory_gb": 0,
+        "basis": "Frame capture and decoding only."
+      },
+      "storage": {
+        "level": "very_low",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "size_gb": 0,
+        "persistent": false,
+        "growth": "none",
+        "basis": "Frames are not stored. The size of an uploaded video file is not stated in the input and is not counted."
+      },
+      "network": {
+        "level": "very_high",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB.",
+          "Frames are passed between units as uncompressed arrays inside the same Python program.",
+          "Operator control actions occur about once every 100 s (0.01 per second), with about 0.1 kB each."
+        ],
+        "physical_ingress_mbps": 0,
+        "physical_egress_mbps": 0,
+        "potential_ingress_mbps": 0.000008,
+        "potential_egress_mbps": 672,
+        "basis": "Potential ingress is U1 -> U2 control (0.000008). Potential egress is U2 -> U3 raw frames (672). Both edges are logical."
+      },
+      "transient": false,
+      "startup_duration_s": null,
+      "confidence": "low",
+      "assumptions": [],
+      "how_to_measure": "Time the capture/read call per frame and record the achieved FPS, and measure the capture thread's CPU share with py-spy and psutil for both webcam and uploaded-file sources."
+    },
+    {
+      "unit_id": "U3",
+      "name": "Frame Preprocessing",
+      "unit_type": "runtime",
+      "platform": "Streamlit Python application",
+      "workload_pattern": "continuous",
+      "constraints": {
+        "execution_constraint": "flexible",
+        "deployment_role": "service",
+        "binding_characteristics": [],
+        "required_hardware_or_platform": []
+      },
+      "evidence": {
+        "observed_facts": [
+          "Resizes frames to the selected display resolution, applies frame skipping, and produces 224x224 frames for action recognition."
+        ],
+        "inferred_characteristics": [
+          "It receives every source frame, keeps one in N, and produces two resized versions per processed frame.",
+          "It is stateless apart from the frame-skip counter."
+        ]
+      },
+      "cpu": {
+        "level": "low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB.",
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw."
+        ],
+        "typical_cores": 0.25,
+        "peak_cores": 0.5,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Two image resizes (to the display resolution and to 224x224) for 15 processed frames per second, plus skip logic on 30 incoming frames per second. The peak covers a higher display resolution or no frame skipping."
+      },
+      "memory": {
+        "level": "very_low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB.",
+          "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw."
+        ],
+        "typical_gb": 0.01,
+        "peak_gb": 0.01,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "One input frame and two resized output frames in flight."
+      },
+      "gpu": {
+        "requirement": "none",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "memory_gb": 0,
+        "basis": "Image resizing and frame skipping only."
+      },
+      "storage": {
+        "level": "very_low",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "size_gb": 0,
+        "persistent": false,
+        "growth": "none",
+        "basis": "The input describes no storage in this unit."
+      },
+      "network": {
+        "level": "very_high",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB.",
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+          "Frames are passed between units as uncompressed arrays inside the same Python program.",
+          "Frames are 8-bit RGB (3 bytes per pixel)."
+        ],
+        "physical_ingress_mbps": 0,
+        "physical_egress_mbps": 0,
+        "potential_ingress_mbps": 672,
+        "potential_egress_mbps": 183.6,
+        "basis": "Potential ingress is U2 -> U3 (672). Potential egress is U3 -> U1 (82.8) + U3 -> U5 (82.8) + U3 -> U6 (18). All edges are logical."
+      },
+      "transient": false,
+      "startup_duration_s": null,
+      "confidence": "low",
+      "assumptions": [],
+      "how_to_measure": "Time the resize and skip code per frame with time.perf_counter() under the configured resolution and frame skip, and check memory with tracemalloc."
+    },
+    {
+      "unit_id": "U4",
+      "name": "Model Provisioning",
+      "unit_type": "initialization",
+      "platform": "Streamlit Python application",
+      "workload_pattern": "startup_only",
+      "constraints": {
+        "execution_constraint": "flexible",
+        "deployment_role": "dependency",
+        "binding_characteristics": ["external_service_dependency"],
+        "required_hardware_or_platform": ["Hugging Face model hub", "PyTorchVideo model repository"]
+      },
+      "evidence": {
+        "observed_facts": [
+          "Downloads pretrained models from Hugging Face and PyTorchVideo (YOLOv8-large, VideoMAE crime detector, I3D-R50) and loads them into CPU/GPU memory at startup."
+        ],
+        "inferred_characteristics": [
+          "A one-time download of three model files, followed by deserialization and transfer into CPU or GPU memory.",
+          "Once loaded, the models are held by the inference units U5 and U6."
+        ]
+      },
+      "cpu": {
+        "level": "medium",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total)."
+        ],
+        "typical_cores": 1,
+        "peak_cores": 2,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Download handling, checkpoint deserialization and model construction at startup. The peak occurs while weights are unpickled and copied to the device."
+      },
+      "memory": {
+        "level": "medium",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total)."
+        ],
+        "typical_gb": 0.5,
+        "peak_gb": 1,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Transient host copies of about 540 MB of checkpoints during loading. The resident models after loading are counted in U5 and U6, not here."
+      },
+      "gpu": {
+        "requirement": "none",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "memory_gb": 0,
+        "basis": "The unit only transfers weights. The GPU memory they occupy afterwards is counted in U5 and U6."
+      },
+      "storage": {
+        "level": "low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total)."
+        ],
+        "size_gb": 0.5,
+        "persistent": true,
+        "growth": "none",
+        "basis": "The cached model files (about 540 MB total) stay on disk for later starts. U5 and U6 do not count this storage again."
+      },
+      "network": {
+        "level": "very_low",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "physical_ingress_mbps": 0,
+        "physical_egress_mbps": 0,
+        "potential_ingress_mbps": 0,
+        "potential_egress_mbps": 0,
+        "basis": "Its unit-graph edges (U4 -> U5, U4 -> U6) are startup_only with 0 bandwidth by definition. The one-time download from the model repositories is not a unit-graph edge and is reflected in startup_duration_s."
+      },
+      "transient": true,
+      "startup_duration_s": 100,
+      "confidence": "low",
+      "assumptions": [
+        "The first start downloads about 540 MB at 50 Mbps (about 86 s) plus about 15 s of loading. With a warm cache, startup is about 15 s. This relies on 'Models are downloaded at about 50 Mbps on first start; later starts use the local cache.'"
+      ],
+      "how_to_measure": "Time the model loader from process start to the first inference-ready state with and without a warm cache, record peak RSS with psutil, and check the size of the Hugging Face and torch hub cache directories."
+    },
+    {
+      "unit_id": "U5",
+      "name": "Object Detection and Tracking",
+      "unit_type": "runtime",
+      "platform": "Streamlit Python application",
+      "workload_pattern": "continuous",
+      "constraints": {
+        "execution_constraint": "flexible",
+        "deployment_role": "service",
+        "binding_characteristics": [],
+        "required_hardware_or_platform": ["Pretrained YOLOv8-large model (provided by U4)", "DeepSORT tracker with MobileNet appearance embedder"]
+      },
+      "evidence": {
+        "observed_facts": [
+          "Runs YOLOv8-large deep learning inference on each sent frame to detect objects and people with confidence above 0.5.",
+          "Applies DeepSORT tracking with a MobileNet appearance embedder to assign persistent IDs to detections and draws labeled bounding boxes on the frame.",
+          "The model loader loads models into CPU/GPU memory."
+        ],
+        "inferred_characteristics": [
+          "Large-detector inference on every processed frame.",
+          "Per-detection appearance embedding and track association, with track state kept across frames.",
+          "One annotated frame is produced per processed frame."
+        ]
+      },
+      "cpu": {
+        "level": "medium",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "Object detection runs on the 640x360 frames, on every processed frame."
+        ],
+        "typical_cores": 1,
+        "peak_cores": 2,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "With the GPU: host-side pre/post-processing, NMS, DeepSORT association, embedding scheduling and box drawing at 15 FPS. The peak covers scenes with many detections. Without a GPU, YOLOv8-large inference moves to the CPU. The need then grows to more than 8 cores and still falls well short of 15 FPS."
+      },
+      "memory": {
+        "level": "medium",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Object detection runs on the 640x360 frames, on every processed frame.",
+          "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total)."
+        ],
+        "typical_gb": 0.5,
+        "peak_gb": 1,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Host-side YOLOv8-large and MobileNet model objects, frame tensors, DeepSORT track state and appearance features. The Python/PyTorch baseline is excluded."
+      },
+      "gpu": {
+        "requirement": "required",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "Object detection runs on the 640x360 frames, on every processed frame."
+        ],
+        "memory_gb": 2,
+        "basis": "YOLOv8-large weights, activations for the detection input and the MobileNet embedder. That this is a large detector running on each sent frame is observed. That a GPU is required rather than optional follows from the assumed 15 FPS rate, since the input indicates a CPU fallback exists, but only at a much lower frame rate."
+      },
+      "storage": {
+        "level": "very_low",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "size_gb": 0,
+        "persistent": false,
+        "growth": "none",
+        "basis": "Model files are counted in U4. Nothing else is stored."
+      },
+      "network": {
+        "level": "high",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+          "Frames are passed between units as uncompressed arrays inside the same Python program."
+        ],
+        "physical_ingress_mbps": 0,
+        "physical_egress_mbps": 0,
+        "potential_ingress_mbps": 82.8,
+        "potential_egress_mbps": 82.8,
+        "basis": "Potential ingress is U3 -> U5 (82.8). Potential egress is U5 -> U1 (82.8). U4 -> U5 is startup_only with 0 bandwidth. All edges are logical."
+      },
+      "transient": false,
+      "startup_duration_s": null,
+      "confidence": "low",
+      "assumptions": [],
+      "how_to_measure": "Profile CPU and RSS of the detection/tracking code with psutil and py-spy, and GPU memory and utilization with nvidia-smi, while processing a 30 FPS 720p video with frame skip 2. Repeat with a CPU-only run to confirm the fallback frame rate."
+    },
+    {
+      "unit_id": "U6",
+      "name": "Crime and Activity Recognition",
+      "unit_type": "runtime",
+      "platform": "Streamlit Python application",
+      "workload_pattern": "continuous",
+      "constraints": {
+        "execution_constraint": "flexible",
+        "deployment_role": "service",
+        "binding_characteristics": [],
+        "required_hardware_or_platform": ["Pretrained VideoMAE crime detector and I3D-R50 (Kinetics-400) models (provided by U4)"]
+      },
+      "evidence": {
+        "observed_facts": [
+          "Keeps a sliding buffer of the last 16 sampled frames used as the input clip for crime detection.",
+          "Runs a VideoMAE video classification model on the 16-frame clip to classify the scene as crime or no crime.",
+          "When no crime is detected, runs the pretrained I3D-R50 model on the same clip to label the ongoing normal activity."
+        ],
+        "inferred_characteristics": [
+          "The buffer is updated on every sampled 224x224 frame.",
+          "Video-transformer inference on a 16x224x224 clip, followed in the no-crime case by 3D-CNN inference on the same clip.",
+          "Outputs are small classification labels and alerts."
+        ]
+      },
+      "cpu": {
+        "level": "low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected."
+        ],
+        "typical_cores": 0.25,
+        "peak_cores": 1,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "With the GPU: buffer updates at 15 frames per second, plus clip normalization and tensor preparation once per second. The peak occurs when both models run on the same clip. Without a GPU, each VideoMAE plus I3D-R50 pass on a 16-frame clip takes several seconds on 4 or more cores, so one classification per second could not be sustained."
+      },
+      "memory": {
+        "level": "medium",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total).",
+          "Frames are 8-bit RGB (3 bytes per pixel)."
+        ],
+        "typical_gb": 0.5,
+        "peak_gb": 1,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Host-side VideoMAE and I3D-R50 model objects, the 16-frame buffer (about 2.4 MB) and clip tensors. The Python/PyTorch baseline is excluded."
+      },
+      "gpu": {
+        "requirement": "required",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected.",
+          "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total)."
+        ],
+        "memory_gb": 2,
+        "basis": "VideoMAE and I3D-R50 weights plus activations for a 16x224x224 clip. The two named video models are observed. That a GPU is required rather than optional follows from the assumed classification rate, since the input indicates a CPU fallback exists, but at a much lower rate."
+      },
+      "storage": {
+        "level": "very_low",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "size_gb": 0,
+        "persistent": false,
+        "growth": "none",
+        "basis": "Model files are counted in U4. The frame buffer is held in memory."
+      },
+      "network": {
+        "level": "high",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+          "Frames are 8-bit RGB (3 bytes per pixel).",
+          "Frames are passed between units as uncompressed arrays inside the same Python program.",
+          "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected.",
+          "Classification results, alerts and log records are about 0.2 kB each."
+        ],
+        "physical_ingress_mbps": 0,
+        "physical_egress_mbps": 0,
+        "potential_ingress_mbps": 18,
+        "potential_egress_mbps": 0.0032,
+        "basis": "Potential ingress is U3 -> U6 (18). Potential egress is U6 -> U1 (0.0016) + U6 -> U7 (0.0016). U4 -> U6 is startup_only with 0 bandwidth. All edges are logical."
+      },
+      "transient": false,
+      "startup_duration_s": null,
+      "confidence": "low",
+      "assumptions": [],
+      "how_to_measure": "Log the timestamps of each crime/activity inference to obtain the real classification rate, and profile CPU and RSS with psutil and GPU memory with nvidia-smi during a video that contains both crime and normal scenes."
+    },
+    {
+      "unit_id": "U7",
+      "name": "Event Logging",
+      "unit_type": "runtime",
+      "platform": "Streamlit Python application",
+      "workload_pattern": "event_driven",
+      "constraints": {
+        "execution_constraint": "flexible",
+        "deployment_role": "service",
+        "binding_characteristics": [],
+        "required_hardware_or_platform": ["File system with a logs folder"]
+      },
+      "evidence": {
+        "observed_facts": [
+          "Writes timestamped detection results, crime events and system events to log files in the logs folder."
+        ],
+        "inferred_characteristics": [
+          "Small text records are appended for every classification result and event.",
+          "Log volume grows with running time."
+        ]
+      },
+      "cpu": {
+        "level": "very_low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected.",
+          "Classification results, alerts and log records are about 0.2 kB each."
+        ],
+        "typical_cores": 0.01,
+        "peak_cores": 0.01,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Formatting and appending about one short record per second. The actual demand is below the smallest grid value."
+      },
+      "memory": {
+        "level": "very_low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Classification results, alerts and log records are about 0.2 kB each."
+        ],
+        "typical_gb": 0.001,
+        "peak_gb": 0.001,
+        "native_estimate": null,
+        "not_comparable_reason": null,
+        "basis": "Log handler buffers. The actual demand is below the smallest grid value."
+      },
+      "gpu": {
+        "requirement": "none",
+        "provenance": "inferred",
+        "assumption_refs": [],
+        "memory_gb": 0,
+        "basis": "File writes only."
+      },
+      "storage": {
+        "level": "low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected.",
+          "Classification results, alerts and log records are about 0.2 kB each.",
+          "Log files are retained for about one week."
+        ],
+        "size_gb": 0.1,
+        "persistent": true,
+        "growth": "grows_over_time",
+        "basis": "About 0.2 kB per second is about 17 MB per day, so one week of retention is about 0.12 GB. That the logs are persistent and grow is observed from the function, while the size is assumed. Without rotation, size grows without bound."
+      },
+      "network": {
+        "level": "very_low",
+        "provenance": "assumed",
+        "assumption_refs": [
+          "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected.",
+          "Classification results, alerts and log records are about 0.2 kB each."
+        ],
+        "physical_ingress_mbps": 0,
+        "physical_egress_mbps": 0,
+        "potential_ingress_mbps": 0.0016,
+        "potential_egress_mbps": 0,
+        "basis": "Potential ingress is U6 -> U7 (0.0016). The edge is logical."
+      },
+      "transient": false,
+      "startup_duration_s": null,
+      "confidence": "low",
+      "assumptions": [],
+      "how_to_measure": "Monitor the size growth of the logs folder over a 24-hour run, and count records per minute."
+    }
+  ],
+  "communication_requirements": [
+    {
+      "source": "U1",
+      "target": "U2",
+      "payload": "Operator control: selected video source, start/stop detection",
+      "flow_path": ["U1", "U2"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 0.1,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 0.01,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "Operator control actions occur about once every 100 s (0.01 per second), with about 0.1 kB each.",
+        "All units are components of one Streamlit Python application on the operator's machine, so every unit-graph edge is currently an in-process call."
+      ],
+      "bandwidth_mbps": 0.000008,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "medium",
+        "reason": "The operator starts and stops detection and selects the source, which is an operator command requiring seconds-scale responsiveness."
+      },
+      "basis": "0.1 x 0.01 x 8 / 1000 = 0.000008 Mbps, the load if the units were separated."
+    },
+    {
+      "source": "U2",
+      "target": "U3",
+      "payload": "Raw 1280x720 RGB frames from the webcam or video file",
+      "flow_path": ["U2", "U3"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 2800,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 30,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB.",
+        "Frames are passed between units as uncompressed arrays inside the same Python program.",
+        "All units are components of one Streamlit Python application on the operator's machine, so every unit-graph edge is currently an in-process call."
+      ],
+      "bandwidth_mbps": 672,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "high",
+        "reason": "Frames are captured continuously at the target FPS, and each frame feeds the real-time display and detection path."
+      },
+      "basis": "2800 x 30 x 8 / 1000 = 672 Mbps of raw arrays, before frame skipping."
+    },
+    {
+      "source": "U3",
+      "target": "U1",
+      "payload": "Resized display-resolution frames",
+      "flow_path": ["U3", "U1"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 690,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 15,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+        "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+        "Frames are passed between units as uncompressed arrays inside the same Python program."
+      ],
+      "bandwidth_mbps": 82.8,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "high",
+        "reason": "Frames are sent on every processed frame for live rendering."
+      },
+      "basis": "690 x 15 x 8 / 1000 = 82.8 Mbps."
+    },
+    {
+      "source": "U3",
+      "target": "U5",
+      "payload": "Resized display-resolution frames for object detection",
+      "flow_path": ["U3", "U5"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 690,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 15,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+        "Object detection runs on the 640x360 frames, on every processed frame.",
+        "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+        "Frames are passed between units as uncompressed arrays inside the same Python program."
+      ],
+      "bandwidth_mbps": 82.8,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "high",
+        "reason": "Detection runs on each sent frame, and its annotated output feeds the live display."
+      },
+      "basis": "690 x 15 x 8 / 1000 = 82.8 Mbps."
+    },
+    {
+      "source": "U3",
+      "target": "U6",
+      "payload": "224x224 RGB frames for the crime-detection sliding buffer",
+      "flow_path": ["U3", "U6"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 150,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 15,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "Frames are 8-bit RGB (3 bytes per pixel).",
+        "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+        "Frames are passed between units as uncompressed arrays inside the same Python program."
+      ],
+      "bandwidth_mbps": 18,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "high",
+        "reason": "Each sampled frame updates the clip that drives the real-time crime alert."
+      },
+      "basis": "The 224x224 size is observed. At 3 bytes per pixel a frame is about 150 kB: 150 x 15 x 8 / 1000 = 18 Mbps."
+    },
+    {
+      "source": "U4",
+      "target": "U5",
+      "payload": "One-time loading of the YOLOv8-large model",
+      "flow_path": ["U4", "U5"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 0,
+      "message_size_provenance": "inferred",
+      "message_rate_per_s": 0,
+      "message_rate_provenance": "inferred",
+      "bandwidth_provenance": "inferred",
+      "assumption_refs": [
+        "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total)."
+      ],
+      "bandwidth_mbps": 0,
+      "one_time_transfer_mb": 84,
+      "latency_sensitivity": {
+        "level": "not_applicable",
+        "reason": "Startup-only initialization transfer."
+      },
+      "basis": "The model is loaded at startup, so the rate and bandwidth are 0 by definition. The one-time volume (about 84 MB) is assumed."
+    },
+    {
+      "source": "U4",
+      "target": "U6",
+      "payload": "One-time loading of the VideoMAE crime detector and I3D-R50 models",
+      "flow_path": ["U4", "U6"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 0,
+      "message_size_provenance": "inferred",
+      "message_rate_per_s": 0,
+      "message_rate_provenance": "inferred",
+      "bandwidth_provenance": "inferred",
+      "assumption_refs": [
+        "Model file sizes are general-knowledge estimates: YOLOv8-large about 84 MB, VideoMAE crime detector about 350 MB, I3D-R50 about 110 MB (about 540 MB in total)."
+      ],
+      "bandwidth_mbps": 0,
+      "one_time_transfer_mb": 460,
+      "latency_sensitivity": {
+        "level": "not_applicable",
+        "reason": "Startup-only initialization transfer."
+      },
+      "basis": "The models are loaded at startup, so the rate and bandwidth are 0 by definition. The one-time volume (about 350 + 110 MB) is assumed."
+    },
+    {
+      "source": "U5",
+      "target": "U1",
+      "payload": "Annotated frames with labeled bounding boxes and track IDs",
+      "flow_path": ["U5", "U1"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 690,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 15,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+        "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+        "Frames are passed between units as uncompressed arrays inside the same Python program."
+      ],
+      "bandwidth_mbps": 82.8,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "high",
+        "reason": "An annotated frame is produced on every processed frame for the live view."
+      },
+      "basis": "690 x 15 x 8 / 1000 = 82.8 Mbps."
+    },
+    {
+      "source": "U6",
+      "target": "U1",
+      "payload": "Crime / no-crime status, normal-activity label and crime alert events",
+      "flow_path": ["U6", "U1"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 0.2,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 1,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "Classification results, alerts and log records are about 0.2 kB each.",
+        "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected."
+      ],
+      "bandwidth_mbps": 0.0016,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "high",
+        "reason": "The input describes a real-time alert raised when a crime is detected."
+      },
+      "basis": "0.2 x 1 x 8 / 1000 = 0.0016 Mbps. Alerts are included in this rate."
+    },
+    {
+      "source": "U6",
+      "target": "U7",
+      "payload": "Timestamped detection results and crime events for the log files",
+      "flow_path": ["U6", "U7"],
+      "current_mechanism": "in_process_call",
+      "boundary": "logical",
+      "message_size_kb": 0.2,
+      "message_size_provenance": "assumed",
+      "message_rate_per_s": 1,
+      "message_rate_provenance": "assumed",
+      "bandwidth_provenance": "assumed",
+      "assumption_refs": [
+        "Classification results, alerts and log records are about 0.2 kB each.",
+        "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected."
+      ],
+      "bandwidth_mbps": 0.0016,
+      "one_time_transfer_mb": null,
+      "latency_sensitivity": {
+        "level": "low",
+        "reason": "Log records need only eventual delivery."
+      },
+      "basis": "0.2 x 1 x 8 / 1000 = 0.0016 Mbps."
+    }
+  ],
+  "summary": {
+    "number_of_units": 7,
+    "current_platform_load": [
+      {
+        "platform": "Streamlit Python application process (operator's machine)",
+        "runtime_units": ["U1", "U2", "U3", "U5", "U6", "U7"],
+        "application_cores": 2.01,
+        "application_memory_gb": 1.071,
+        "baseline_cores": 0.1,
+        "baseline_memory_gb": 1,
+        "combined_cores": 2.11,
+        "combined_memory_gb": 2.071,
+        "storage_gb": 0.1,
+        "units_without_numeric_values": [],
+        "provenance": "assumed"
+      }
+    ],
+    "initialization_demand": {
+      "units": ["U4"],
+      "peak_cores": 2,
+      "peak_memory_gb": 1,
+      "persistent_storage_gb": 0.5,
+      "startup_duration_s": 100
+    },
+    "units_requiring_gpu": ["U5", "U6"],
+    "physical_boundaries": [],
+    "provenance_overview": {
+      "estimates_by_provenance": {"observed": 0, "inferred": 11, "assumed": 24, "unknown": 0},
+      "edges_by_bandwidth_provenance": {"observed": 0, "inferred": 2, "assumed": 8, "unknown": 0},
+      "key_assumptions": [
+        "The webcam delivers 1280x720 RGB frames at 30 FPS; one raw frame is about 2800 kB.",
+        "Frame skipping processes every 2nd frame, giving 15 processed frames per second.",
+        "The selected display resolution is 640x360; one display or detection frame is about 690 kB raw.",
+        "Crime detection classifies the 16-frame clip about once per second; activity recognition runs on the same clip when no crime is detected.",
+        "Frames are passed between units as uncompressed arrays inside the same Python program."
+      ]
+    },
+    "resource_observations": [
+      "The named models (YOLOv8-large, VideoMAE, I3D-R50), the per-frame and per-clip inference and the 224x224 clip size are observed, so the kind of demand is well founded. Every numeric CPU, memory, GPU and bandwidth value still depends on the assumed camera resolution, frame rate, frame skip, display resolution and classification rate. This is why 24 of 35 estimates are assumed and every unit has low confidence.",
+      "The 11 inferred estimates are qualitative: no GPU need for UI, capture, preprocessing, model loading and logging; no storage in units that write nothing; and 0 bandwidth on startup-only edges.",
+      "U5 accounts for about half of the estimated application CPU (1 of 2.01 cores). U1, U2, U3 and U6 are low (0.25 cores each), and U7 is very_low.",
+      "U5 and U6 hold almost all application host memory (0.5 GB each of 1.071 GB) and all GPU demand (2 GB each, plus the per-process CUDA context). Whether a GPU is required rather than optional depends on the assumed 15 FPS and 1 clip/s rates.",
+      "The raw frame flows are the largest communication volumes: U2 -> U3 at 672 Mbps, and U3 -> U1, U3 -> U5 and U5 -> U1 at 82.8 Mbps each. Clip frames U3 -> U6 carry 18 Mbps, while result, alert, log and control flows are at most 0.0016 Mbps. All frame values assume uncompressed arrays and would drop substantially with encoding.",
+      "No edge crosses a physical device link today: all ten edges are logical in-process calls inside the Streamlit application.",
+      "U4 needs about 0.5 GB of persistent model storage and a one-time download from the model repositories, estimated at about 100 s on first start. Its loaded models are counted in U5 and U6.",
+      "U7 is the only runtime unit with persistent, growing storage (about 17 MB per day)."
+    ]
+  },
+  "calibration_status": "uncalibrated"
+}

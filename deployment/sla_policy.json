@@ -1,0 +1,138 @@
+{
+  "policy": {
+    "name": "default-offloading-sla",
+    "version": "2.0",
+    "description": "Global planning rules, objective weights and per-application SLA / scalability requirements."
+  },
+  "planning": {
+    "mode": "sequential_by_priority",
+    "utilization_target": 0.8,
+    "max_exhaustive_candidates": 200000,
+    "top_k_alternatives": 3,
+    "strict_assumptions": false,
+    "availability_mode": "soft",
+    "allow_stateful_replication": false,
+    "replication_policy": "sla_required",
+    "max_replicated_candidates": 5000,
+    "runtime_overhead_per_node": {
+      "cpu_cores": 0.1,
+      "memory_gb": 0.25
+    },
+    "default_unknown_demand": {
+      "cpu_cores": 0.1,
+      "memory_gb": 0.1
+    },
+    "safety_margins": {
+      "observed": 1.0,
+      "inferred": 1.1,
+      "assumed": 1.25,
+      "unknown": 1.5
+    },
+    "per_replica_overhead": {
+      "cpu_cores": 0.05
+    },
+    "persistent_replication": "mirrored",
+    "replication_models": {
+      "_comment": "How replicas share the work, per replication semantics (load_split: stateless units; mirrored/partitioned: units with persistent data, chosen by persistent_replication; single: stateful units). writes: all_replicas | split; reads: load_balanced | primary; cpu/storage: split | full.",
+      "load_split": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "full"
+      },
+      "mirrored": {
+        "writes": "all_replicas",
+        "reads": "load_balanced",
+        "cpu": "full",
+        "storage": "full"
+      },
+      "partitioned": {
+        "writes": "split",
+        "reads": "load_balanced",
+        "cpu": "split",
+        "storage": "split"
+      }
+    }
+  },
+  "objective": {
+    "weights": {
+      "network_traffic": 1.0,
+      "wan_traffic": 2.0,
+      "latency": 2.0,
+      "device_load": 1.0,
+      "load_imbalance": 1.0,
+      "cloud_usage": 0.5,
+      "assumption_risk": 0.5,
+      "availability_shortfall": 3.0,
+      "max_node_utilization": 1.0
+    },
+    "normalization": {
+      "network_traffic_mbps": 100,
+      "wan_traffic_mbps": 100,
+      "latency_cost_ms": 10,
+      "device_load": 1,
+      "load_imbalance": 0.05,
+      "cloud_usage_cores": 4,
+      "assumption_risk_units": 1,
+      "availability_shortfall": 0.01,
+      "max_node_utilization": 0.5
+    },
+    "latency_weights": {
+      "high": 1.0,
+      "medium": 0.3,
+      "low": 0.05,
+      "unknown": 0.3,
+      "not_applicable": 0.0
+    }
+  },
+  "applications": {
+    "smart_surveillance": {
+      "priority": 1,
+      "availability_target": 0.99,
+      "units": {
+        "U5": {
+          "desired_replicas": 1,
+          "max_replicas": 2,
+          "priority": "critical"
+        },
+        "U6": {
+          "desired_replicas": 1,
+          "max_replicas": 2,
+          "priority": "critical"
+        },
+        "U7": {
+          "desired_replicas": 2,
+          "max_replicas": 2,
+          "priority": "medium"
+        }
+      }
+    },
+    "smart_agriculture_iot": {
+      "priority": 2,
+      "availability_target": 0.95,
+      "units": {
+        "U5": {
+          "desired_replicas": 1,
+          "max_replicas": 1,
+          "priority": "high"
+        }
+      }
+    },
+    "crop_monitoring": {
+      "priority": 3,
+      "availability_target": 0.99,
+      "units": {
+        "U3": {
+          "desired_replicas": 2,
+          "max_replicas": 2,
+          "priority": "high"
+        },
+        "U4": {
+          "desired_replicas": 2,
+          "max_replicas": 2,
+          "priority": "high"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "application_id": "crop_monitoring",
+  "result": "Valid",
+  "summary": {
+    "valid": true,
+    "checks": 27,
+    "passed": 25,
+    "errors": 0,
+    "warnings": 2
+  },
+  "violations": [],
+  "warnings": [
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U2 is offloaded while 2 assumption(s) remain to verify",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U3 is offloaded while 2 assumption(s) remain to verify",
+      "unit": "U3",
+      "node": null
+    }
+  ],
+  "checks": [
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U1 -> ['crop_sensor']",
+      "unit": "U1",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U2 -> ['edge_5']",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U3 -> ['edge_5', 'edge_4']",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U4 -> ['edge_5', 'edge_4']",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U1 must run only on crop_sensor (anchor A1), found ['crop_sensor']",
+      "unit": "U1",
+      "node": "crop_sensor"
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U2 on edge_5: eligible",
+      "unit": "U2",
+      "node": "edge_5"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U2 replicas ['edge_5']",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U2: 1 replicas, max 1",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "stateful units are not replicated",
+      "result": "pass",
+      "detail": "U2 is stateful/single (1 replicas)",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "pass",
+      "detail": "U2: availability 0.9900, target 0.99 (soft constraint)",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U2 is offloaded while 2 assumption(s) remain to verify",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U3 on edge_5: eligible",
+      "unit": "U3",
+      "node": "edge_5"
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U3 on edge_4: eligible",
+      "unit": "U3",
+      "node": "edge_4"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U3 replicas ['edge_5', 'edge_4']",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U3: 2 replicas, max 2",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "SLA-required replicas are deployed",
+      "result": "pass",
+      "detail": "U3: 2 of 2 requested replicas",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "pass",
+      "detail": "U3: availability 0.9999, target 0.99 (soft constraint)",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V9",
+      "constraint": "offloaded units have no unverified assumptions",
+      "result": "warning",
+      "detail": "U3 is offloaded while 2 assumption(s) remain to verify",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U4 on edge_5: eligible",
+      "unit": "U4",
+      "node": "edge_5"
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U4 on edge_4: eligible",
+      "unit": "U4",
+      "node": "edge_4"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U4 replicas ['edge_5', 'edge_4']",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U4: 2 replicas, max 2",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "SLA-required replicas are deployed",
+      "result": "pass",
+      "detail": "U4: 2 of 2 requested replicas",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "pass",
+      "detail": "U4: availability 0.9999, target 0.99 (soft constraint)",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_e5: descriptor 1.6e-05 Mbps, recomputed 1.6e-05 Mbps",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_crop: descriptor 4e-06 Mbps, recomputed 4e-06 Mbps",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_e4: descriptor 1.2e-05 Mbps, recomputed 1.2e-05 Mbps",
+      "unit": null,
+      "node": null
+    }
+  ]
+}

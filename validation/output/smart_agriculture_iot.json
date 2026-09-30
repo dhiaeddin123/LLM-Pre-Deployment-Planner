@@ -1,0 +1,183 @@
+{
+  "application_id": "smart_agriculture_iot",
+  "result": "Valid",
+  "summary": {
+    "valid": true,
+    "checks": 21,
+    "passed": 21,
+    "errors": 0,
+    "warnings": 0
+  },
+  "violations": [],
+  "warnings": [],
+  "checks": [
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U1 -> ['agri_arduino']",
+      "unit": "U1",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U2 -> ['agri_arduino']",
+      "unit": "U2",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U3 -> ['agri_arduino']",
+      "unit": "U3",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U4 -> ['agri_phone']",
+      "unit": "U4",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U5 -> ['agri_phone']",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V1",
+      "constraint": "every unit is deployed on known nodes",
+      "result": "pass",
+      "detail": "U6 -> ['agri_phone']",
+      "unit": "U6",
+      "node": null
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U1 must run only on agri_arduino (anchor A1), found ['agri_arduino']",
+      "unit": "U1",
+      "node": "agri_arduino"
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U2 must run only on agri_arduino (anchor A1), found ['agri_arduino']",
+      "unit": "U2",
+      "node": "agri_arduino"
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U3 must run only on agri_arduino (anchor A1), found ['agri_arduino']",
+      "unit": "U3",
+      "node": "agri_arduino"
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U4 must run only on agri_phone (anchor A2), found ['agri_phone']",
+      "unit": "U4",
+      "node": "agri_phone"
+    },
+    {
+      "id": "V4",
+      "constraint": "offloaded units run on eligible hosts",
+      "result": "pass",
+      "detail": "U5 on agri_phone: eligible",
+      "unit": "U5",
+      "node": "agri_phone"
+    },
+    {
+      "id": "V6",
+      "constraint": "proximity condition",
+      "result": "pass",
+      "detail": "U5 on agri_phone must be regional with U4 on agri_phone",
+      "unit": "U5",
+      "node": "agri_phone"
+    },
+    {
+      "id": "V6",
+      "constraint": "proximity condition",
+      "result": "pass",
+      "detail": "U5 on agri_phone must be regional with U6 on agri_phone",
+      "unit": "U5",
+      "node": "agri_phone"
+    },
+    {
+      "id": "V7",
+      "constraint": "one replica per node (anti-affinity)",
+      "result": "pass",
+      "detail": "U5 replicas ['agri_phone']",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "replica count within SLA maximum",
+      "result": "pass",
+      "detail": "U5: 1 replicas, max 1",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V7",
+      "constraint": "stateful units are not replicated",
+      "result": "pass",
+      "detail": "U5 is stateful/single (1 replicas)",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V8",
+      "constraint": "availability target (movable units)",
+      "result": "pass",
+      "detail": "U5: availability 0.9700, target 0.95 (soft constraint)",
+      "unit": "U5",
+      "node": null
+    },
+    {
+      "id": "V2",
+      "constraint": "non-offloadable units stay on their anchor",
+      "result": "pass",
+      "detail": "U6 must run only on agri_phone (anchor A2), found ['agri_phone']",
+      "unit": "U6",
+      "node": "agri_phone"
+    },
+    {
+      "id": "V10",
+      "constraint": "hardware edges are not split across nodes",
+      "result": "pass",
+      "detail": "U2->U3 on ['agri_arduino'] / ['agri_arduino']",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "V10",
+      "constraint": "hardware edges are not split across nodes",
+      "result": "pass",
+      "detail": "U3->U2 on ['agri_arduino'] / ['agri_arduino']",
+      "unit": null,
+      "node": null
+    },
+    {
+      "id": "V11",
+      "constraint": "reported link load matches recomputation",
+      "result": "pass",
+      "detail": "l_bt: descriptor 0.00016 Mbps, recomputed 0.00016008 Mbps",
+      "unit": null,
+      "node": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "applications": [
+    "smart_surveillance"
+  ],
+  "node_usage": {
+    "operator_pc": {
+      "cpu_cores": 1.038,
+      "memory_gb": 0.338
+    },
+    "edge_1": {
+      "cpu_cores": 1.663,
+      "memory_gb": 1.5,
+      "gpu_memory_gb": 4.0,
+      "storage_gb": 0.5
+    },
+    "edge_2": {
+      "cpu_cores": 0.113,
+      "memory_gb": 0.251,
+      "storage_gb": 0.1
+    },
+    "edge_3": {
+      "cpu_cores": 0.113,
+      "memory_gb": 0.251,
+      "storage_gb": 0.1
+    }
+  },
+  "link_usage_mbps": {
+    "l_pc": 183.6016,
+    "l_e1": 183.6048,
+    "l_e2": 0.0016,
+    "l_e3": 0.0016
+  }
+}
