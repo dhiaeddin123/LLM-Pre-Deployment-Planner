@@ -1,0 +1,841 @@
+{
+  "name": "synthetic_m2_n16_s20263036",
+  "m": 2,
+  "n": 16,
+  "seed": 20263036,
+  "graph": {
+    "application_id": "synthetic_m2_n16_s20263036",
+    "nodes": [
+      {
+        "id": "anchor",
+        "name": "anchor",
+        "function": "anchor"
+      },
+      {
+        "id": "task_1",
+        "name": "task_1",
+        "function": "task_1"
+      },
+      {
+        "id": "task_2",
+        "name": "task_2",
+        "function": "task_2"
+      }
+    ],
+    "edges": [
+      {
+        "source": "anchor",
+        "target": "task_1",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_1",
+        "target": "task_2",
+        "type": "data_flow"
+      }
+    ]
+  },
+  "resource": {
+    "application_id": "synthetic_m2_n16_s20263036",
+    "resource_profiles": [
+      {
+        "unit_id": "U0",
+        "name": "Anchored source",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "very_low",
+          "provenance": "inferred",
+          "typical_cores": 0.05,
+          "peak_cores": 0.1
+        },
+        "memory": {
+          "level": "very_low",
+          "provenance": "inferred",
+          "typical_gb": 0.05,
+          "peak_gb": 0.1
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U1",
+        "name": "Synthetic task 1",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U2",
+        "name": "Synthetic task 2",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "required",
+          "memory_gb": 2
+        },
+        "storage": {
+          "level": "low",
+          "size_gb": 0.5,
+          "persistent": true,
+          "growth": "grows_over_time"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      }
+    ],
+    "communication_requirements": [
+      {
+        "source": "U0",
+        "target": "U1",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U1",
+        "target": "U2",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      }
+    ]
+  },
+  "offloadability": {
+    "application_id": "synthetic_m2_n16_s20263036",
+    "anchors": [
+      {
+        "anchor_id": "A1",
+        "anchored_units": [
+          "U0"
+        ],
+        "network_connectivity": "IP network",
+        "provenance": "assumed"
+      }
+    ],
+    "offloadability_profiles": [
+      {
+        "unit_id": "U0",
+        "name": "Anchored source",
+        "unit_type": "runtime",
+        "status": "non_offloadable",
+        "anchored_to": "A1",
+        "conditions": [],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U1",
+        "name": "Synthetic task 1",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U2",
+        "name": "Synthetic task 2",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "gpu_required",
+            "value": 2,
+            "unit": "GB",
+            "related_unit": null
+          },
+          {
+            "type": "persistent_storage",
+            "value": 0.5,
+            "unit": "GB",
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      }
+    ]
+  },
+  "infrastructure": {
+    "description": "Generated two-tier Edge and Cloud infrastructure.",
+    "sites": [
+      {
+        "id": "local",
+        "region": "region_a",
+        "description": "Local Edge site"
+      },
+      {
+        "id": "metro",
+        "region": "region_a",
+        "description": "Metropolitan Edge site"
+      },
+      {
+        "id": "cloud",
+        "region": "cloud",
+        "description": "Cloud site"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "anchor_node",
+        "tier": "device",
+        "site": "local",
+        "kind": "device",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.98,
+        "capacity": {
+          "cpu_cores": 4,
+          "memory_gb": 8,
+          "gpu_memory_gb": 0,
+          "storage_gb": 10
+        }
+      },
+      {
+        "id": "edge_1",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_2",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_3",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_4",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_5",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_6",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_7",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_8",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_9",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_10",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_11",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_12",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_13",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_14",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_15",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_16",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "local_switch",
+        "tier": "switch",
+        "site": "local",
+        "kind": "switch",
+        "comparable": false,
+        "internet_access": true,
+        "availability": 1.0,
+        "capacity": {
+          "cpu_cores": 0,
+          "memory_gb": 0,
+          "gpu_memory_gb": 0,
+          "storage_gb": 0
+        }
+      },
+      {
+        "id": "metro_switch",
+        "tier": "switch",
+        "site": "metro",
+        "kind": "switch",
+        "comparable": false,
+        "internet_access": true,
+        "availability": 1.0,
+        "capacity": {
+          "cpu_cores": 0,
+          "memory_gb": 0,
+          "gpu_memory_gb": 0,
+          "storage_gb": 0
+        }
+      },
+      {
+        "id": "cloud_switch",
+        "tier": "switch",
+        "site": "cloud",
+        "kind": "switch",
+        "comparable": false,
+        "internet_access": true,
+        "availability": 1.0,
+        "capacity": {
+          "cpu_cores": 0,
+          "memory_gb": 0,
+          "gpu_memory_gb": 0,
+          "storage_gb": 0
+        }
+      },
+      {
+        "id": "cloud_1",
+        "tier": "cloud",
+        "site": "cloud",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.999,
+        "capacity": {
+          "cpu_cores": 128,
+          "memory_gb": 512,
+          "gpu_memory_gb": 24,
+          "storage_gb": 10000
+        }
+      }
+    ],
+    "links": [
+      {
+        "id": "edge_link_1",
+        "a": "edge_1",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_2",
+        "a": "edge_2",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_3",
+        "a": "edge_3",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_4",
+        "a": "edge_4",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_5",
+        "a": "edge_5",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_6",
+        "a": "edge_6",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_7",
+        "a": "edge_7",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_8",
+        "a": "edge_8",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_9",
+        "a": "edge_9",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_10",
+        "a": "edge_10",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_11",
+        "a": "edge_11",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_12",
+        "a": "edge_12",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_13",
+        "a": "edge_13",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_14",
+        "a": "edge_14",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_15",
+        "a": "edge_15",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_16",
+        "a": "edge_16",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "anchor_link",
+        "a": "anchor_node",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "local_metro_wan",
+        "a": "local_switch",
+        "b": "metro_switch",
+        "type": "wan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 5
+      },
+      {
+        "id": "metro_cloud_wan",
+        "a": "metro_switch",
+        "b": "cloud_switch",
+        "type": "wan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 40
+      },
+      {
+        "id": "cloud_link",
+        "a": "cloud_1",
+        "b": "cloud_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      }
+    ],
+    "application_bindings": {
+      "synthetic_m2_n16_s20263036": {
+        "anchors": {
+          "A1": "anchor_node"
+        },
+        "original_host": {
+          "U0": "anchor_node"
+        }
+      }
+    }
+  },
+  "gpu_units": [
+    "U2"
+  ],
+  "stateful_units": [],
+  "proximity_units": [
+    "U1"
+  ],
+  "generation_attempt": 1,
+  "policy": {
+    "policy": {
+      "name": "default-offloading-sla",
+      "version": "2.0",
+      "description": "Global planning rules, objective weights and per-application SLA / scalability requirements."
+    },
+    "planning": {
+      "mode": "sequential_by_priority",
+      "utilization_target": 0.8,
+      "max_exhaustive_candidates": 200000,
+      "top_k_alternatives": 3,
+      "strict_assumptions": false,
+      "availability_mode": "soft",
+      "allow_stateful_replication": false,
+      "replication_policy": "sla_required",
+      "max_replicated_candidates": 5000,
+      "runtime_overhead_per_node": {
+        "cpu_cores": 0.1,
+        "memory_gb": 0.25
+      },
+      "default_unknown_demand": {
+        "cpu_cores": 0.1,
+        "memory_gb": 0.1
+      },
+      "safety_margins": {
+        "observed": 1.0,
+        "inferred": 1.1,
+        "assumed": 1.25,
+        "unknown": 1.5
+      },
+      "per_replica_overhead": {
+        "cpu_cores": 0.05
+      },
+      "persistent_replication": "mirrored",
+      "replication_models": {
+        "_comment": "How replicas share the work, per replication semantics (load_split: stateless units; mirrored/partitioned: units with persistent data, chosen by persistent_replication; single: stateful units). writes: all_replicas | split; reads: load_balanced | primary; cpu/storage: split | full.",
+        "load_split": {
+          "writes": "split",
+          "reads": "load_balanced",
+          "cpu": "split",
+          "storage": "full"
+        },
+        "mirrored": {
+          "writes": "all_replicas",
+          "reads": "load_balanced",
+          "cpu": "full",
+          "storage": "full"
+        },
+        "partitioned": {
+          "writes": "split",
+          "reads": "load_balanced",
+          "cpu": "split",
+          "storage": "split"
+        }
+      }
+    },
+    "objective": {
+      "weights": {
+        "network_traffic": 1.0,
+        "wan_traffic": 2.0,
+        "latency": 2.0,
+        "device_load": 1.0,
+        "load_imbalance": 1.0,
+        "cloud_usage": 0.5,
+        "assumption_risk": 0.5,
+        "availability_shortfall": 3.0,
+        "max_node_utilization": 1.0
+      },
+      "normalization": {
+        "network_traffic_mbps": 100,
+        "wan_traffic_mbps": 100,
+        "latency_cost_ms": 10,
+        "device_load": 1,
+        "load_imbalance": 0.05,
+        "cloud_usage_cores": 4,
+        "assumption_risk_units": 1,
+        "availability_shortfall": 0.01,
+        "max_node_utilization": 0.5
+      },
+      "latency_weights": {
+        "high": 1.0,
+        "medium": 0.3,
+        "low": 0.05,
+        "unknown": 0.3,
+        "not_applicable": 0.0
+      }
+    },
+    "applications": {
+      "synthetic_m2_n16_s20263036": {
+        "priority": 1,
+        "availability_target": 0.95,
+        "units": {
+          "U1": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U2": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3478 @@
+{
+  "name": "synthetic_m20_n64_s20281246",
+  "m": 20,
+  "n": 64,
+  "seed": 20281246,
+  "graph": {
+    "application_id": "synthetic_m20_n64_s20281246",
+    "nodes": [
+      {
+        "id": "anchor",
+        "name": "anchor",
+        "function": "anchor"
+      },
+      {
+        "id": "task_1",
+        "name": "task_1",
+        "function": "task_1"
+      },
+      {
+        "id": "task_2",
+        "name": "task_2",
+        "function": "task_2"
+      },
+      {
+        "id": "task_3",
+        "name": "task_3",
+        "function": "task_3"
+      },
+      {
+        "id": "task_4",
+        "name": "task_4",
+        "function": "task_4"
+      },
+      {
+        "id": "task_5",
+        "name": "task_5",
+        "function": "task_5"
+      },
+      {
+        "id": "task_6",
+        "name": "task_6",
+        "function": "task_6"
+      },
+      {
+        "id": "task_7",
+        "name": "task_7",
+        "function": "task_7"
+      },
+      {
+        "id": "task_8",
+        "name": "task_8",
+        "function": "task_8"
+      },
+      {
+        "id": "task_9",
+        "name": "task_9",
+        "function": "task_9"
+      },
+      {
+        "id": "task_10",
+        "name": "task_10",
+        "function": "task_10"
+      },
+      {
+        "id": "task_11",
+        "name": "task_11",
+        "function": "task_11"
+      },
+      {
+        "id": "task_12",
+        "name": "task_12",
+        "function": "task_12"
+      },
+      {
+        "id": "task_13",
+        "name": "task_13",
+        "function": "task_13"
+      },
+      {
+        "id": "task_14",
+        "name": "task_14",
+        "function": "task_14"
+      },
+      {
+        "id": "task_15",
+        "name": "task_15",
+        "function": "task_15"
+      },
+      {
+        "id": "task_16",
+        "name": "task_16",
+        "function": "task_16"
+      },
+      {
+        "id": "task_17",
+        "name": "task_17",
+        "function": "task_17"
+      },
+      {
+        "id": "task_18",
+        "name": "task_18",
+        "function": "task_18"
+      },
+      {
+        "id": "task_19",
+        "name": "task_19",
+        "function": "task_19"
+      },
+      {
+        "id": "task_20",
+        "name": "task_20",
+        "function": "task_20"
+      }
+    ],
+    "edges": [
+      {
+        "source": "anchor",
+        "target": "task_1",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_1",
+        "target": "task_2",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_2",
+        "target": "task_3",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_3",
+        "target": "task_4",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_4",
+        "target": "task_5",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_5",
+        "target": "task_6",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_6",
+        "target": "task_7",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_7",
+        "target": "task_8",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_8",
+        "target": "task_9",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_9",
+        "target": "task_10",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_10",
+        "target": "task_11",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_11",
+        "target": "task_12",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_12",
+        "target": "task_13",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_13",
+        "target": "task_14",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_14",
+        "target": "task_15",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_15",
+        "target": "task_16",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_16",
+        "target": "task_17",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_17",
+        "target": "task_18",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_18",
+        "target": "task_19",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_19",
+        "target": "task_20",
+        "type": "data_flow"
+      },
+      {
+        "source": "anchor",
+        "target": "task_16",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_1",
+        "target": "task_13",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_2",
+        "target": "task_4",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_2",
+        "target": "task_6",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_2",
+        "target": "task_8",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_2",
+        "target": "task_13",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_2",
+        "target": "task_15",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_2",
+        "target": "task_16",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_3",
+        "target": "task_8",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_3",
+        "target": "task_19",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_4",
+        "target": "task_18",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_5",
+        "target": "task_12",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_6",
+        "target": "task_10",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_7",
+        "target": "task_12",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_8",
+        "target": "task_17",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_8",
+        "target": "task_18",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_9",
+        "target": "task_16",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_10",
+        "target": "task_19",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_11",
+        "target": "task_13",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_13",
+        "target": "task_18",
+        "type": "data_flow"
+      },
+      {
+        "source": "task_15",
+        "target": "task_18",
+        "type": "data_flow"
+      }
+    ]
+  },
+  "resource": {
+    "application_id": "synthetic_m20_n64_s20281246",
+    "resource_profiles": [
+      {
+        "unit_id": "U0",
+        "name": "Anchored source",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "very_low",
+          "provenance": "inferred",
+          "typical_cores": 0.05,
+          "peak_cores": 0.1
+        },
+        "memory": {
+          "level": "very_low",
+          "provenance": "inferred",
+          "typical_gb": 0.05,
+          "peak_gb": 0.1
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U1",
+        "name": "Synthetic task 1",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "required",
+          "memory_gb": 2
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U2",
+        "name": "Synthetic task 2",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U3",
+        "name": "Synthetic task 3",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U4",
+        "name": "Synthetic task 4",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U5",
+        "name": "Synthetic task 5",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "required",
+          "memory_gb": 2
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U6",
+        "name": "Synthetic task 6",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "required",
+          "memory_gb": 2
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U7",
+        "name": "Synthetic task 7",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U8",
+        "name": "Synthetic task 8",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U9",
+        "name": "Synthetic task 9",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U10",
+        "name": "Synthetic task 10",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U11",
+        "name": "Synthetic task 11",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U12",
+        "name": "Synthetic task 12",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "required",
+          "memory_gb": 2
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U13",
+        "name": "Synthetic task 13",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U14",
+        "name": "Synthetic task 14",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U15",
+        "name": "Synthetic task 15",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "required",
+          "memory_gb": 2
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U16",
+        "name": "Synthetic task 16",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U17",
+        "name": "Synthetic task 17",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "required",
+          "memory_gb": 2
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U18",
+        "name": "Synthetic task 18",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U19",
+        "name": "Synthetic task 19",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "very_low",
+          "size_gb": 0,
+          "persistent": false,
+          "growth": "none"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      },
+      {
+        "unit_id": "U20",
+        "name": "Synthetic task 20",
+        "unit_type": "runtime",
+        "cpu": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_cores": 0.25,
+          "peak_cores": 0.5
+        },
+        "memory": {
+          "level": "low",
+          "provenance": "assumed",
+          "typical_gb": 0.25,
+          "peak_gb": 0.5
+        },
+        "gpu": {
+          "requirement": "none",
+          "memory_gb": 0
+        },
+        "storage": {
+          "level": "low",
+          "size_gb": 0.5,
+          "persistent": true,
+          "growth": "grows_over_time"
+        },
+        "network": {
+          "physical_ingress_mbps": 0,
+          "physical_egress_mbps": 0,
+          "potential_ingress_mbps": 0.01,
+          "potential_egress_mbps": 0.01
+        }
+      }
+    ],
+    "communication_requirements": [
+      {
+        "source": "U0",
+        "target": "U1",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U1",
+        "target": "U2",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U2",
+        "target": "U3",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U3",
+        "target": "U4",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U4",
+        "target": "U5",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U5",
+        "target": "U6",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U6",
+        "target": "U7",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U7",
+        "target": "U8",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U8",
+        "target": "U9",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U9",
+        "target": "U10",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U10",
+        "target": "U11",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U11",
+        "target": "U12",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U12",
+        "target": "U13",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U13",
+        "target": "U14",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U14",
+        "target": "U15",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U15",
+        "target": "U16",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U16",
+        "target": "U17",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U17",
+        "target": "U18",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U18",
+        "target": "U19",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U19",
+        "target": "U20",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U0",
+        "target": "U16",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U1",
+        "target": "U13",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U2",
+        "target": "U4",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U2",
+        "target": "U6",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U2",
+        "target": "U8",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U2",
+        "target": "U13",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U2",
+        "target": "U15",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U2",
+        "target": "U16",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U3",
+        "target": "U8",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U3",
+        "target": "U19",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U4",
+        "target": "U18",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U5",
+        "target": "U12",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U6",
+        "target": "U10",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U7",
+        "target": "U12",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U8",
+        "target": "U17",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U8",
+        "target": "U18",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U9",
+        "target": "U16",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U10",
+        "target": "U19",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U11",
+        "target": "U13",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U13",
+        "target": "U18",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      },
+      {
+        "source": "U15",
+        "target": "U18",
+        "bandwidth_mbps": 0.01,
+        "boundary": "logical",
+        "latency_sensitivity": "medium"
+      }
+    ]
+  },
+  "offloadability": {
+    "application_id": "synthetic_m20_n64_s20281246",
+    "anchors": [
+      {
+        "anchor_id": "A1",
+        "anchored_units": [
+          "U0"
+        ],
+        "network_connectivity": "IP network",
+        "provenance": "assumed"
+      }
+    ],
+    "offloadability_profiles": [
+      {
+        "unit_id": "U0",
+        "name": "Anchored source",
+        "unit_type": "runtime",
+        "status": "non_offloadable",
+        "anchored_to": "A1",
+        "conditions": [],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U1",
+        "name": "Synthetic task 1",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "gpu_required",
+            "value": 2,
+            "unit": "GB",
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U2",
+        "name": "Synthetic task 2",
+        "unit_type": "runtime",
+        "status": "offloadable",
+        "anchored_to": null,
+        "conditions": [],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U3",
+        "name": "Synthetic task 3",
+        "unit_type": "runtime",
+        "status": "offloadable",
+        "anchored_to": null,
+        "conditions": [],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U4",
+        "name": "Synthetic task 4",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U5",
+        "name": "Synthetic task 5",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "gpu_required",
+            "value": 2,
+            "unit": "GB",
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U6",
+        "name": "Synthetic task 6",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "gpu_required",
+            "value": 2,
+            "unit": "GB",
+            "related_unit": null
+          },
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U7",
+        "name": "Synthetic task 7",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U8",
+        "name": "Synthetic task 8",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U9",
+        "name": "Synthetic task 9",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U10",
+        "name": "Synthetic task 10",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U11",
+        "name": "Synthetic task 11",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          },
+          {
+            "type": "state_handling",
+            "value": null,
+            "unit": null,
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U12",
+        "name": "Synthetic task 12",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "gpu_required",
+            "value": 2,
+            "unit": "GB",
+            "related_unit": null
+          },
+          {
+            "type": "state_handling",
+            "value": null,
+            "unit": null,
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U13",
+        "name": "Synthetic task 13",
+        "unit_type": "runtime",
+        "status": "offloadable",
+        "anchored_to": null,
+        "conditions": [],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U14",
+        "name": "Synthetic task 14",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U15",
+        "name": "Synthetic task 15",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "gpu_required",
+            "value": 2,
+            "unit": "GB",
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U16",
+        "name": "Synthetic task 16",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U17",
+        "name": "Synthetic task 17",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "gpu_required",
+            "value": 2,
+            "unit": "GB",
+            "related_unit": null
+          },
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U18",
+        "name": "Synthetic task 18",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          },
+          {
+            "type": "state_handling",
+            "value": null,
+            "unit": null,
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U19",
+        "name": "Synthetic task 19",
+        "unit_type": "runtime",
+        "status": "offloadable",
+        "anchored_to": null,
+        "conditions": [],
+        "follows_units": []
+      },
+      {
+        "unit_id": "U20",
+        "name": "Synthetic task 20",
+        "unit_type": "runtime",
+        "status": "conditionally_offloadable",
+        "anchored_to": null,
+        "conditions": [
+          {
+            "type": "network_proximity",
+            "value": "same_site",
+            "unit": "same_site",
+            "related_unit": "U0"
+          },
+          {
+            "type": "persistent_storage",
+            "value": 0.5,
+            "unit": "GB",
+            "related_unit": null
+          }
+        ],
+        "follows_units": []
+      }
+    ]
+  },
+  "infrastructure": {
+    "description": "Generated two-tier Edge and Cloud infrastructure.",
+    "sites": [
+      {
+        "id": "local",
+        "region": "region_a",
+        "description": "Local Edge site"
+      },
+      {
+        "id": "metro",
+        "region": "region_a",
+        "description": "Metropolitan Edge site"
+      },
+      {
+        "id": "cloud",
+        "region": "cloud",
+        "description": "Cloud site"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "anchor_node",
+        "tier": "device",
+        "site": "local",
+        "kind": "device",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.98,
+        "capacity": {
+          "cpu_cores": 4,
+          "memory_gb": 8,
+          "gpu_memory_gb": 0,
+          "storage_gb": 10
+        }
+      },
+      {
+        "id": "edge_1",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_2",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_3",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_4",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_5",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_6",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_7",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_8",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_9",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_10",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_11",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_12",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_13",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_14",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_15",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_16",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_17",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_18",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_19",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_20",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_21",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_22",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_23",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_24",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_25",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_26",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_27",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_28",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_29",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_30",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_31",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_32",
+        "tier": "edge",
+        "site": "local",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_33",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_34",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_35",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_36",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_37",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_38",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_39",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_40",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_41",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_42",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_43",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_44",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_45",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_46",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_47",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_48",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_49",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_50",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_51",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_52",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_53",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_54",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_55",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_56",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_57",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_58",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_59",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_60",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_61",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 8,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_62",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_63",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "edge_64",
+        "tier": "edge",
+        "site": "metro",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.99,
+        "capacity": {
+          "cpu_cores": 32,
+          "memory_gb": 128,
+          "gpu_memory_gb": 0,
+          "storage_gb": 1000
+        }
+      },
+      {
+        "id": "local_switch",
+        "tier": "switch",
+        "site": "local",
+        "kind": "switch",
+        "comparable": false,
+        "internet_access": true,
+        "availability": 1.0,
+        "capacity": {
+          "cpu_cores": 0,
+          "memory_gb": 0,
+          "gpu_memory_gb": 0,
+          "storage_gb": 0
+        }
+      },
+      {
+        "id": "metro_switch",
+        "tier": "switch",
+        "site": "metro",
+        "kind": "switch",
+        "comparable": false,
+        "internet_access": true,
+        "availability": 1.0,
+        "capacity": {
+          "cpu_cores": 0,
+          "memory_gb": 0,
+          "gpu_memory_gb": 0,
+          "storage_gb": 0
+        }
+      },
+      {
+        "id": "cloud_switch",
+        "tier": "switch",
+        "site": "cloud",
+        "kind": "switch",
+        "comparable": false,
+        "internet_access": true,
+        "availability": 1.0,
+        "capacity": {
+          "cpu_cores": 0,
+          "memory_gb": 0,
+          "gpu_memory_gb": 0,
+          "storage_gb": 0
+        }
+      },
+      {
+        "id": "cloud_1",
+        "tier": "cloud",
+        "site": "cloud",
+        "kind": "server",
+        "comparable": true,
+        "internet_access": true,
+        "availability": 0.999,
+        "capacity": {
+          "cpu_cores": 128,
+          "memory_gb": 512,
+          "gpu_memory_gb": 24,
+          "storage_gb": 10000
+        }
+      }
+    ],
+    "links": [
+      {
+        "id": "edge_link_1",
+        "a": "edge_1",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_2",
+        "a": "edge_2",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_3",
+        "a": "edge_3",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_4",
+        "a": "edge_4",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_5",
+        "a": "edge_5",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_6",
+        "a": "edge_6",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_7",
+        "a": "edge_7",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_8",
+        "a": "edge_8",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_9",
+        "a": "edge_9",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_10",
+        "a": "edge_10",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_11",
+        "a": "edge_11",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_12",
+        "a": "edge_12",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_13",
+        "a": "edge_13",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_14",
+        "a": "edge_14",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_15",
+        "a": "edge_15",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_16",
+        "a": "edge_16",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_17",
+        "a": "edge_17",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_18",
+        "a": "edge_18",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_19",
+        "a": "edge_19",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_20",
+        "a": "edge_20",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_21",
+        "a": "edge_21",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_22",
+        "a": "edge_22",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_23",
+        "a": "edge_23",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_24",
+        "a": "edge_24",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_25",
+        "a": "edge_25",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_26",
+        "a": "edge_26",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_27",
+        "a": "edge_27",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_28",
+        "a": "edge_28",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_29",
+        "a": "edge_29",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_30",
+        "a": "edge_30",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_31",
+        "a": "edge_31",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_32",
+        "a": "edge_32",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_33",
+        "a": "edge_33",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_34",
+        "a": "edge_34",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_35",
+        "a": "edge_35",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_36",
+        "a": "edge_36",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_37",
+        "a": "edge_37",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_38",
+        "a": "edge_38",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_39",
+        "a": "edge_39",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_40",
+        "a": "edge_40",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_41",
+        "a": "edge_41",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_42",
+        "a": "edge_42",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_43",
+        "a": "edge_43",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_44",
+        "a": "edge_44",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_45",
+        "a": "edge_45",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_46",
+        "a": "edge_46",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_47",
+        "a": "edge_47",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_48",
+        "a": "edge_48",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_49",
+        "a": "edge_49",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_50",
+        "a": "edge_50",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_51",
+        "a": "edge_51",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_52",
+        "a": "edge_52",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_53",
+        "a": "edge_53",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_54",
+        "a": "edge_54",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_55",
+        "a": "edge_55",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_56",
+        "a": "edge_56",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_57",
+        "a": "edge_57",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_58",
+        "a": "edge_58",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_59",
+        "a": "edge_59",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_60",
+        "a": "edge_60",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_61",
+        "a": "edge_61",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_62",
+        "a": "edge_62",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_63",
+        "a": "edge_63",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "edge_link_64",
+        "a": "edge_64",
+        "b": "metro_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "anchor_link",
+        "a": "anchor_node",
+        "b": "local_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      },
+      {
+        "id": "local_metro_wan",
+        "a": "local_switch",
+        "b": "metro_switch",
+        "type": "wan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 5
+      },
+      {
+        "id": "metro_cloud_wan",
+        "a": "metro_switch",
+        "b": "cloud_switch",
+        "type": "wan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 40
+      },
+      {
+        "id": "cloud_link",
+        "a": "cloud_1",
+        "b": "cloud_switch",
+        "type": "lan",
+        "bandwidth_mbps": 10000,
+        "latency_ms": 0.2
+      }
+    ],
+    "application_bindings": {
+      "synthetic_m20_n64_s20281246": {
+        "anchors": {
+          "A1": "anchor_node"
+        },
+        "original_host": {
+          "U0": "anchor_node"
+        }
+      }
+    }
+  },
+  "gpu_units": [
+    "U1",
+    "U12",
+    "U15",
+    "U17",
+    "U5",
+    "U6"
+  ],
+  "stateful_units": [
+    "U11",
+    "U12",
+    "U18"
+  ],
+  "proximity_units": [
+    "U10",
+    "U11",
+    "U14",
+    "U16",
+    "U17",
+    "U18",
+    "U20",
+    "U4",
+    "U6",
+    "U7",
+    "U8",
+    "U9"
+  ],
+  "policy": {
+    "policy": {
+      "name": "default-offloading-sla",
+      "version": "2.0",
+      "description": "Global planning rules, objective weights and per-application SLA / scalability requirements."
+    },
+    "planning": {
+      "mode": "sequential_by_priority",
+      "utilization_target": 0.8,
+      "max_exhaustive_candidates": 200000,
+      "top_k_alternatives": 3,
+      "strict_assumptions": false,
+      "availability_mode": "soft",
+      "allow_stateful_replication": false,
+      "replication_policy": "sla_required",
+      "max_replicated_candidates": 5000,
+      "runtime_overhead_per_node": {
+        "cpu_cores": 0.1,
+        "memory_gb": 0.25
+      },
+      "default_unknown_demand": {
+        "cpu_cores": 0.1,
+        "memory_gb": 0.1
+      },
+      "safety_margins": {
+        "observed": 1.0,
+        "inferred": 1.1,
+        "assumed": 1.25,
+        "unknown": 1.5
+      },
+      "per_replica_overhead": {
+        "cpu_cores": 0.05
+      },
+      "persistent_replication": "mirrored",
+      "replication_models": {
+        "_comment": "How replicas share the work, per replication semantics (load_split: stateless units; mirrored/partitioned: units with persistent data, chosen by persistent_replication; single: stateful units). writes: all_replicas | split; reads: load_balanced | primary; cpu/storage: split | full.",
+        "load_split": {
+          "writes": "split",
+          "reads": "load_balanced",
+          "cpu": "split",
+          "storage": "full"
+        },
+        "mirrored": {
+          "writes": "all_replicas",
+          "reads": "load_balanced",
+          "cpu": "full",
+          "storage": "full"
+        },
+        "partitioned": {
+          "writes": "split",
+          "reads": "load_balanced",
+          "cpu": "split",
+          "storage": "split"
+        }
+      }
+    },
+    "objective": {
+      "weights": {
+        "network_traffic": 1.0,
+        "wan_traffic": 2.0,
+        "latency": 2.0,
+        "device_load": 1.0,
+        "load_imbalance": 1.0,
+        "cloud_usage": 0.5,
+        "assumption_risk": 0.5,
+        "availability_shortfall": 3.0,
+        "max_node_utilization": 1.0
+      },
+      "normalization": {
+        "network_traffic_mbps": 100,
+        "wan_traffic_mbps": 100,
+        "latency_cost_ms": 10,
+        "device_load": 1,
+        "load_imbalance": 0.05,
+        "cloud_usage_cores": 4,
+        "assumption_risk_units": 1,
+        "availability_shortfall": 0.01,
+        "max_node_utilization": 0.5
+      },
+      "latency_weights": {
+        "high": 1.0,
+        "medium": 0.3,
+        "low": 0.05,
+        "unknown": 0.3,
+        "not_applicable": 0.0
+      }
+    },
+    "applications": {
+      "synthetic_m20_n64_s20281246": {
+        "priority": 1,
+        "availability_target": 0.95,
+        "units": {
+          "U1": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U2": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U3": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U4": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U5": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U6": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U7": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U8": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U9": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U10": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U11": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U12": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U13": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U14": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U15": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U16": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U17": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U18": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U19": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          },
+          "U20": {
+            "desired_replicas": 1,
+            "max_replicas": 1
+          }
+        }
+      }
+    }
+  }
+}

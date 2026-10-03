@@ -107,6 +107,33 @@ Search: exhaustive over the constraint-pruned candidate space when it has at
 most `max_exhaustive_candidates` configurations (default 200,000), greedy +
 local search otherwise.
 
+### RQ2 – Scalability benchmark
+
+Run the reproducible synthetic benchmark from the project root:
+
+```bash
+python -m pip install -r experiments/requirements.txt
+python experiments/rq2_scalability_benchmark.py
+```
+
+The default run tests the 12 combinations of 2–5 movable units and 8, 16 or 24
+Edge nodes with both exhaustive search and the planner's greedy+local-search
+fallback. For each small case, a fixed seed is advanced deterministically until
+the candidate space fits the exact-search limit. It also
+tests `(m, N)` sizes `(10, 32)`, `(20, 64)` and `(40, 100)` using the fallback
+only. Each case is repeated three times. A fixed random seed and generated
+instances are saved for reproducibility. Results, including runtime samples,
+candidate-space sizes, feasibility and small-case optimality gaps, are written
+to `experiments/output/rq2_scalability/`. PDF plots are written to
+`experiments/figures/`.
+
+Use `--m-values`, `--n-values`, `--large-pairs`, `--repetitions` or
+`--max-exact-configurations` to adjust the run. Use `--plot-only` to regenerate
+the plots from saved results without rerunning the planner. Search evaluation
+counts include greedy initialization and local-search scoring; wall-clock time
+covers the complete `plan_app` call, including candidate generation, search,
+baselines and replication.
+
 ### Stage 5 – Validation
 
 ```bash

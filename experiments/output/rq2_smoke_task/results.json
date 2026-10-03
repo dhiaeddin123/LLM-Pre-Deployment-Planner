@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "seed": 20261002,
+    "repetitions": 1,
+    "small_m_values": [
+      2
+    ],
+    "small_N_values": [
+      8
+    ],
+    "large_heuristic_only_pairs": [],
+    "max_exact_configurations": 200000,
+    "probabilities": {
+      "gpu_requirement": 0.2,
+      "stateful": 0.2,
+      "proximity": 0.5,
+      "extra_edge": 0.1
+    },
+    "timing_scope": "End-to-end plan_app call, including candidate generation, search, baselines, and replication."
+  },
+  "results": [
+    {
+      "case": "small_paired",
+      "m": 2,
+      "N": 8,
+      "seed": 20263028,
+      "candidate_space": 12,
+      "mode": "exhaustive",
+      "search_method": "exhaustive",
+      "repetitions": 1,
+      "runtime_median_seconds": 0.019965900108218193,
+      "runtime_min_seconds": 0.019965900108218193,
+      "runtime_max_seconds": 0.019965900108218193,
+      "configurations_evaluated_median": 12,
+      "feasible_repetitions": 1,
+      "objective_score_median": 2.1583,
+      "optimality_gap_median": 0.0,
+      "samples": [
+        {
+          "elapsed_seconds": 0.019965900108218193,
+          "method": "exhaustive",
+          "configurations_evaluated": 12,
+          "feasible": true,
+          "objective_score": 2.1583
+        }
+      ]
+    },
+    {
+      "case": "small_paired",
+      "m": 2,
+      "N": 8,
+      "seed": 20263028,
+      "candidate_space": 12,
+      "mode": "heuristic",
+      "search_method": "greedy+local_search",
+      "repetitions": 1,
+      "runtime_median_seconds": 0.02185070002451539,
+      "runtime_min_seconds": 0.02185070002451539,
+      "runtime_max_seconds": 0.02185070002451539,
+      "configurations_evaluated_median": 5,
+      "feasible_repetitions": 1,
+      "objective_score_median": 2.1583,
+      "optimality_gap_median": 0.0,
+      "samples": [
+        {
+          "elapsed_seconds": 0.02185070002451539,
+          "method": "greedy+local_search",
+          "configurations_evaluated": 5,
+          "feasible": true,
+          "objective_score": 2.1583
+        }
+      ]
+    }
+  ]
+}

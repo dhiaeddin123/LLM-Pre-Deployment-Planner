@@ -123,10 +123,10 @@ class Infrastructure:
 class Application:
     """Merges the resource estimation and offloadability outputs of one app."""
 
-    def __init__(self, name, infra, policy):
+    def __init__(self, name, infra, policy, resource_document=None, offloadability_document=None):
         self.name = name
-        self.res = load_json(ROOT / "resource_estimation" / "output" / f"{name}.json")
-        self.off = load_json(ROOT / "offloadability" / "output" / f"{name}.json")
+        self.res = resource_document or load_json(ROOT / "resource_estimation" / "output" / f"{name}.json")
+        self.off = offloadability_document or load_json(ROOT / "offloadability" / "output" / f"{name}.json")
         self.bind = infra.bindings[name]
         self.sla = policy["applications"].get(name, {})
         self.planning = policy["planning"]
@@ -468,12 +468,14 @@ def search(app, infra, policy, cands):
                 results.append((score, prim, det))
     else:
         method = "greedy+local_search"
-        prim = greedy(app, infra, policy, cands)
+        prim, greedy_explored = greedy(app, infra, policy, cands, return_evaluations=True)
+        explored += greedy_explored
         if prim:
             improved = True
             while improved:
                 improved = False
                 base = evaluate(app, infra, full_placement(app, prim, infra), policy)
+                explored += 1
                 for u in movable:
                     for n in cands[u]:
                         if [n] == prim[u]:
@@ -485,15 +487,17 @@ def search(app, infra, policy, cands):
                         if f and s < base[1] - EPS:
                             prim, base, improved = trial, (f, s, d), True
             f, s, d = evaluate(app, infra, full_placement(app, prim, infra), policy)
+            explored += 1
             if f:
                 results.append((s, prim, d))
     results.sort(key=lambda x: x[0])
     return results[:policy['planning'].get('max_replicated_candidates', 5000)], explored, method
 
 
-def greedy(app, infra, policy, cands):
+def greedy(app, infra, policy, cands, return_evaluations=False):
     """First-fit on candidates ordered by preference (current host, same site, edge, cloud)."""
     prim = {}
+    explored = 0
     order = sorted(app.movable, key=lambda u: -sum(app.demand(u).values()))
     for u in order:
         best = None
@@ -502,12 +506,13 @@ def greedy(app, infra, policy, cands):
             trial[u] = [n]
             partial = {x: trial[x] for x in trial}
             f, s, _ = evaluate(app, infra, full_placement_partial(app, partial), policy)
+            explored += 1
             if f and (best is None or s < best[0]):
                 best = (s, n)
         if best is None:
-            return None
+            return (None, explored) if return_evaluations else None
         prim[u] = [best[1]]
-    return prim
+    return (prim, explored) if return_evaluations else prim
 
 
 def full_placement_partial(app, primary):

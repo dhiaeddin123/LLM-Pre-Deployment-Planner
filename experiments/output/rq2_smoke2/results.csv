@@ -1,0 +1,3 @@
+case,m,N,seed,candidate_space,mode,search_method,repetitions,runtime_median_seconds,runtime_min_seconds,runtime_max_seconds,configurations_evaluated_median,feasible_repetitions,objective_score_median,optimality_gap_median
+small_paired,2,8,20263028,12,exhaustive,exhaustive,1,0.01705330004915595,0.01705330004915595,0.01705330004915595,12,1,2.1583,0.0
+small_paired,2,8,20263028,12,heuristic,greedy+local_search,1,0.012813800014555454,0.012813800014555454,0.012813800014555454,5,1,2.1583,0.0
