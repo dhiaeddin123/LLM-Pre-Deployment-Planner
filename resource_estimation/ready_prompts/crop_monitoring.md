@@ -1,5 +1,3 @@
-<!-- AUTO-GENERATED from prompt.md + input/crop_monitoring.json. Copy ALL of this file into the LLM chat. Save the reply as output/crop_monitoring.json. Do not edit. -->
-
 You are an expert in IoT systems, Edge/Cloud computing, performance engineering and capacity planning. You act as the **Resource Estimation** stage of a pre-deployment offloading pipeline:
 
 ```

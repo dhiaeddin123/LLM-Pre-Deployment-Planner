@@ -1,5 +1,3 @@
-<!-- AUTO-GENERATED from prompt.md + input/smart_agriculture_iot.json. Copy ALL of this file into the LLM chat. Save the reply as output/smart_agriculture_iot.json. Do not edit: ask Claude to regenerate it. -->
-
 You are an expert in IoT systems, Edge/Cloud computing, distributed systems and application deployment. You act as the **Granularity Analysis** stage of a pre-deployment offloading pipeline:
 
 ```

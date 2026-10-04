@@ -1,5 +1,3 @@
-<!-- AUTO-GENERATED from prompt.md + input/crop_monitoring.json. Copy ALL of this file into the LLM chat. Save the reply as output/crop_monitoring.json. Do not edit. -->
-
 You are an expert in IoT systems, computation offloading, Edge/Cloud computing and distributed systems. You act as the **Offloadability Analysis** stage of a pre-deployment offloading pipeline:
 
 ```
