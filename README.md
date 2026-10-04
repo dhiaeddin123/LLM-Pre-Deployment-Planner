@@ -41,11 +41,9 @@ granularity/            Stage 1 – splits the functional graph into execution u
 
 resource_estimation/    Stage 2 – CPU, memory, GPU, storage and bandwidth per unit
   input/ prompt.md ready_prompts/ output/   (same layout)
-  paper_section.tex
 
 offloadability/         Stage 3 – anchors, offloadability status and conditions
   input/ prompt.md ready_prompts/ output/   (same layout)
-  paper_section.tex
 
 deployment/             Stage 4 – Deployment Planner
   deployment_planner.py
@@ -53,17 +51,27 @@ deployment/             Stage 4 – Deployment Planner
   sla_policy.json         planning rules, objective weights, per-application SLA
   output/<app>.json       deployment descriptor per application
   output/joint_plan_summary.json
-  paper_section.tex
 
 validation/             Stage 5 – independent validator
   deployment_validator.py
   output/<app>.json       validation result per application
   output/joint_validation.json
   output/self_test.json   fault-injection results
-  paper_section.tex
 
 experiments/
-  experimentation_section.tex   Experimental Evaluation section of the paper
+  experiment_summary.py           summary scripts for application and validation outputs
+  requirements.txt                Python dependencies for benchmark scripts
+  rq2_scalability_benchmark.py    synthetic benchmark for scalability experiments
+  figures/                        generated plots for the experiments
+  output/                         benchmark and summary results
+    rq2_count_smoke/              smoke benchmark outputs
+    rq2_sampling_smoke/            sample-size benchmark outputs
+    rq2_scalability/              scalability benchmark outputs
+    rq2_smoke/                    smoke benchmark outputs
+    rq2_smoke2/                   additional smoke outputs
+    rq2_smoke3/                   additional smoke outputs
+    rq2_smoke_task/               task-based smoke outputs
+
 ```
 
 ## Requirements
